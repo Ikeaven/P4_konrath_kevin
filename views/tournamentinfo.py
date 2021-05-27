@@ -2,6 +2,7 @@
 
 from .utilities import UtilitiesView
 
+
 class GetTournamentInfoView:
 
     def __init__(self):

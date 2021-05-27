@@ -1,9 +1,10 @@
 """Utilities View"""
 
+
 class UtilitiesView:
     def line_separator(self):
         print("_________________________________________")
-    
+
     def prompt_error_NaN(self):
         self.line_separator()
         print("Erreur. Ce champ n'accepte que les nombres!")

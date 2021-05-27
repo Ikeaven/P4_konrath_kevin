@@ -13,10 +13,9 @@ class Tournament:
         self.round_list = []
         self.append_tournois(self)
 
-    @classmethod   
+    @classmethod
     def append_tournois(cls, tournament):
         cls.LISTE_TOURNOIS.append(tournament)
 
     def bind_players(self, players):
         self.players_list = players
-

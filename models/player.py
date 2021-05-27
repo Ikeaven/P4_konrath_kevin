@@ -10,7 +10,7 @@ class Player:
         for attr_name, attr_value in player_info.items():
             setattr(self, attr_name, attr_value)
         self.append_player(self)
-    
+
     @classmethod
     def append_player(cls, player):
         cls.LIST_PLAYERS.append(player)
