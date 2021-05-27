@@ -67,9 +67,6 @@ class Controller:
     def get_players_number(self):
         return self.get_player_info_view.how_many_players()
 
-    def bind_player_to_tournament(self, tournois_obj, players):
-        tournois_obj.bind_players(players)
-
     @checker_menu(1, 3)
     def get_time_controle(self):
         return self.get_tournament_info_view.get_time_controller()
@@ -85,10 +82,11 @@ class Controller:
     @checker_text_field
     def get_description(self):
         return self.get_tournament_info_view.get_description()
+    
+    def bind_player_to_tournament(self, tournois_obj, players):
+        tournois_obj.bind_players(players)
 
     def create_tournament(self):
-        # create Tournament Object and append to list
-
         name_tournament = self.get_name_tournament()
         location_tournament = self.get_location_tournament()
         start_date = time.localtime()

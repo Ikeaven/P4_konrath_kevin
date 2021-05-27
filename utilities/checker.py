@@ -1,20 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""fields checker decorators"""
+
 import functools
 
 from views.utilities import UtilitiesView
-
-
-class Checker:
-    def n_is_a_number_between_x_y(self, n, x, y):
-        if n.isdigit():
-            if n >= x and n <= y:
-                return True
-            else:
-                False
-        else:
-            return None
 
 
 def checker_text_field(function):
