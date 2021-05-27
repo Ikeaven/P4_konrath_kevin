@@ -19,14 +19,20 @@ class MenuView:
     def separator(self):
         print("_________________________________________")
 
-    def get_player_info(self):
+    def get_player_info(self, num_player):
+        self.separator()
+        print("Player", num_player)
         last_name = input("Nom du joueur : ")
         first_name = input("Prénom du joueur : ")
         date_of_birth = input("date d'anniversaire : ")
         sex = input("sexe du joueur [M] / [F] : ")
         ranking = input("score du joueur : ")
         self.separator()
-        return (last_name, first_name, date_of_birth, sex, ranking)
+        return {"last_name" : last_name,
+            "first_name" : first_name,
+            "date_of_birth" : date_of_birth,
+            "sex" : sex,
+            "ranking" : ranking}
 
     def create_tournament(self):
         #TODO : exploser la fonction dans plusieurs fonction et check des inputs
