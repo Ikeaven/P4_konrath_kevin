@@ -7,16 +7,10 @@ from controllers.base import Controller
 
 from utilities.checker import Checker
 
-# from models.player import PlayerModel
-# from models.tournament import TournamentModel
-
 
 def main():
     view = MenuView()
     checker = Checker()
-    # player = PlayersModel()
-    # tournament = TournamentModel()
-
     controller = Controller(view, checker)
 
     controller.run()
