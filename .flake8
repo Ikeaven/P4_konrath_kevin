@@ -1,0 +1,10 @@
+[flake8]
+exclude=
+    .gitignore,
+    env/,
+    notes.md,
+    README.md, 
+    requirements.txt, 
+    .vscode/
+
+max-line-length = 119
