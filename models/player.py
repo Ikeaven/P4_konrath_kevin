@@ -3,10 +3,14 @@
 
 
 class Player:
-    # def __init__(self, nom, prenom, date_de_naissance, sexe, classement):
-    #     self.nom = nom
-    #     self.prenom = prenom
-    #     self.date_de_naissance = date_de_naissance
-    #     self.sexe = sexe
-    #     self.classement = classement  
-    pass
+
+    LIST_PLAYERS = []
+
+    def __init__(self, player_info):
+        for attr_name, attr_value in player_info.items():
+            setattr(self, attr_name, attr_value)
+        self.append_player(self)
+    
+    @classmethod
+    def append_player(cls, player):
+        cls.LIST_PLAYERS.append(player)

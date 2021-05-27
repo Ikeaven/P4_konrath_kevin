@@ -40,12 +40,18 @@ class Controller:
 
     def get_players(self, players_number):
         for num_player in range(int(players_number)):
-            self.view.get_player_info()
+            player_info = self.view.get_player_info(num_player + 1)
+            player_obj = Player(player_info)
+            self.players.append(player_obj)
+
+    def bind_player_to_tournament(self, tournois_obj, players):
+        tournois_obj.bind_players(players)
+        print(tournois_obj.__dict__)
 
     def create_tournament(self):
-        self.tournaments.append(Tournament(self.view.create_tournament()))
-        print(self.tournaments[0].__dict__)
-        # print(self.view.create_tournament())
+        #create Tournament Object and append to list 
+        tournois_obj = Tournament(self.view.create_tournament())
+        self.tournaments.append(tournois_obj)
         
         player_is_not_enter = True
         while player_is_not_enter:
@@ -53,7 +59,8 @@ class Controller:
             if self.checker.string_is_a_number(players_number):
                 self.get_players(players_number)
                 player_is_not_enter = False
-        
+
+        self.bind_player_to_tournament(tournois_obj, self.players)
 
     def run(self):
         self.prompt_base_menu()
