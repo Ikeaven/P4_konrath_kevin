@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
-class TournoisModel:
+class Tournament:
 
     LISTE_TOURNOIS = []
 
-    def __init__(self, **tournois_infos):
+    def __init__(self, tournois_infos):
         for attr_name, attr_value in tournois_infos.items():
             setattr(self, attr_name, attr_value)
+

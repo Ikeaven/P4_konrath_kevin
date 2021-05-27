@@ -5,14 +5,20 @@ from views.menu import MenuView
 
 from controllers.base import Controller
 
-from models.joueur import JoueursModel
-from models.tournois import TournoisModel
+from utilities.checker import Checker
+
+# from models.player import PlayerModel
+# from models.tournament import TournamentModel
 
 
 def main():
     view = MenuView()
-    controller = Controller(view)
-    
+    checker = Checker()
+    # player = PlayersModel()
+    # tournament = TournamentModel()
+
+    controller = Controller(view, checker)
+
     controller.run()
 
 if __name__ == '__main__':
