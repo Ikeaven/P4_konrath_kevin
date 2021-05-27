@@ -15,6 +15,7 @@ from models.tournament import Tournament
 from views.utilities import UtilitiesView
 
 from utilities.checker import checker_text_field, checker_menu, checker_digit_field
+from utilities.checker import checker_digit_or_empy_default_field
 
 
 class Controller:
@@ -44,7 +45,7 @@ class Controller:
 
         elif selected_menu == '2':
             # Éditer un tournoi
-            print("modif classement joueur")
+            print("editin de tournoi")
 
         elif selected_menu == '3':
             # Editer joueur
@@ -79,6 +80,10 @@ class Controller:
     def get_location_tournament(self):
         return self.get_tournament_info_view.get_location_tournament()
 
+    @checker_digit_or_empy_default_field(4)
+    def get_tour_number(self):
+        return self.get_tournament_info_view.get_tour_number()
+
     @checker_text_field
     def get_description(self):
         return self.get_tournament_info_view.get_description()
@@ -91,7 +96,8 @@ class Controller:
         location_tournament = self.get_location_tournament()
         start_date = time.localtime()
         end_date = "not finished"
-        tour_number = self.get_tournament_info_view.get_tour_number()
+        tour_number = self.get_tour_number()
+        print(tour_number)
         time_controller = self.get_time_controle()
         description = self.get_description()
 

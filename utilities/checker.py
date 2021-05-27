@@ -32,6 +32,19 @@ def checker_digit_field(function):
         return result
     return wrapper
 
+def checker_digit_or_empy_default_field(default):
+    def decorator(function):
+        def wrapper(*args, **kwargs):
+            while True:
+                result = function(*args, **kwargs)
+                if result == '':
+                    return default
+                elif result.isdigit():
+                    return result
+                else:
+                    UtilitiesView().prompt_error_NaN()
+        return wrapper
+    return decorator
 
 def checker_menu(x, y):
     def decorator(function):
