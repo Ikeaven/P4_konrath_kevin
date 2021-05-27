@@ -20,7 +20,7 @@ from utilities.checker import checker_text_field, checker_menu, checker_digit_fi
 class Controller:
     """Main Controller."""
 
-    def __init__(self, menu_view, get_player_info_view, get_tournament_info_view, checker):
+    def __init__(self, menu_view, get_player_info_view, get_tournament_info_view):
         # models
         self.players: List[Player] = []
         self.tournaments: List[Tournament] = []
@@ -31,9 +31,6 @@ class Controller:
         self.get_tournament_info_view = get_tournament_info_view
         self.utilities_view = UtilitiesView()
 
-        # utilities checker
-        self.checker = checker
-
         self.running = True
 
     def prompt_base_menu(self):
@@ -42,19 +39,22 @@ class Controller:
 
     def routing_menu(self, selected_menu):
         if selected_menu == '1':
-            # CRÉER UN NOUVEAU TOURNOI
+            # Créer un nouvau tournoi
             self.create_tournament()
 
         elif selected_menu == '2':
-            # ÉDITER UN TOURNOI
+            # Éditer un tournoi
             print("modif classement joueur")
 
         elif selected_menu == '3':
+            # Editer joueur
             self.get_player_info_view.prompt_players_list(self.players)
 
         elif selected_menu == '5':
+            # stop
             self.running = False
         else:
+            # Choix n'est pas dans les propositions du menu
             self.utilities_view.prompt_error()
 
     def get_players(self, players_number):
