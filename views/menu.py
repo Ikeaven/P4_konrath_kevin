@@ -14,7 +14,8 @@ class MenuView:
         print("[2] Editer un tournois")
         print("[3] Editer un joueur")
         print('[4] Afficher les joueurs')
-        print("[5] Quitter")
+        print('[5] Afficher les tournois')
+        print("[9] Quitter")
         menu_value = input('entrer le numéro du menu :')
         return menu_value
 

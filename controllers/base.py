@@ -50,15 +50,23 @@ class Controller:
         elif selected_menu == '3':
             # Editer joueur
             self.get_player_info_view.prompt_players_list(self.players)
+        
+        elif selected_menu == '4':
+            # Afficher les joueurs
+            pass
 
         elif selected_menu == '5':
+            # Afficher les tournois
+            
+
+        elif selected_menu == '9':
             # stop
             self.running = False
         else:
             # Choix n'est pas dans les propositions du menu
             self.utilities_view.prompt_error()
 
-    def get_players(self, players_number):
+    def add_multiple_players(self, players_number):
         for num_player in range(int(players_number)):
             player_info = self.get_player_info_view.get_player_info(num_player + 1)
             player_obj = Player(player_info)
@@ -115,7 +123,7 @@ class Controller:
         self.tournaments.append(tournois_obj)
 
         number_of_player = self.get_players_number()
-        self.get_players(number_of_player)
+        self.add_multiple_players(number_of_player)
 
         self.bind_player_to_tournament(tournois_obj, self.players)
 
