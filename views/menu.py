@@ -10,8 +10,8 @@ class MenuView:
         self.utilities = UtilitiesView()
 
     def prompt_menu(self):
-        print("[1] Créer un nouveau tournois")
-        print("[2] Editer un tournois")
+        print("[1] Créer un nouveau tournoi")
+        print("[2] Editer un tournoi")
         print("[3] Editer un joueur")
         print('[4] Afficher les joueurs')
         print('[5] Afficher les tournois')

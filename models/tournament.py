@@ -6,7 +6,7 @@ class Tournament:
 
     LISTE_TOURNOIS = []
 
-    def __init__(self, tournois_infos):
+    def add_tournament(self, tournois_infos):
         for attr_name, attr_value in tournois_infos.items():
             setattr(self, attr_name, attr_value)
         self.players_list = []

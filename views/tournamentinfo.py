@@ -14,8 +14,8 @@ class GetTournamentInfoView:
     def get_location_tournament(self):
         return input("Lieu du tournois : ")
 
-    def get_tour_number(self):
-        return input("Nombre de tour (si champ vide, 4 par défaut) : ")
+    def get_tour_number(self, default):
+        return input(f"Nombre de tour (si champ vide, {default} par défaut) : ")
 
     def get_time_controller(self):
         return input("[1] bullet / [2] blitz / [3] coup rapide : ")

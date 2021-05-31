@@ -1,6 +1,9 @@
 """Get player info view"""
 
+import pandas as pd
+
 from .utilities import UtilitiesView
+
 
 
 class GetPlayerInfoView:
@@ -28,5 +31,15 @@ class GetPlayerInfoView:
         return player_number
 
     def prompt_players_list(self, players):
-        for player in players:
-            print(f'{player.first_name}, {player.last_name}')
+        self.utilities.line_separator()
+        pd.DataFrame(players)
+
+        # for player in players:
+           
+            # print(f'{player.first_name} {player.last_name}')
+            # print(f"date of birth: {player.date_of_birth}")
+            # print(f"sex: {player.sex}")
+            # print(f"ranking : {player.ranking}")
+            # self.utilities.line_separator()
+            
+

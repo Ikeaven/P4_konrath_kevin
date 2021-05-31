@@ -21,6 +21,8 @@ from utilities.checker import checker_digit_or_empy_default_field
 class Controller:
     """Main Controller."""
 
+    DEFAULT_TOUR_NUMBER = 4
+
     def __init__(self, menu_view, get_player_info_view, get_tournament_info_view):
         # models
         self.players: List[Player] = []
@@ -53,12 +55,12 @@ class Controller:
         
         elif selected_menu == '4':
             # Afficher les joueurs
-            pass
+            self.get_all_players_from_model()
 
         elif selected_menu == '5':
             # Afficher les tournois
+            pass
             
-
         elif selected_menu == '9':
             # stop
             self.running = False
@@ -66,10 +68,16 @@ class Controller:
             # Choix n'est pas dans les propositions du menu
             self.utilities_view.prompt_error()
 
+    def get_all_players_from_model(self):
+        self.all_players = Player().get_all_players()
+        self.get_player_info_view.prompt_players_list(self.all_players)
+        
+
     def add_multiple_players(self, players_number):
         for num_player in range(int(players_number)):
             player_info = self.get_player_info_view.get_player_info(num_player + 1)
-            player_obj = Player(player_info)
+            player_obj = Player()
+            player_obj.add_player(player_info)
             self.players.append(player_obj)
 
     @checker_digit_field
@@ -88,9 +96,9 @@ class Controller:
     def get_location_tournament(self):
         return self.get_tournament_info_view.get_location_tournament()
 
-    @checker_digit_or_empy_default_field(4)
+    @checker_digit_or_empy_default_field(DEFAULT_TOUR_NUMBER)
     def get_tour_number(self):
-        return self.get_tournament_info_view.get_tour_number()
+        return self.get_tournament_info_view.get_tour_number(self.DEFAULT_TOUR_NUMBER)
 
     @checker_text_field
     def get_description(self):
@@ -105,7 +113,6 @@ class Controller:
         start_date = time.localtime()
         end_date = "not finished"
         tour_number = self.get_tour_number()
-        print(tour_number)
         time_controller = self.get_time_controle()
         description = self.get_description()
 
@@ -119,13 +126,17 @@ class Controller:
             "description": description
         }
 
-        tournois_obj = Tournament(tournament_info)
-        self.tournaments.append(tournois_obj)
+        self.tournois_obj = Tournament()
+        self.tournois_obj.add_tournament(tournament_info)
+
+        # TODO : a remplacer par la liste du modèle 
+        self.tournaments.append(self.tournois_obj)
 
         number_of_player = self.get_players_number()
         self.add_multiple_players(number_of_player)
 
-        self.bind_player_to_tournament(tournois_obj, self.players)
+        # TODO : normal ? 
+        self.bind_player_to_tournament(self.tournois_obj, self.players)
 
     def run(self):
         while self.running:
