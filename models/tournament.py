@@ -18,4 +18,5 @@ class Tournament:
         cls.LISTE_TOURNOIS.append(tournament)
 
     def bind_players(self, players):
-        self.players_list = players
+        for player in players:
+            self.players_list.append(player)

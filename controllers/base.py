@@ -18,6 +18,8 @@ from views.utilities import UtilitiesView
 from utilities.checker import checker_text_field, checker_menu, checker_digit_field
 from utilities.checker import checker_digit_or_empy_default_field
 
+from paires.suisse import Suisse
+
 
 class Controller:
     """Main Controller."""
@@ -128,6 +130,9 @@ class Controller:
     def bind_player_to_tournament(self, tournois_obj, players):
         tournois_obj.bind_players(players)
 
+    def generate_round(self, tournois_obj):
+        Suisse().generate_round(tournois_obj.players_list)
+
     def create_tournament(self):
 
         tournament_infos = self.get_tournament_info_view.get_tournament_info()
@@ -143,6 +148,9 @@ class Controller:
 
         # TODO : normal ? 
         self.bind_player_to_tournament(self.tournois_obj, self.players)
+        # print(self.tournois_obj.players_list)
+
+        self.generate_round(self.tournois_obj)
 
     def run(self):
         while self.running:

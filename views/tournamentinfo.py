@@ -1,6 +1,6 @@
 """ Get tournament infos view"""
 
-from config_chess_tournament import DEFAULT_TOUR_NUMBER, DEFAULT_PLAYERS_NUMBER
+from config import DEFAULT_TOUR_NUMBER, DEFAULT_PLAYERS_NUMBER
 
 from .utilities import UtilitiesView
 from .fields import Fields

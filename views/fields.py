@@ -1,4 +1,4 @@
-import config_chess_tournament as config
+import config as config
 from utilities.checker import checker_digit_field, date_validation, sex_validation, checker_digit_field, checker_text_field
 from utilities.checker import checker_menu, checker_digit_or_empy_default_field
 
