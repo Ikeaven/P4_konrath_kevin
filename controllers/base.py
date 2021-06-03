@@ -21,8 +21,6 @@ from utilities.checker import checker_digit_or_empy_default_field
 class Controller:
     """Main Controller."""
 
-    DEFAULT_TOUR_NUMBER = 4
-
     def __init__(self, menu_view, get_player_info_view, get_tournament_info_view):
         # models
         self.players: List[Player] = []
@@ -73,67 +71,39 @@ class Controller:
         self.get_player_info_view.prompt_players_list(self.all_players)
         
 
-    def add_multiple_players(self, players_number):
+    def add_multiple_players(self, players_number): 
         for num_player in range(int(players_number)):
-            player_info = self.get_player_info_view.get_player_info(num_player + 1)
-            player_obj = Player()
-            player_obj.add_player(player_info)
-            self.players.append(player_obj)
+            selected_menu = self.menu_view.prompt_menu_add_player()
+            if selected_menu == '1':
+                self.get_all_players_from_model()
+                # selectionner le joueur à ajouter
+            elif selected_menu == '2':
+                player_info = self.get_player_info_view.get_player_info(num_player + 1)
+                player_obj = Player()
+                player_obj.add_player(player_info)
+                self.players.append(player_obj)
+            else: 
+                self.utilities_view.prompt_error()
 
     @checker_digit_field
     def get_players_number(self):
         return self.get_player_info_view.how_many_players()
-
-    @checker_menu(1, 3)
-    def get_time_controle(self):
-        return self.get_tournament_info_view.get_time_controller()
-
-    @checker_text_field
-    def get_name_tournament(self):
-        return self.get_tournament_info_view.get_name_tournament()
-
-    @checker_text_field
-    def get_location_tournament(self):
-        return self.get_tournament_info_view.get_location_tournament()
-
-    @checker_digit_or_empy_default_field(DEFAULT_TOUR_NUMBER)
-    def get_tour_number(self):
-        return self.get_tournament_info_view.get_tour_number(self.DEFAULT_TOUR_NUMBER)
-
-    @checker_text_field
-    def get_description(self):
-        return self.get_tournament_info_view.get_description()
     
     def bind_player_to_tournament(self, tournois_obj, players):
         tournois_obj.bind_players(players)
 
     def create_tournament(self):
-        name_tournament = self.get_name_tournament()
-        location_tournament = self.get_location_tournament()
-        start_date = time.localtime()
-        end_date = "not finished"
-        tour_number = self.get_tour_number()
-        time_controller = self.get_time_controle()
-        description = self.get_description()
 
-        tournament_info = {
-            "name_tournament": name_tournament,
-            "location_tournament": location_tournament,
-            "start_date": start_date,
-            "end_date": end_date,
-            "tour_number": tour_number,
-            "time_controller": time_controller,
-            "description": description
-        }
+        tournament_infos = self.get_tournament_info_view.get_tournament_info()
 
         self.tournois_obj = Tournament()
-        self.tournois_obj.add_tournament(tournament_info)
+        self.tournois_obj.add_tournament(tournament_infos)
 
         # TODO : a remplacer par la liste du modèle 
         self.tournaments.append(self.tournois_obj)
 
-        number_of_player = self.get_players_number()
-        self.add_multiple_players(number_of_player)
+        # number_of_player = self.get_players_number()
+        self.add_multiple_players(self.tournois_obj.number_of_players)
 
         # TODO : normal ? 
         self.bind_player_to_tournament(self.tournois_obj, self.players)

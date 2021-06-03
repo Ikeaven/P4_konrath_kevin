@@ -4,6 +4,7 @@
 """fields checker decorators"""
 
 import functools
+import datetime
 
 from views.utilities import UtilitiesView
 
@@ -38,6 +39,7 @@ def checker_digit_or_empy_default_field(default):
             while True:
                 result = function(*args, **kwargs)
                 if result == '':
+                    print(f'Valeur mise à {default}')
                     return default
                 elif result.isdigit():
                     return result
@@ -63,3 +65,28 @@ def checker_menu(x, y):
             return result
         return wrapper
     return decorator
+
+
+def date_validation(function):
+    def wrapper(*args, **kwargs):
+        while True: 
+            result = function(*args, **kwargs)
+            try:
+                datetime.datetime.strptime(result, "%d/%m/%Y")
+                break
+            except ValueError:
+                UtilitiesView().prompt_error()
+        return result
+    return wrapper
+
+def sex_validation(function):
+    def wrapper(*args, **kwargs):
+        while True:
+            result = function(*args, **kwargs)
+            if result == 'M' or result == 'F':
+                break
+            else:
+                UtilitiesView().prompt_error()
+        return result
+    return wrapper
+
