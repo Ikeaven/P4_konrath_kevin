@@ -12,6 +12,8 @@ from typing import List
 
 from models.player import Player
 from models.tournament import Tournament
+from models.match import Match
+from models.round import Round
 
 from views.utilities import UtilitiesView
 
@@ -37,10 +39,6 @@ class Controller:
 
         self.running = True
 
-    def prompt_base_menu(self):
-        selected_menu = self.menu_view.prompt_menu()
-        self.routing_menu(selected_menu)
-
     def routing_menu(self, selected_menu):
         if selected_menu == '1':
             # Créer un nouvau tournoi
@@ -49,7 +47,6 @@ class Controller:
         elif selected_menu == '2':
             # Éditer un tournoi
             # afficher les tournois 
-            
             # choisir le tournois à éditer
             # remplir les champs
             self.edit_tournament()
@@ -65,7 +62,11 @@ class Controller:
         elif selected_menu == '5':
             # Afficher les tournois
             self.get_tournament_info_view.prompt_tournament_list(Tournament().LISTE_TOURNOIS)
-            
+
+        elif selected_menu == '8':
+            # TEST générer tournois auto    
+            self.TEST_import_auto_tournoi()
+
         elif selected_menu == '9':
             # stop
             self.running = False
@@ -84,12 +85,27 @@ class Controller:
         print(tournoi.tournament_name)
 
 
+    # AUTO REMPLISSAGE POUR TESTER PLUS FACILEMENT 
+    # TODO : A SUPPRIMER
+    def TEST_import_auto_tournoi(self):
+        tournament_infos = {'tournament_name': f"tournament_name {random.randint(0, 1000)}", 
+                            'location': "Strasbourg",
+                            'tour_number': '4', 
+                            'time_controller': f'{random.randint(1,3)}', 
+                            'number_of_players': '8',
+                            'description': 'Description du tournois'}
+        self.tournois_obj = Tournament()
+        self.tournois_obj.add_tournament(tournament_infos)
+        self.tournaments.append(self.tournois_obj)
+        self.add_multiple_players(self.tournois_obj.number_of_players)
+        self.bind_player_to_tournament(self.tournois_obj, self.players)
+        self.generate_first_round(self.tournois_obj)
 
 
 
     # AUTO REMPLISSAGE POUR TESTER PLUS FACILEMENT 
     # TODO : A SUPPRIMER
-    def TEST_import_auto(self, players_number):
+    def TEST_import_auto_players(self, players_number):
         for num_player in range(int(players_number)):
             player_infos = {
                 "last_name": f'Nom joueur {str(num_player)}',
@@ -106,7 +122,7 @@ class Controller:
         # TODO REMPLISSAGE AUTO A SUPPRIMER => POUR TEST 
         menu = self.menu_view.test_import_auto()
         if menu == '1':
-            self.TEST_import_auto(players_number)
+            self.TEST_import_auto_players(players_number)
         elif menu == '2':
             for num_player in range(int(players_number)):
                 selected_menu = self.menu_view.prompt_menu_add_player()
@@ -122,16 +138,19 @@ class Controller:
                     self.utilities_view.prompt_error()
         else:
             self.utilities_view.prompt_error()
-
-    @checker_digit_field
-    def get_players_number(self):
-        return self.get_player_info_view.how_many_players()
     
     def bind_player_to_tournament(self, tournois_obj, players):
         tournois_obj.bind_players(players)
 
-    def generate_round(self, tournois_obj):
-        Suisse().generate_round(tournois_obj.players_list)
+    def generate_first_round(self, tournois_obj):
+        first_round_list = Suisse().generate_first_round(tournois_obj.players_list)
+        round = Round().create_round('Round 1')
+        for players in first_round_list: 
+            match = Match().create_match(players[0], 0, players[1], 0)
+            round.add_match_to_round(match)
+        tournois_obj.add_round(round)
+        import pdb; pdb.set_trace()
+        
 
     def create_tournament(self):
 
@@ -150,8 +169,9 @@ class Controller:
         self.bind_player_to_tournament(self.tournois_obj, self.players)
         # print(self.tournois_obj.players_list)
 
-        self.generate_round(self.tournois_obj)
+        self.generate_first_round(self.tournois_obj)
 
     def run(self):
         while self.running:
-            self.prompt_base_menu()
+            selected_menu = self.menu_view.prompt_menu()
+            self.routing_menu(selected_menu)

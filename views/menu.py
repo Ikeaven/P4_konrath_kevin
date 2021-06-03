@@ -16,6 +16,7 @@ class MenuView:
         print("[3] Editer un joueur")
         print('[4] Afficher les joueurs')
         print('[5] Afficher les tournois')
+        print('[8] Générer tournois automatiquement')
         print("[9] Quitter")
         menu_value = input('entrer le numéro du menu :')
         return menu_value
@@ -31,8 +32,8 @@ class MenuView:
         return menu_value
 
     def test_import_auto(self):
-        print('[1] AUTO')
-        print('[2] MANUEL')
+        print('[1] INSERT PLAYERS AUTO')
+        print('[2] INSERT PLAYERS MANUEL')
         menu_value = input('entrer le numéro du menu :')
         return menu_value
 

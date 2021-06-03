@@ -1,7 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-
+""" Player model """
 class Player:
 
     LIST_PLAYERS = []

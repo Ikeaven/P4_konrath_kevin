@@ -11,8 +11,8 @@ class Suisse:
 
     def sort_list(self, players_list):
         sorted_list = sorted(players_list, key=lambda x: x.ranking, reverse=True)
-        for el in sorted_list:
-            print(el.first_name)
+        # for el in sorted_list:
+        #     print(el.first_name)
         return sorted_list
 
     def split_list(self, sorted_list):
@@ -30,20 +30,19 @@ class Suisse:
         round_list = []
         if len(upper_list) == len(lower_list):
             for i in range(len(upper_list)):
-                round_list.append(([upper_list[i], 0], [lower_list[i], 0]))
+                round_list.append((upper_list[i],lower_list[i]))
 
         elif len(upper_list) > len(lower_list):
             for i in range(len(lower_list)):
-                round_list.append(([upper_list[i], 0], [lower_list[i], 0]))
+                round_list.append((upper_list[i],lower_list[i]))
         else:
             for i in range(len(upper_list)):
-                round_list.append(([upper_list[i], 0], [lower_list[i], 0]))
-            
+                round_list.append((upper_list[i],lower_list[i]))
         return round_list
 
 
-    def generate_round(self, players_list):
+    def generate_first_round(self, players_list):
         sorted_list = self.sort_list(players_list) 
         upper_list, lower_list = self.split_list(sorted_list)
         round_list = self.first_round_player_association(upper_list, lower_list)
-        print(round_list)
+        return round_list

@@ -20,3 +20,6 @@ class Tournament:
     def bind_players(self, players):
         for player in players:
             self.players_list.append(player)
+
+    def add_round(self, round):
+        self.round_list.append(round)
