@@ -6,6 +6,7 @@ TODO : Module summary
 """
 
 import time
+import random
 
 from typing import List
 
@@ -45,7 +46,11 @@ class Controller:
 
         elif selected_menu == '2':
             # Éditer un tournoi
-            print("editin de tournoi")
+            # afficher les tournois 
+            
+            # choisir le tournois à éditer
+            # remplir les champs
+            self.edit_tournament()
 
         elif selected_menu == '3':
             # Editer joueur
@@ -57,7 +62,7 @@ class Controller:
 
         elif selected_menu == '5':
             # Afficher les tournois
-            pass
+            self.get_tournament_info_view.prompt_tournament_list(Tournament().LISTE_TOURNOIS)
             
         elif selected_menu == '9':
             # stop
@@ -69,21 +74,52 @@ class Controller:
     def get_all_players_from_model(self):
         self.all_players = Player().get_all_players()
         self.get_player_info_view.prompt_players_list(self.all_players)
-        
+    
+    def edit_tournament(self):
+        self.get_tournament_info_view.prompt_tournament_list(Tournament().LISTE_TOURNOIS)
+        item_index = self.menu_view.select_item()
+        tournoi = Tournament().LISTE_TOURNOIS[int(item_index)]
+        print(tournoi.tournament_name)
+
+
+
+
+
+    # AUTO REMPLISSAGE POUR TESTER PLUS FACILEMENT 
+    # TODO : A SUPPRIMER
+    def TEST_import_auto(self, players_number):
+        for num_player in range(int(players_number)):
+            player_infos = {
+                "last_name": f'Nom joueur {str(num_player)}',
+                "first_name": f'Prénom joueur {str(num_player)}',
+                "date_of_birth": f'{random.randint(10, 28)}/{random.randint(10, 12)}/{random.randint(1950, 2021)}',
+                "sex": 'M' if random.randint(0,1) else 'F',
+                "ranking": random.randint(100, 3000)}
+            player_obj = Player()
+            player_obj.add_player(player_infos)
+            self.players.append(player_obj)
+
 
     def add_multiple_players(self, players_number): 
-        for num_player in range(int(players_number)):
-            selected_menu = self.menu_view.prompt_menu_add_player()
-            if selected_menu == '1':
-                self.get_all_players_from_model()
-                # selectionner le joueur à ajouter
-            elif selected_menu == '2':
-                player_info = self.get_player_info_view.get_player_info(num_player + 1)
-                player_obj = Player()
-                player_obj.add_player(player_info)
-                self.players.append(player_obj)
-            else: 
-                self.utilities_view.prompt_error()
+        # TODO REMPLISSAGE AUTO A SUPPRIMER => POUR TEST 
+        menu = self.menu_view.test_import_auto()
+        if menu == '1':
+            self.TEST_import_auto(players_number)
+        elif menu == '2':
+            for num_player in range(int(players_number)):
+                selected_menu = self.menu_view.prompt_menu_add_player()
+                if selected_menu == '1':
+                    self.get_all_players_from_model()
+                    # selectionner le joueur à ajouter
+                elif selected_menu == '2':
+                    player_info = self.get_player_info_view.get_player_info(num_player + 1)
+                    player_obj = Player()
+                    player_obj.add_player(player_info)
+                    self.players.append(player_obj)
+                else: 
+                    self.utilities_view.prompt_error()
+        else:
+            self.utilities_view.prompt_error()
 
     @checker_digit_field
     def get_players_number(self):

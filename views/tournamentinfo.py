@@ -27,17 +27,26 @@ class GetTournamentInfoView:
                             'description': description}
         return tournament_infos
 
-    def get_name_tournament(self):
-        return input("Nom du tournoi : ")
+    # def get_name_tournament(self):
+    #     return input("Nom du tournoi : ")
 
-    def get_location_tournament(self):
-        return input("Lieu du tournois : ")
+    # def get_location_tournament(self):
+    #     return input("Lieu du tournois : ")
 
-    def get_tour_number(self, default):
-        return input(f"Nombre de tour (si champ vide, {DEFAULT_TOUR_NUMBER} par défaut) : ")
+    # def get_tour_number(self, default):
+    #     return input(f"Nombre de tour (si champ vide, {DEFAULT_TOUR_NUMBER} par défaut) : ")
 
-    def get_time_controller(self):
-        return input("[1] bullet / [2] blitz / [3] coup rapide : ")
+    # def get_time_controller(self):
+    #     return input("[1] bullet / [2] blitz / [3] coup rapide : ")
 
-    def get_description(self):
-        return input("Description du tournois : ")
+    # def get_description(self):
+    #     return input("Description du tournois : ")
+
+    def prompt_tournament_list(self, tournaments_list):
+        self.utilities.line_separator()
+        
+        for index, tournament in enumerate(tournaments_list):
+            print(f'Index du tournoi : [{index}]')
+            print(f'{tournament.tournament_name}')
+            print(f'{tournament.location}')
+            self.utilities.line_separator()

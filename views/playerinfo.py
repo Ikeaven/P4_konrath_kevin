@@ -32,8 +32,8 @@ class GetPlayerInfoView:
     def prompt_players_list(self, players):
         self.utilities.line_separator()
         
-        for player in players:
-           
+        for index, player in enumerate(players):
+            print(f'index : [{index}]')
             print(f'{player.first_name} {player.last_name}')
             print(f"date of birth: {player.date_of_birth}")
             print(f"sex: {player.sex}")

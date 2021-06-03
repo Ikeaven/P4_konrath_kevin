@@ -2,6 +2,7 @@
 
 
 from .utilities import UtilitiesView
+# TODO UTILISER LES FIELDS avec vérif !! 
 
 
 class MenuView:
@@ -27,4 +28,14 @@ class MenuView:
         print('[1] Ajouter joueur a partir des joueurs déjà enregistré')
         print('[2] Ajouter un nouveau joueur')
         menu_value = input('entrer le numéro du menu :')
+        return menu_value
+
+    def test_import_auto(self):
+        print('[1] AUTO')
+        print('[2] MANUEL')
+        menu_value = input('entrer le numéro du menu :')
+        return menu_value
+
+    def select_item(self):
+        menu_value = input("selectionner l'item avec l'index : ")
         return menu_value
