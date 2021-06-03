@@ -63,6 +63,15 @@ class Controller:
             # Afficher les tournois
             self.get_tournament_info_view.prompt_tournament_list(Tournament().LISTE_TOURNOIS)
 
+        elif selected_menu == '6':
+            # fin de round
+            try:
+                self.round.end_round()
+                print(f'end at : {self.round.end_round_datetime}')
+            except AttributeError:
+                self.utilities_view.prompt_error()
+
+
         elif selected_menu == '8':
             # TEST générer tournois auto    
             self.TEST_import_auto_tournoi()
@@ -144,12 +153,11 @@ class Controller:
 
     def generate_first_round(self, tournois_obj):
         first_round_list = Suisse().generate_first_round(tournois_obj.players_list)
-        round = Round().create_round('Round 1')
+        self.round = Round().create_round('Round 1')
         for players in first_round_list: 
             match = Match().create_match(players[0], 0, players[1], 0)
-            round.add_match_to_round(match)
-        tournois_obj.add_round(round)
-        import pdb; pdb.set_trace()
+            self.round.add_match_to_round(match)
+        tournois_obj.add_round(self.round)
         
 
     def create_tournament(self):

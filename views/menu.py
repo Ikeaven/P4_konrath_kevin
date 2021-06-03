@@ -16,6 +16,7 @@ class MenuView:
         print("[3] Editer un joueur")
         print('[4] Afficher les joueurs')
         print('[5] Afficher les tournois')
+        print('[6] Fin de round')
         print('[8] Générer tournois automatiquement')
         print("[9] Quitter")
         menu_value = input('entrer le numéro du menu :')
