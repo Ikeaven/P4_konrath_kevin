@@ -27,7 +27,7 @@ class MenuView:
         print('[2] modifier un joueur')
 
     def prompt_menu_add_player(self):
-        print('[1] Ajouter joueur a partir des joueurs déjà enregistré')
+        print('[1] Ajouter joueur a partir des joueurs déjà enregistrés')
         print('[2] Ajouter un nouveau joueur')
         menu_value = input('entrer le numéro du menu :')
         return menu_value

@@ -17,3 +17,5 @@ class Round:
 
     def end_round(self):
         self.end_round_datetime = datetime.now()
+
+    # update date -> début et fin si besoin

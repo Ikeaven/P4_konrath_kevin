@@ -67,7 +67,10 @@ class Controller:
             # fin de round
             try:
                 self.round.end_round()
+                # TODO : passer à la view 
                 print(f'end at : {self.round.end_round_datetime}')
+                # aller à la mise à jour des scores de chaque match 
+                # lancer le round suivant ou terminer le tournois
             except AttributeError:
                 self.utilities_view.prompt_error()
 
