@@ -10,8 +10,7 @@ class GetTournamentInfoView:
     def __init__(self):
         self.utilities = UtilitiesView()
         self.fields = Fields()
-
-
+        
     def get_tournament_info(self):
         tournament_name = self.fields.input_text_field("Nom du tournoi : ")
         location = self.fields.input_text_field("Lieu du tournoi : ")

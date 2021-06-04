@@ -32,3 +32,7 @@ class Fields:
     @checker_digit_or_empy_default_field(config.DEFAULT_PLAYERS_NUMBER)
     def input_number_of_players(self, prompt):
         return input(prompt)
+
+    @checker_menu(0, 2)
+    def input_winner(self, prompt):
+        return input(prompt)

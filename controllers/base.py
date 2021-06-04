@@ -7,6 +7,7 @@ TODO : Module summary
 
 import time
 import random
+import sys
 
 from typing import List
 
@@ -16,6 +17,9 @@ from models.match import Match
 from models.round import Round
 
 from views.utilities import UtilitiesView
+
+from views.score import ScoreView
+from views.round import RoundView
 
 from utilities.checker import checker_text_field, checker_menu, checker_digit_field
 from utilities.checker import checker_digit_or_empy_default_field
@@ -36,6 +40,7 @@ class Controller:
         self.get_player_info_view = get_player_info_view
         self.get_tournament_info_view = get_tournament_info_view
         self.utilities_view = UtilitiesView()
+        self.score = ScoreView()
 
         self.running = True
 
@@ -66,11 +71,12 @@ class Controller:
         elif selected_menu == '6':
             # fin de round
             try:
-                self.round.end_round()
-                # TODO : passer à la view 
-                print(f'end at : {self.round.end_round_datetime}')
-                # aller à la mise à jour des scores de chaque match 
-                # lancer le round suivant ou terminer le tournois
+                self.round.stop_round()
+                round_view = RoundView()
+                round_view.display_stop_time(self.round)
+                self.update_score_round(self.round)
+                round_view.start_new_round()
+                self.generate_next_round(self.round, self.tournois_obj)
             except AttributeError:
                 self.utilities_view.prompt_error()
 
@@ -95,6 +101,21 @@ class Controller:
         item_index = self.menu_view.select_item()
         tournoi = Tournament().LISTE_TOURNOIS[int(item_index)]
         print(tournoi.tournament_name)
+
+    def update_score_round(self, round):
+        for match in round.matchs:
+            winner = self.score.update_score(match)
+            if winner == 0:
+                # match null
+                match.score_player1 += 0.5
+                match.score_player2 += 0.5
+            elif winner == 1:
+                # player 1 gagne
+                match.score_player1 += 1
+                
+            elif winner == 2:
+                # player 2 gagne
+                match.score_player2 += 1
 
 
     # AUTO REMPLISSAGE POUR TESTER PLUS FACILEMENT 
@@ -161,7 +182,14 @@ class Controller:
             match = Match().create_match(players[0], 0, players[1], 0)
             self.round.add_match_to_round(match)
         tournois_obj.add_round(self.round)
-        
+
+    def generate_next_round(self, previous_round, tournois_obj):
+        match_list = Suisse().generate_next_round(previous_round, tournois_obj)
+        self.round = Round().create_round(f'Round {len(tournois_obj.round_list)+1}')
+        for match in match_list: 
+            formated_match = Match().create_match(match[0][0], match[0][1], match[1][0], match[1][1])
+            self.round.add_match_to_round(formated_match)
+        tournois_obj.add_round(self.round)
 
     def create_tournament(self):
 
