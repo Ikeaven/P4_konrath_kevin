@@ -1,8 +1,10 @@
-""" Round model """ 
+""" Round model """
 
 from datetime import datetime
+
+
 class Round:
-    
+
     def create_round(self, round_name):
         self.round_name = round_name
         self.matchs = []
@@ -19,4 +21,3 @@ class Round:
         self.end_round_datetime = datetime.now()
 
     # update date -> début et fin si besoin
-    

@@ -33,6 +33,7 @@ def checker_digit_field(function):
         return result
     return wrapper
 
+
 def checker_digit_or_empy_default_field(default):
     def decorator(function):
         def wrapper(*args, **kwargs):
@@ -47,6 +48,7 @@ def checker_digit_or_empy_default_field(default):
                     UtilitiesView().prompt_error_NaN()
         return wrapper
     return decorator
+
 
 def checker_menu(x, y):
     def decorator(function):
@@ -69,7 +71,7 @@ def checker_menu(x, y):
 
 def date_validation(function):
     def wrapper(*args, **kwargs):
-        while True: 
+        while True:
             result = function(*args, **kwargs)
             try:
                 datetime.datetime.strptime(result, "%d/%m/%Y")
@@ -78,6 +80,7 @@ def date_validation(function):
                 UtilitiesView().prompt_error()
         return result
     return wrapper
+
 
 def sex_validation(function):
     def wrapper(*args, **kwargs):
@@ -89,4 +92,3 @@ def sex_validation(function):
                 UtilitiesView().prompt_error()
         return result
     return wrapper
-

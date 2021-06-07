@@ -1,4 +1,6 @@
 """ Player model """
+
+
 class Player:
 
     LIST_PLAYERS = []

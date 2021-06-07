@@ -2,7 +2,7 @@
 
 
 from .utilities import UtilitiesView
-# TODO UTILISER LES FIELDS avec vérif !! 
+# TODO UTILISER LES FIELDS avec vérif !!
 
 
 class MenuView:

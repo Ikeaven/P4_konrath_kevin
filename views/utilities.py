@@ -3,7 +3,9 @@
 
 class UtilitiesView:
     def line_separator(self):
-        print("___________________________________________________________________________________________________________________________")
+        for _ in range(115):
+            print('_', end='')
+        print()
 
     def prompt_error_NaN(self):
         self.line_separator()
