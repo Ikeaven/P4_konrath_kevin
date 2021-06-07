@@ -60,15 +60,16 @@ class Controller:
 
         elif selected_menu == '3':
             # Editer joueur
-            self.get_player_info_view.prompt_players_list(self.players)
+            self.get_player_info_view.display_players_list(self.players)
 
         elif selected_menu == '4':
-            # Afficher les joueurs
-            self.get_all_players_from_model()
+            # Rapports
+            # self.get_all_players_from_model()
+            pass
 
         elif selected_menu == '5':
             # Afficher les tournois
-            self.get_tournament_info_view.prompt_tournament_list(Tournament().LISTE_TOURNOIS)
+            self.get_tournament_info_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
 
         elif selected_menu == '6':
             # fin de round
@@ -80,7 +81,7 @@ class Controller:
 
                 self.generate_next_round(self.round, self.tournois_obj)
             except AttributeError:
-                self.utilities_view.prompt_error()
+                self.utilities_view.display_error()
 
         elif selected_menu == '8':
             # TEST générer tournois auto
@@ -91,14 +92,14 @@ class Controller:
             self.running = False
         else:
             # Choix n'est pas dans les propositions du menu
-            self.utilities_view.prompt_error()
+            self.utilities_view.display_error()
 
     def get_all_players_from_model(self):
         self.all_players = Player().get_all_players()
-        self.get_player_info_view.prompt_players_list(self.all_players)
+        self.get_player_info_view.display_players_list(self.all_players)
 
     def edit_tournament(self):
-        self.get_tournament_info_view.prompt_tournament_list(Tournament().LISTE_TOURNOIS)
+        self.get_tournament_info_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
         item_index = self.menu_view.select_item()
         tournoi = Tournament().LISTE_TOURNOIS[int(item_index)]
         print(tournoi.tournament_name)
@@ -131,7 +132,7 @@ class Controller:
         self.tournois_obj.add_tournament(tournament_infos)
         self.tournaments.append(self.tournois_obj)
         self.add_multiple_players(self.tournois_obj.number_of_players)
-        self.bind_player_to_tournament(self.tournois_obj, self.players)
+
         self.generate_first_round(self.tournois_obj)
 
     # AUTO REMPLISSAGE POUR TESTER PLUS FACILEMENT
@@ -149,6 +150,8 @@ class Controller:
             player_obj = Player()
             player_obj.add_player(player_infos)
             self.players.append(player_obj)
+            self.bind_player_to_tournament(self.tournois_obj, self.players)
+            self.players = []
 
     def add_multiple_players(self, players_number):
         # TODO REMPLISSAGE AUTO A SUPPRIMER => POUR TEST
@@ -157,7 +160,7 @@ class Controller:
             self.TEST_import_auto_players(players_number)
         elif menu == '2':
             for num_player in range(int(players_number)):
-                selected_menu = self.menu_view.prompt_menu_add_player()
+                selected_menu = self.menu_view.display_menu_add_player()
                 if selected_menu == '1':
                     self.get_all_players_from_model()
                     # selectionner le joueur à ajouter
@@ -167,12 +170,13 @@ class Controller:
                     player_obj.add_player(player_info)
                     self.players.append(player_obj)
                 else:
-                    self.utilities_view.prompt_error()
+                    self.utilities_view.display_error()
         else:
-            self.utilities_view.prompt_error()
+            self.utilities_view.display_error()
 
     def bind_player_to_tournament(self, tournois_obj, players):
         tournois_obj.bind_players(players)
+
 
     def display_match_of_round(self, round):
         for match in round.matchs:
@@ -230,5 +234,5 @@ class Controller:
 
     def run(self):
         while self.running:
-            selected_menu = self.menu_view.prompt_menu()
+            selected_menu = self.menu_view.display_menu()
             self.routing_menu(selected_menu)

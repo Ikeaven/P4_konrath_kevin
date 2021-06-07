@@ -46,7 +46,7 @@ class GetTournamentInfoView:
     # def get_description(self):
     #     return input("Description du tournois : ")
 
-    def prompt_tournament_list(self, tournaments_list):
+    def display_tournament_list(self, tournaments_list):
         self.utilities.line_separator()
 
         for index, tournament in enumerate(tournaments_list):

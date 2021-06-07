@@ -17,7 +17,7 @@ def checker_text_field(function):
                 break
             else:
                 UtilitiesView().line_separator
-                UtilitiesView().prompt_error_null()
+                UtilitiesView().display_error_null()
         return result
     return wrapper
 
@@ -29,7 +29,7 @@ def checker_digit_field(function):
             if result.isdigit():
                 break
             else:
-                UtilitiesView().prompt_error_NaN()
+                UtilitiesView().display_error_NaN()
         return result
     return wrapper
 
@@ -45,7 +45,7 @@ def checker_digit_or_empy_default_field(default):
                 elif result.isdigit():
                     return result
                 else:
-                    UtilitiesView().prompt_error_NaN()
+                    UtilitiesView().display_error_NaN()
         return wrapper
     return decorator
 
@@ -61,9 +61,9 @@ def checker_menu(x, y):
                     if result >= x and result <= y:
                         break
                     else:
-                        UtilitiesView().prompt_error()
+                        UtilitiesView().display_error()
                 else:
-                    UtilitiesView().prompt_error_NaN()
+                    UtilitiesView().display_error_NaN()
             return result
         return wrapper
     return decorator
@@ -77,7 +77,7 @@ def date_validation(function):
                 datetime.datetime.strptime(result, "%d/%m/%Y")
                 break
             except ValueError:
-                UtilitiesView().prompt_error()
+                UtilitiesView().display_error()
         return result
     return wrapper
 
@@ -89,6 +89,6 @@ def sex_validation(function):
             if result == 'M' or result == 'F':
                 break
             else:
-                UtilitiesView().prompt_error()
+                UtilitiesView().display_error()
         return result
     return wrapper

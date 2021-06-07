@@ -29,7 +29,7 @@ class GetPlayerInfoView:
     #     player_number = input(f"Combien de joueurs pour le tournois ? (si vide default {}): ")
     #     return player_number
 
-    def prompt_players_list(self, players):
+    def display_players_list(self, players):
         self.utilities.line_separator()
 
         for index, player in enumerate(players):
