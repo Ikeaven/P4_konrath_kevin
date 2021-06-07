@@ -81,26 +81,29 @@ class Suisse:
         # On parcours tous les joueurs
         for i, player in enumerate(players_list_with_score):
             # S'il est déjà associé, on passe au suivant sans rien faire
-            if player in associated_players:
-                pass
+            if player[0] in associated_players:
+                continue
             # Sinon on check si l'association n'a pas déjà eu lieu
             else :
+                # TODO si i = len(nombre_de_player... on est au bout)
                 next_player = i+1
                 while True:
                     try: 
-                        # Si l'association n'a pas encore eu lieu, on créer le match et on met de coté ces utilisateurs
+                        # on vérifie si le joueur 2 n'est pas déjà asocié, s'il est associé on passe au suivant
+                        while players_list_with_score[next_player][0] in associated_players:
+                            next_player += 1
+                        # On vérifie les matchs précédent, Si les deux joueurs n'ont pas encore été associé, on créer le match et on met de coté ces utilisateurs
                         if self.check_association(player[0], players_list_with_score[next_player][0], tournament):
-                            associated_players.append(player)
-                            associated_players.append(players_list_with_score[i+1])
-                            yield (player, players_list_with_score[i+1])
+                            associated_players.append(player[0])
+                            associated_players.append(players_list_with_score[next_player][0])
+                            yield (player, players_list_with_score[next_player])
                             break
                         # Sinon on cherche avec l'utilisateur suivant
                         else:
                             next_player += 1
                     except IndexError:
-                        print('on a fait le tour... le tournois est surement terminé ?')
+                        print('Tournois terminé !')
                         break
-                
 
 
 
@@ -112,7 +115,5 @@ class Suisse:
         # association des joueurs
         match_list = []
         for match in self.next_round_player_association(sorted_list, tournament):
-            # TODO retour au controler pour création des matchs et du round
-            print(match)
             match_list.append(match)
         return match_list

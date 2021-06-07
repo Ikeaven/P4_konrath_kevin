@@ -9,6 +9,8 @@ import time
 import random
 import sys
 
+from config import DEFAULT_TOUR_NUMBER
+
 from typing import List
 
 from models.player import Player
@@ -75,7 +77,7 @@ class Controller:
                 round_view = RoundView()
                 round_view.display_stop_time(self.round)
                 self.update_score_round(self.round)
-                round_view.start_new_round()
+                
                 self.generate_next_round(self.round, self.tournois_obj)
             except AttributeError:
                 self.utilities_view.prompt_error()
@@ -139,13 +141,15 @@ class Controller:
     # AUTO REMPLISSAGE POUR TESTER PLUS FACILEMENT 
     # TODO : A SUPPRIMER
     def TEST_import_auto_players(self, players_number):
+        ranking = 2000
         for num_player in range(int(players_number)):
             player_infos = {
-                "last_name": f'Nom joueur {str(num_player)}',
-                "first_name": f'Prénom joueur {str(num_player)}',
+                "last_name": f'Nom {str(num_player+1)}',
+                "first_name": f'Prénom {str(num_player+1)}',
                 "date_of_birth": f'{random.randint(10, 28)}/{random.randint(10, 12)}/{random.randint(1950, 2021)}',
                 "sex": 'M' if random.randint(0,1) else 'F',
-                "ranking": random.randint(100, 3000)}
+                "ranking": ranking}
+            ranking -= 100
             player_obj = Player()
             player_obj.add_player(player_infos)
             self.players.append(player_obj)
@@ -175,6 +179,10 @@ class Controller:
     def bind_player_to_tournament(self, tournois_obj, players):
         tournois_obj.bind_players(players)
 
+    def display_match_of_round(self, round):
+        for match in round.matchs:
+            self.score.display_match(match)
+
     def generate_first_round(self, tournois_obj):
         first_round_list = Suisse().generate_first_round(tournois_obj.players_list)
         self.round = Round().create_round('Round 1')
@@ -182,14 +190,27 @@ class Controller:
             match = Match().create_match(players[0], 0, players[1], 0)
             self.round.add_match_to_round(match)
         tournois_obj.add_round(self.round)
+        self.display_match_of_round(self.round)
 
     def generate_next_round(self, previous_round, tournois_obj):
-        match_list = Suisse().generate_next_round(previous_round, tournois_obj)
-        self.round = Round().create_round(f'Round {len(tournois_obj.round_list)+1}')
-        for match in match_list: 
-            formated_match = Match().create_match(match[0][0], match[0][1], match[1][0], match[1][1])
-            self.round.add_match_to_round(formated_match)
-        tournois_obj.add_round(self.round)
+        if len(tournois_obj.round_list) < DEFAULT_TOUR_NUMBER:
+            RoundView().start_new_round()
+            match_list = Suisse().generate_next_round(previous_round, tournois_obj)
+        
+            self.round = Round().create_round(f'Round {len(tournois_obj.round_list)+1}')
+            for match in match_list: 
+                formated_match = Match().create_match(match[0][0], match[0][1], match[1][0], match[1][1])
+                self.round.add_match_to_round(formated_match)
+            tournois_obj.add_round(self.round)
+            self.display_match_of_round(self.round)
+
+        else:
+            # fin de tournois => afficher score
+            # récupérer la liste triée: 
+            players = Suisse().get_players_list_with_score(tournois_obj.round_list[-1])
+            sorted_list = Suisse().sort_list_by_score(players)
+            self.score.display_final_score(sorted_list)
+            print("Fin du tournois => scores")
 
     def create_tournament(self):
 
