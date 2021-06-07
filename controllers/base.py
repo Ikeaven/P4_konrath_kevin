@@ -32,21 +32,21 @@ from paires.suisse import Suisse
 class Controller:
     """Main Controller."""
 
-    def __init__(self, menu_view, get_player_info_view, get_tournament_info_view):
+    def __init__(self, menu_view, player_view, tournament_view):
         # models
         self.players: List[Player] = []
         self.tournaments: List[Tournament] = []
 
         # views
         self.menu_view = menu_view
-        self.get_player_info_view = get_player_info_view
-        self.get_tournament_info_view = get_tournament_info_view
+        self.player_view = player_view
+        self.tournament_view = tournament_view
         self.utilities_view = UtilitiesView()
         self.score = ScoreView()
 
         self.running = True
 
-    def routing_menu(self, selected_menu):
+    def routing_menu_principal(self, selected_menu):
         if selected_menu == '1':
             # Créer un nouvau tournoi
             self.create_tournament()
@@ -60,16 +60,15 @@ class Controller:
 
         elif selected_menu == '3':
             # Editer joueur
-            self.get_player_info_view.display_players_list(self.players)
+            self.player_view.display_players_list(self.players)
 
         elif selected_menu == '4':
             # Rapports
-            # self.get_all_players_from_model()
-            pass
+            self.routing_menu_reports()
 
         elif selected_menu == '5':
             # Afficher les tournois
-            self.get_tournament_info_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
+            self.tournament_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
 
         elif selected_menu == '6':
             # fin de round
@@ -94,12 +93,45 @@ class Controller:
             # Choix n'est pas dans les propositions du menu
             self.utilities_view.display_error()
 
+    def routing_menu_reports(self):
+        selected_menu = self.menu_view.display_report_menu()
+        if selected_menu == '1':
+            # TODO demande dans quel tri -> Alpha / Classement
+            players = Player.LIST_PLAYERS
+            self.player_view.display_players_list(players)
+        elif selected_menu == '2':
+            # liste des joueurs d'un tournois
+            # Selectionner un tournoi -> afficher les tournois
+            self.tournament_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
+            # choisir l'ordre d'affichage
+            selected_item = self.menu_view.select_item()
+            # afficher les joueurs du tournoi
+            players = Tournament().LISTE_TOURNOIS[int(selected_item)].players_list
+            # TODO demander dans quel tri il faut afficher
+            self.player_view.display_players_list(players)
+
+
+        elif selected_menu == '3':
+            # Liste des tournois
+            pass
+        elif selected_menu == '4':
+            # Liste des tours d'un tournoi
+            pass
+        elif selected_menu == '5':
+            # Liste des matchs d'un tournoi
+            pass
+        elif selected_menu == '6':
+            # retour au menu principal
+            self.menu_principal()
+        else:
+            UtilitiesView().display_error()
+
     def get_all_players_from_model(self):
         self.all_players = Player().get_all_players()
-        self.get_player_info_view.display_players_list(self.all_players)
+        self.player_view.display_players_list(self.all_players)
 
     def edit_tournament(self):
-        self.get_tournament_info_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
+        self.tournament_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
         item_index = self.menu_view.select_item()
         tournoi = Tournament().LISTE_TOURNOIS[int(item_index)]
         print(tournoi.tournament_name)
@@ -165,7 +197,7 @@ class Controller:
                     self.get_all_players_from_model()
                     # selectionner le joueur à ajouter
                 elif selected_menu == '2':
-                    player_info = self.get_player_info_view.get_player_info(num_player + 1)
+                    player_info = self.player_view.get_player_info(num_player + 1)
                     player_obj = Player()
                     player_obj.add_player(player_info)
                     self.players.append(player_obj)
@@ -176,7 +208,6 @@ class Controller:
 
     def bind_player_to_tournament(self, tournois_obj, players):
         tournois_obj.bind_players(players)
-
 
     def display_match_of_round(self, round):
         for match in round.matchs:
@@ -215,7 +246,7 @@ class Controller:
 
     def create_tournament(self):
 
-        tournament_infos = self.get_tournament_info_view.get_tournament_info()
+        tournament_infos = self.tournament_view.get_tournament_info()
 
         self.tournois_obj = Tournament()
         self.tournois_obj.add_tournament(tournament_infos)
@@ -228,11 +259,15 @@ class Controller:
 
         # TODO : normal ?
         self.bind_player_to_tournament(self.tournois_obj, self.players)
+        self.players = []
         # print(self.tournois_obj.players_list)
 
         self.generate_first_round(self.tournois_obj)
 
+    def menu_principal(self):
+        selected_menu = self.menu_view.display_menu()
+        self.routing_menu_principal(selected_menu)
+
     def run(self):
         while self.running:
-            selected_menu = self.menu_view.display_menu()
-            self.routing_menu(selected_menu)
+            self.menu_principal()

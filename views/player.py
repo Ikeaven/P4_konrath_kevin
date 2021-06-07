@@ -4,7 +4,7 @@ from .utilities import UtilitiesView
 from .fields import Fields
 
 
-class GetPlayerInfoView:
+class PlayerView:
 
     def __init__(self):
         self.utilities = UtilitiesView()

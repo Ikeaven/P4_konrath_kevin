@@ -6,7 +6,7 @@ from .utilities import UtilitiesView
 from .fields import Fields
 
 
-class GetTournamentInfoView:
+class TournamentView:
 
     def __init__(self):
         self.utilities = UtilitiesView()
@@ -54,3 +54,7 @@ class GetTournamentInfoView:
             print(f'{tournament.tournament_name}')
             print(f'{tournament.location}')
             self.utilities.line_separator()
+
+    def display_tournoi(self, tournoi):
+        pass
+

@@ -11,6 +11,9 @@ class MenuView:
         self.utilities = UtilitiesView()
 
     def display_menu(self):
+        print()
+        print("----- MENU PRINCIPAL -----")
+        print()
         print("[1] Créer un nouveau tournoi")
         print("[2] Editer un tournoi")
         print("[3] Editer un joueur")
@@ -19,6 +22,7 @@ class MenuView:
         print('[6] Fin de round')
         print('[8] Générer tournois automatiquement')
         print("[9] Quitter")
+        print()
         menu_value = input('entrer le numéro du menu :')
         return menu_value
 
@@ -40,4 +44,18 @@ class MenuView:
 
     def select_item(self):
         menu_value = input("selectionner l'item avec l'index : ")
+        return menu_value
+
+    def display_report_menu(self):
+        print()
+        print("----- MENU RAPPORTS -----")
+        print()
+        print('[1] Liste des acteurs')
+        print("[2] Liste des joueurs d'un tournoi")
+        print("[3] Liste des tournois")
+        print("[4] Liste des tours d'un tournoi")
+        print("[5] Liste des matchs d'un tournoi")
+        print("[6] Retour au menu principal")
+        print()
+        menu_value = input("entrer le numéro du menu : ")
         return menu_value
