@@ -5,6 +5,8 @@
 TODO : Module summary
 """
 
+# TODO Enlever les appele de classes sauvages. ex : Tournament()... si ça change faudra le chercher dans tout le code...
+
 # import time
 import random
 # import sys
@@ -101,22 +103,13 @@ class Controller:
             self.player_view.display_players_list(players)
         elif selected_menu == '2':
             # liste des joueurs d'un tournois
-            # Selectionner un tournoi -> afficher les tournois
-            self.tournament_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
-            # choisir l'ordre d'affichage
-            selected_item = self.menu_view.select_item()
-            # afficher les joueurs du tournoi
-            players = Tournament().LISTE_TOURNOIS[int(selected_item)].players_list
-            # TODO demander dans quel tri il faut afficher
-            self.player_view.display_players_list(players)
+            self.display_players_of_tournament()
 
 
         elif selected_menu == '3':
-            # Liste des tournois
-            pass
+            self.tournament_view.display_tournament_list(Tournament.LISTE_TOURNOIS)
         elif selected_menu == '4':
-            # Liste des tours d'un tournoi
-            pass
+            self.display_round_of_tournament()
         elif selected_menu == '5':
             # Liste des matchs d'un tournoi
             pass
@@ -125,6 +118,26 @@ class Controller:
             self.menu_principal()
         else:
             UtilitiesView().display_error()
+
+    def display_round_of_tournament(self):
+        selected_tournament = self.select_tournament()
+        RoundView().display_round(selected_tournament)
+
+    def select_tournament(self):
+        """ retourne l'objet tournoi selectionné """
+        # Selectionner un tournoi -> afficher les tournois
+        self.tournament_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
+        # choisir l'ordre d'affichage
+        number_item = self.menu_view.select_item()
+        selected_tournament = Tournament().LISTE_TOURNOIS[int(number_item)]
+        return selected_tournament
+
+    def display_players_of_tournament(self):
+        selected_tournament = self.select_tournament()
+        # afficher les joueurs du tournoi
+        players = selected_tournament.players_list
+        # TODO demander dans quel tri il faut afficher
+        self.player_view.display_players_list(players)
 
     def get_all_players_from_model(self):
         self.all_players = Player().get_all_players()
