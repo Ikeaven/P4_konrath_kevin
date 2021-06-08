@@ -6,6 +6,7 @@ from .fields import Fields
 
 class ScoreView:
 
+    # TODO sortir ce code dans une view match
     def display_match(self, match):
         UtilitiesView().line_separator()
         print()

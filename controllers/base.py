@@ -112,12 +112,16 @@ class Controller:
             self.display_round_of_tournament()
         elif selected_menu == '5':
             # Liste des matchs d'un tournoi
-            pass
+            self.display_match_of_tournament()
         elif selected_menu == '6':
             # retour au menu principal
             self.menu_principal()
         else:
             UtilitiesView().display_error()
+
+    def display_match_of_tournament(self):
+        selected_tournament = self.select_tournament()
+        RoundView().display_round(selected_tournament, True)
 
     def display_round_of_tournament(self):
         selected_tournament = self.select_tournament()

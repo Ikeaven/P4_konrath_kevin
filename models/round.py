@@ -5,6 +5,9 @@ from datetime import datetime
 
 class Round:
 
+    def __init__(self):
+        self.end_round_datetime = 'Round en cours'
+
     def create_round(self, round_name):
         self.round_name = round_name
         self.matchs = []
