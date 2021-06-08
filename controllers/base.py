@@ -136,12 +136,35 @@ class Controller:
         selected_tournament = Tournament().LISTE_TOURNOIS[int(number_item)]
         return selected_tournament
 
+    def sort_list_by(self, players, tri):
+        if tri == 'ranking':
+            sorted_list = sorted(players, key = lambda x: x.ranking)
+        elif tri == 'last_name':
+            sorted_list = sorted(players, key = lambda x: x.last_name)
+        return sorted_list
+
+    def rooting_sort_by(self, players):
+        sort_by = self.menu_view.select_sorting()
+        if sort_by == '1':
+            # tri par alpha
+            sorted_list = self.sort_list_by(players, "ranking")
+            return sorted_list
+        elif sort_by == '2':
+            sorted_list = self.sort_list_by(players, "last_name")
+            return sorted_list
+        else:
+            # bad request
+            UtilitiesView().display_error()
+
     def display_players_of_tournament(self):
         selected_tournament = self.select_tournament()
         # afficher les joueurs du tournoi
         players = selected_tournament.players_list
+
+        sorted_list = self.rooting_sort_by(players)
+
         # TODO demander dans quel tri il faut afficher
-        self.player_view.display_players_list(players)
+        self.player_view.display_players_list(sorted_list)
 
     def get_all_players_from_model(self):
         self.all_players = Player().get_all_players()
@@ -156,6 +179,7 @@ class Controller:
     def update_score_round(self, round):
         for match in round.matchs:
             winner = self.score.update_score(match)
+            # passer le score en variable de config
             if winner == 0:
                 # match null
                 match.score_player1 += 0.5

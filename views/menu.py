@@ -59,3 +59,11 @@ class MenuView:
         print()
         menu_value = input("entrer le numéro du menu : ")
         return menu_value
+
+    def select_sorting(self):
+        print("[1] Ordre alphabétique")
+        print("[2] Ordre de classement")
+        menu_value = input("selectionner un ordre de tri : ")
+        return menu_value
+
+

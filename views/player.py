@@ -39,3 +39,4 @@ class PlayerView:
             print(f"sex: {player.sex}")
             print(f"ranking : {player.ranking}")
             self.utilities.line_separator()
+
