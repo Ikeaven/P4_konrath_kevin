@@ -19,7 +19,9 @@ class MenuView:
         print("[3] Editer un joueur")
         print('[4] Rapports')
         # print('[5] Afficher les tournois')
+        # TODO S'il y a un round non terminé uniquement
         print('[6] Fin de round')
+        print('[7] Sauvegarder')
         print('[8] Générer tournois automatiquement')
         print("[9] Quitter")
         print()

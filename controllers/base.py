@@ -25,6 +25,9 @@ from views.utilities import UtilitiesView
 from views.score import ScoreView
 from views.round import RoundView
 
+from serializers.player import PlayerSerializer
+from db.tinydb import insert_players_to_db
+
 # from utilities.checker import checker_text_field, checker_menu, checker_digit_field
 # from utilities.checker import checker_digit_or_empy_default_field
 
@@ -83,7 +86,8 @@ class Controller:
                 self.generate_next_round(self.round, self.tournois_obj)
             except AttributeError:
                 self.utilities_view.display_error()
-
+        elif selected_menu == '7':
+            self.save_to_tinydb(Player().LIST_PLAYERS)
         elif selected_menu == '8':
             # TEST générer tournois auto
             self.TEST_import_auto_tournoi()
@@ -119,6 +123,12 @@ class Controller:
         else:
             UtilitiesView().display_error()
 
+    def save_to_tinydb(self, players):
+        serialized_player = []
+        for player in players:
+            serialized_player.append(PlayerSerializer().serialize_player(player))
+        insert_players_to_db(serialized_player)
+
     def display_match_of_tournament(self):
         selected_tournament = self.select_tournament()
         RoundView().display_round(selected_tournament, True)
@@ -138,19 +148,20 @@ class Controller:
 
     def sort_list_by(self, players, tri):
         if tri == 'ranking':
-            sorted_list = sorted(players, key = lambda x: x.ranking)
+            sorted_list = sorted(players, key = lambda x: x.ranking, reverse=True)
         elif tri == 'last_name':
-            sorted_list = sorted(players, key = lambda x: x.last_name)
+            sorted_list = sorted(players, key = lambda x: x.last_name, reverse=False)
         return sorted_list
 
     def rooting_sort_by(self, players):
         sort_by = self.menu_view.select_sorting()
         if sort_by == '1':
             # tri par alpha
-            sorted_list = self.sort_list_by(players, "ranking")
+            sorted_list = self.sort_list_by(players, "last_name")
             return sorted_list
         elif sort_by == '2':
-            sorted_list = self.sort_list_by(players, "last_name")
+            # tri par classement
+            sorted_list = self.sort_list_by(players, "ranking")
             return sorted_list
         else:
             # bad request
@@ -218,7 +229,7 @@ class Controller:
                 "first_name": f'Prénom {str(num_player+1)}',
                 "date_of_birth": f'{random.randint(10, 28)}/{random.randint(10, 12)}/{random.randint(1950, 2021)}',
                 "sex": 'M' if random.randint(0, 1) else 'F',
-                "ranking": ranking}
+                "ranking": random.randint(300, 2000)}
             ranking -= 100
             player_obj = Player()
             player_obj.add_player(player_infos)
