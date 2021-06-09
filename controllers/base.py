@@ -26,6 +26,7 @@ from views.score import ScoreView
 from views.round import RoundView
 
 from serializers.player import PlayerSerializer
+from serializers.tournament import TournamentSerializer
 from db.tinydb import insert_players_to_db
 
 # from utilities.checker import checker_text_field, checker_menu, checker_digit_field
@@ -87,7 +88,7 @@ class Controller:
             except AttributeError:
                 self.utilities_view.display_error()
         elif selected_menu == '7':
-            self.save_to_tinydb(Player().LIST_PLAYERS)
+            self.save_to_tinydb(Player().LIST_PLAYERS, Tournament().LISTE_TOURNOIS)
         elif selected_menu == '8':
             # TEST générer tournois auto
             self.TEST_import_auto_tournoi()
@@ -123,11 +124,15 @@ class Controller:
         else:
             UtilitiesView().display_error()
 
-    def save_to_tinydb(self, players):
+    def save_to_tinydb(self, players, tournaments):
         serialized_player = []
         for player in players:
             serialized_player.append(PlayerSerializer().serialize_player(player))
         insert_players_to_db(serialized_player)
+
+        serialized_tournament = []
+        for tournament in tournaments:
+            serialized_tournament.append(TournamentSerializer().serialize_tournament(tournament))
 
     def display_match_of_tournament(self):
         selected_tournament = self.select_tournament()
