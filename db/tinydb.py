@@ -17,5 +17,5 @@ def insert_tournaments_to_db(tournaments):
     tournaments_table.insert_multiple(tournaments)
 
 
-# clear_db(players_table)
-# clear_db(tournaments_table)
+clear_db(players_table)
+clear_db(tournaments_table)

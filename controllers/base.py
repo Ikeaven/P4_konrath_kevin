@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-TODO : Module summary
-"""
+""" Controller """
 
 # TODO Enlever les appele de classes sauvages. ex : Tournament()... si ça change faudra le chercher dans tout le code...
 
@@ -11,7 +9,7 @@ TODO : Module summary
 import random
 # import sys
 
-from config import DEFAULT_TOUR_NUMBER
+from config import DEFAULT_TOUR_NUMBER, SCORE_FOR_WINNER, SCORE_FOR_NULL
 
 from typing import List
 
@@ -27,7 +25,7 @@ from views.round import RoundView
 
 from serializers.player import PlayerSerializer
 from serializers.tournament import TournamentSerializer
-from db.tinydb import insert_players_to_db
+from db.tinydb import insert_players_to_db, insert_tournaments_to_db
 
 # from utilities.checker import checker_text_field, checker_menu, checker_digit_field
 # from utilities.checker import checker_digit_or_empy_default_field
@@ -53,31 +51,34 @@ class Controller:
         self.running = True
 
     def routing_menu_principal(self, selected_menu):
+        """ Cette fonction déclenche des méthodes en fonction du choix de l'utilisateur """
+        # Créer un nouvau tournoi
         if selected_menu == '1':
-            # Créer un nouvau tournoi
+
             self.create_tournament()
 
+        # Éditer un tournoi
         elif selected_menu == '2':
-            # Éditer un tournoi
-            # afficher les tournois
-            # choisir le tournois à éditer
-            # remplir les champs
+            # TODO : choisir le tournois à éditer
+            # TODO :remplir les champs
             self.edit_tournament()
 
+        # Editer joueur
         elif selected_menu == '3':
-            # Editer joueur
+            # TODO Choisir le joueur et modifier
             self.player_view.display_players_list(self.players)
 
+        # Rapports
         elif selected_menu == '4':
-            # Rapports
             self.routing_menu_reports()
 
+        # Afficher les tournois
         elif selected_menu == '5':
-            # Afficher les tournois
             self.tournament_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
 
+        # fin de round
         elif selected_menu == '6':
-            # fin de round
+            # TODO : créer une méthode pour ça
             try:
                 self.round.stop_round()
                 round_view = RoundView()
@@ -87,44 +88,61 @@ class Controller:
                 self.generate_next_round(self.round, self.tournois_obj)
             except AttributeError:
                 self.utilities_view.display_error()
+
+        # Sauvegarder
         elif selected_menu == '7':
             self.save_to_tinydb(Player().LIST_PLAYERS, Tournament().LISTE_TOURNOIS)
+
+        # TEST générer tournois auto
         elif selected_menu == '8':
-            # TEST générer tournois auto
             self.TEST_import_auto_tournoi()
 
+        # stop
         elif selected_menu == '9':
-            # stop
             self.running = False
+
+        # Choix n'est pas dans les propositions du menu
         else:
-            # Choix n'est pas dans les propositions du menu
             self.utilities_view.display_error()
 
     def routing_menu_reports(self):
+        """ Cette fonction déclenche des méthodes en fonction du choix de l'utilisateur
+        Menu reports """
+
         selected_menu = self.menu_view.display_report_menu()
+
+        # Afficher tous les joueurs
         if selected_menu == '1':
             # TODO demande dans quel tri -> Alpha / Classement
             players = Player.LIST_PLAYERS
             self.player_view.display_players_list(players)
+
+        # Afficher les joueurs d'un tournois
         elif selected_menu == '2':
-            # liste des joueurs d'un tournois
             self.display_players_of_tournament()
 
-
+        # Afficher les tournois
         elif selected_menu == '3':
             self.tournament_view.display_tournament_list(Tournament.LISTE_TOURNOIS)
+
+        # Afficher les rounds d'un tournoi
         elif selected_menu == '4':
             self.display_round_of_tournament()
+
+        # Liste des matchs d'un tournoi
         elif selected_menu == '5':
-            # Liste des matchs d'un tournoi
             self.display_match_of_tournament()
+
+        # retour au menu principal
         elif selected_menu == '6':
-            # retour au menu principal
             self.menu_principal()
+
+        # Le choix n'est pas dans les propositions du menu
         else:
             UtilitiesView().display_error()
 
     def save_to_tinydb(self, players, tournaments):
+        """ Sauvegarder dans un fichier json """
         serialized_player = []
         for player in players:
             serialized_player.append(PlayerSerializer().serialize_player(player))
@@ -133,6 +151,7 @@ class Controller:
         serialized_tournament = []
         for tournament in tournaments:
             serialized_tournament.append(TournamentSerializer().serialize_tournament(tournament))
+        insert_tournaments_to_db(serialized_tournament)
 
     def display_match_of_tournament(self):
         selected_tournament = self.select_tournament()
@@ -152,6 +171,14 @@ class Controller:
         return selected_tournament
 
     def sort_list_by(self, players, tri):
+        """Cette fonction va trier une liste de joueurs.
+        Par ordre alphabetique, ou par classement
+
+        Keyword arguments:
+        players : [array] -- liste d'instance de Player
+        tri : string -- mot clé pour classement
+        Return: sorted_list (liste de joueur classé)
+        """
         if tri == 'ranking':
             sorted_list = sorted(players, key = lambda x: x.ranking, reverse=True)
         elif tri == 'last_name':
@@ -159,58 +186,86 @@ class Controller:
         return sorted_list
 
     def rooting_sort_by(self, players):
+        """Cette fonction va renvoyer une liste de joueurs, ranger dans l'ordre en fonction de notre choix
+        - ordre alphabetique
+        - ordre par classement
+
+        Keyword arguments:
+        players : [array] -- liste d'instance de Player
+        Return [array]: sorted_list -- la liste de joueurs ordonné
+        """
         sort_by = self.menu_view.select_sorting()
+        # tri alphabetique
         if sort_by == '1':
-            # tri par alpha
             sorted_list = self.sort_list_by(players, "last_name")
             return sorted_list
+
+         # tri par classement
         elif sort_by == '2':
-            # tri par classement
             sorted_list = self.sort_list_by(players, "ranking")
             return sorted_list
+
+        # bad request
         else:
-            # bad request
             UtilitiesView().display_error()
 
     def display_players_of_tournament(self):
+        """ Afficher les joueurs d'un tournoi """
+        # affiche les tournois - et choix
         selected_tournament = self.select_tournament()
         # afficher les joueurs du tournoi
         players = selected_tournament.players_list
-
+        # Ranger la liste par ordre alphabetique ou par classement
         sorted_list = self.rooting_sort_by(players)
-
-        # TODO demander dans quel tri il faut afficher
+        # afficher les joueurs par ordre souhaité
         self.player_view.display_players_list(sorted_list)
 
     def get_all_players_from_model(self):
+        """Cette méthode récupère la liste d'instance de class Player
+        et l'affiche
+        """
         self.all_players = Player().get_all_players()
         self.player_view.display_players_list(self.all_players)
 
     def edit_tournament(self):
+
         self.tournament_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
         item_index = self.menu_view.select_item()
         tournoi = Tournament().LISTE_TOURNOIS[int(item_index)]
         print(tournoi.tournament_name)
 
     def update_score_round(self, round):
+        """Cette méthode permet de mettre à jour les scores des joueurs
+        à la fin de chaque match
+
+        Keyword arguments:
+        round : Round -- instance de class Round
+        """
+
         for match in round.matchs:
+            # On demande : qui est le vainqueur
             winner = self.score.update_score(match)
             # passer le score en variable de config
             if winner == 0:
                 # match null
-                match.score_player1 += 0.5
-                match.score_player2 += 0.5
+                match.score_player1 += SCORE_FOR_NULL
+                match.score_player2 += SCORE_FOR_NULL
             elif winner == 1:
                 # player 1 gagne
-                match.score_player1 += 1
+                match.score_player1 += SCORE_FOR_WINNER
 
             elif winner == 2:
                 # player 2 gagne
-                match.score_player2 += 1
+                match.score_player2 += SCORE_FOR_WINNER
 
     # AUTO REMPLISSAGE POUR TESTER PLUS FACILEMENT
-    # TODO : A SUPPRIMER
+    # TODO : A SUPPRIMER pour la mise en production
     def TEST_import_auto_tournoi(self):
+        """ Cette méthode génère une instance de tournoi
+        avec des attributs aléatoires.
+
+        A SUPPRIMER POUR LA PRODUCTION
+        """
         tournament_infos = {'tournament_name': f"tournament_name {random.randint(0, 1000)}",
                             'location': "Strasbourg",
                             'tour_number': '4',
@@ -227,7 +282,12 @@ class Controller:
     # AUTO REMPLISSAGE POUR TESTER PLUS FACILEMENT
     # TODO : A SUPPRIMER
     def TEST_import_auto_players(self, players_number):
-        ranking = 2000
+        """Cette méthode génère automatiquement des instance de Player
+        avec attributs aléatoires
+
+        Keyword arguments:
+        players_number : int -- Nombre de joueurs à créer
+        """
         for num_player in range(int(players_number)):
             player_infos = {
                 "last_name": f'Nom {str(num_player+1)}',
@@ -235,7 +295,6 @@ class Controller:
                 "date_of_birth": f'{random.randint(10, 28)}/{random.randint(10, 12)}/{random.randint(1950, 2021)}',
                 "sex": 'M' if random.randint(0, 1) else 'F',
                 "ranking": random.randint(300, 2000)}
-            ranking -= 100
             player_obj = Player()
             player_obj.add_player(player_infos)
             self.players.append(player_obj)
@@ -243,16 +302,25 @@ class Controller:
             self.players = []
 
     def add_multiple_players(self, players_number):
-        # TODO REMPLISSAGE AUTO A SUPPRIMER => POUR TEST
+        """Cette méthode permet de saisir plusieurs joueurs pour un tournoi
+
+        Keyword arguments:
+        players_number : int -- nombre de joueurs à saisir
+        """
+
+        # TODO : REMPLISSAGE AUTO A SUPPRIMER => POUR TEST
+        # MENU À SUPPRIMER POUR LA PRODUCTION
         menu = self.menu_view.test_import_auto()
         if menu == '1':
             self.TEST_import_auto_players(players_number)
         elif menu == '2':
             for num_player in range(int(players_number)):
                 selected_menu = self.menu_view.display_menu_add_player()
+                #  Ajouter un joueur déjà enregistré
                 if selected_menu == '1':
                     self.get_all_players_from_model()
-                    # selectionner le joueur à ajouter
+                    # TODO : selectionner le joueur à ajouter
+                # Saisir un nouveau joueu
                 elif selected_menu == '2':
                     player_info = self.player_view.get_player_info(num_player + 1)
                     player_obj = Player()
@@ -260,27 +328,55 @@ class Controller:
                     self.players.append(player_obj)
                 else:
                     self.utilities_view.display_error()
+        # A SUPPRIMER - fait parti du menu IMPORT AUTO
         else:
             self.utilities_view.display_error()
 
     def bind_player_to_tournament(self, tournois_obj, players):
+        """Cette méthode ajoute la liste d'instance des joueurs à l'instance de tournois
+
+        Keyword arguments:
+        tournois_obj : Tournament -- Instance de Tournament
+        players : [Player] -- Liste d'instance de Player
+        """
         tournois_obj.bind_players(players)
 
     def display_match_of_round(self, round):
+        """Cette méthode affiche les matchs d'un round
+
+        Keyword arguments:
+        round : Round -- Instance de class Round
+        """
         for match in round.matchs:
             self.score.display_match(match)
 
     def generate_first_round(self, tournois_obj):
+        """Cette méthode génère le premier round : association de joueurs en fonction de leur classement
+
+        Keyword arguments:
+        tournois_obj : Tournament -- Instance de class Tournament
+        """
+        # generate_first_round renvoi une liste de tuple => pair de joueur [(player1, player2), (player1, player2), ...]
         first_round_list = Suisse().generate_first_round(tournois_obj.players_list)
         self.round = Round().create_round('Round 1')
         for players in first_round_list:
+            # création de l'instance de match - initialisation du score
             match = Match().create_match(players[0], 0, players[1], 0)
             self.round.add_match_to_round(match)
+        #  Création du match suivant, et affichage des prochains matchs
         tournois_obj.add_round(self.round)
         RoundView().start_new_round(self.round)
         self.display_match_of_round(self.round)
 
     def generate_next_round(self, previous_round, tournois_obj):
+        """Génèrer les rounds suivant - pas le premier round
+        Si le tournoi est terminé, on affiche les scores
+
+        Keyword arguments:
+        previous_round : Round -- Instance du Round qui vient de se terminer
+        tournois_obj : Tournament -- Instance de Tournament
+        """
+        # Check nombre de tour du tournois
         if len(tournois_obj.round_list) < DEFAULT_TOUR_NUMBER:
 
             match_list = Suisse().generate_next_round(previous_round, tournois_obj)
@@ -293,8 +389,8 @@ class Controller:
             tournois_obj.add_round(self.round)
             self.display_match_of_round(self.round)
 
+        # fin de tournois => afficher score
         else:
-            # fin de tournois => afficher score
             # récupérer la liste triée:
             players = Suisse().get_players_list_with_score(tournois_obj.round_list[-1])
             sorted_list = Suisse().sort_list_by_score(players)
@@ -302,7 +398,11 @@ class Controller:
             print("Fin du tournois => scores")
 
     def create_tournament(self):
+        """Création de l'instance de tournoi
+        On va demander à l'utilisateur de remplir les informations du tournoi
+        """
 
+        # Saisi des informations du tournoi
         tournament_infos = self.tournament_view.get_tournament_info()
 
         self.tournois_obj = Tournament()
@@ -314,17 +414,18 @@ class Controller:
         # number_of_player = self.get_players_number()
         self.add_multiple_players(self.tournois_obj.number_of_players)
 
-        # TODO : normal ?
         self.bind_player_to_tournament(self.tournois_obj, self.players)
+        # remis à zéro pour le prochain tournoi
         self.players = []
-        # print(self.tournois_obj.players_list)
 
         self.generate_first_round(self.tournois_obj)
 
     def menu_principal(self):
+        """ afficher le menu principal """
         selected_menu = self.menu_view.display_menu()
         self.routing_menu_principal(selected_menu)
 
     def run(self):
+        """ Boucle du programme """
         while self.running:
             self.menu_principal()

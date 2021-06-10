@@ -11,8 +11,8 @@ class TournamentSerializer:
             'time_controller': tournament.time_controller,
             'number_of_players': tournament.number_of_players,
             'description': tournament.description,
-            'players_list': tournament.players_list,
-            'round_list': tournament.round_list
+            # 'players_list': tournament.players_list,
+            # 'round_list': tournament.round_list
         }
         return serialized_tournament
 
