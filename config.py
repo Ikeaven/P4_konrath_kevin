@@ -1,5 +1,6 @@
 """ Variables de configuration """
 
+# TODO : ajouter les controllers de temps
 
 DEFAULT_TOUR_NUMBER = 4
 DEFAULT_PLAYERS_NUMBER = 8

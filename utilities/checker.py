@@ -6,6 +6,8 @@
 import functools
 import datetime
 
+# TODO ajouter les checkers a filds directement... 
+
 from views.utilities import UtilitiesView
 
 
