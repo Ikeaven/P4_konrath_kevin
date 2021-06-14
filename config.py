@@ -1,7 +1,7 @@
 """ Variables de configuration """
 
 
-DEFAULT_TOUR_NUMBER = 7
+DEFAULT_TOUR_NUMBER = 4
 DEFAULT_PLAYERS_NUMBER = 8
 
 # Score de match, mise à jour du score
