@@ -14,6 +14,7 @@ import uuid
 from config import DEFAULT_TOUR_NUMBER, SCORE_FOR_WINNER, SCORE_FOR_NULL
 
 from typing import List
+from models import tournament
 
 from models.player import Player
 from models.tournament import Tournament
@@ -50,7 +51,8 @@ class Controller:
             player_view (View): Display players view
             tournament_view (View): Display tournament view
         """
-        # models
+        # models 
+        # TODO : normanelent je n'ai pas besoin de ces listes la... 
         self.players: List[Player] = []
         self.tournaments: List[Tournament] = []
 
@@ -75,14 +77,16 @@ class Controller:
 
         # Edit tournament
         elif selected_menu == '2':
-            # TODO : choisir le tournois à éditer
-            # TODO :remplir les champs
-            self.edit_tournament()
+            selected_tournament = self.select_tournament()
+            self.routing_edit_tournament(selected_tournament)
 
         # Edit player
         elif selected_menu == '3':
             # TODO Choisir le joueur et modifier
-            self.player_view.display_players_list(self.players)
+            self.player_view.display_players_list(Player.get_all_players())
+            player_id : int = int(self.menu_view.select_item('joueur'))
+            selected_player : object = Player.get_all_players()[player_id]
+            self.routing_edit_player(selected_player)
 
         # Rapports
         elif selected_menu == '4':
@@ -90,23 +94,22 @@ class Controller:
 
         # Load data from database
         elif selected_menu == '5':
-            self.load_tournaments()
             self.load_players()
-            self.load_rounds()
-            self.load_matchs()
+            self.load_tournaments()
+            
             
         # end of round
-        elif selected_menu == '6':
-            # TODO : créer une méthode pour ça
-            try:
-                self.round.stop_round()
-                round_view = RoundView()
-                round_view.display_stop_time(self.round)
-                self.update_score_round(self.round)
-
-                self.generate_next_round(self.round, self.tournois_obj)
-            except AttributeError:
-                self.utilities_view.display_error()
+        # elif selected_menu == '6':
+        #     # TODO Passer ce menu dans editer un tournoi
+        #     try:
+        #         self.round.stop_round()
+        #         round_view = RoundView()
+        #         round_view.display_stop_time(self.round)
+        #         self.update_score_round(self.round)
+        #         # FIXME : LIGNE EN DESSOUS A fixer => tournois_obj not defined
+        #         # self.generate_next_round(self.round, tournois_obj)
+        #     except AttributeError:
+        #         self.utilities_view.display_error()
 
         # Save
         elif selected_menu == '7':
@@ -124,6 +127,55 @@ class Controller:
         else:
             self.utilities_view.display_error()
 
+    def routing_edit_tournament(self, tournament:object):
+        selected_menu = self.menu_view.display_menu_edit_tournament(tournament)
+        # end of the round -> update score
+        if selected_menu == '1':
+            self.end_of_round(tournament)
+        # change name of tournament
+        elif selected_menu == '2':
+            new_tournament_name = self.tournament_view.update_tournament_name(tournament)
+            tournament.update_name(new_tournament_name)
+        # change description
+        elif selected_menu == '3':
+            new_description = self.tournament_view.update_tournament_description(tournament)
+            tournament.update_description(new_description)
+        # change time controller
+        elif selected_menu == '4':
+            new_time_controller = self.tournament_view.update_time_controller(tournament)
+            tournament.update_time_controller(new_time_controller)
+        # return to main menu
+        elif selected_menu == '5':
+            self.main_menu()
+        # error : value not found
+        else:
+            self.utilities_view.display_error()
+
+    def routing_edit_player(self, player:object):
+        selected_menu = self.menu_view.display_menu_edit_player()
+        # Editer the ranking
+        if selected_menu == '1':
+            new_ranking = self.player_view.update_ranking(player)
+            player.update_ranking(new_ranking)
+
+        # Edit first name and last name
+        elif selected_menu == '2':
+            new_first_name, new_last_name = self.player_view.update_name(player)
+            player.update_name(new_first_name, new_last_name)
+        # Edit date of birth
+        elif selected_menu == '3':
+            new_date_of_birth = self.player_view.update_birthday(player)
+            player.update_birthday(new_date_of_birth)
+        #  Edit sex
+        elif selected_menu == '4':
+            new_sex = self.player_view.update_sex(player)
+            player.update_sex(new_sex)
+        # Return to main menu
+        elif selected_menu == '5':
+            pass
+        else:
+            self.utilities_view.display_error()
+            
     def routing_menu_reports(self):
         """Choice - Menu reports."""
         selected_menu = self.menu_view.display_report_menu()
@@ -158,7 +210,7 @@ class Controller:
         else:
             UtilitiesView().display_error()
 
-    def rooting_sort_by(self, players):
+    def routing_sort_by(self, players):
             # TODO : à simplifier ... 
             
             """Cette fonction va renvoyer une liste de joueurs, ranger dans l'ordre en fonction de notre choix.
@@ -210,10 +262,11 @@ class Controller:
 
     # Loads
     def load_tournaments(self):
-        tournaments = self.database.get_all_tournament()
+        tournaments : list[dict]= self.database.get_all_tournaments()
         for tournament in tournaments:
             # We only create a new instance if we don't already have it
             if tournament['id'] not in (tournament.id for tournament in Tournament.LISTE_TOURNOIS):
+                # create tournament object with attributs  
                 tournament_obj = Tournament()
                 tournament_dict = {
                             'id': tournament['id'],
@@ -224,21 +277,66 @@ class Controller:
                             'number_of_players': tournament['number_of_players'],
                             'description': tournament['description']}
                 tournament_obj.add_tournament(tournament_dict)
+                # load round for this tournament
+                self.load_rounds(tournament_obj)
+                # bind player with this tournament
+                tournament_player = []
+                for player_id in tournament['players_list']:
+                    tournament_player.append(Player.get_player_by_id(player_id))
+                tournament_obj.bind_players(tournament_player)
             else:
                 pass
-            
+
     def load_players(self):
-        pass
+        players: list = self.database.get_all_players()
+        for player in players:
+            # We only create new instance if we don't already have it
+            if player['id'] not in (player.id for player in Player.LIST_PLAYERS):
+                player_dict = {
+                    "id": player['id'],
+                    "last_name": player['last_name'],
+                    "first_name": player['first_name'],
+                    "date_of_birth": player['date_of_birth'],
+                    "sex": player['sex'],
+                    "ranking": player['ranking']
+                }
+                self.create_player(player_dict)
+                
+            else:
+                pass
+        
 
-    def load_rounds(self):
-        pass
+    def load_rounds(self, tournament):
+        rounds: list[dict] = self.database.get_all_rounds_of_tournament(tournament.id)
+        for round in rounds: 
+            round_dict = {
+                "id": round['id'],
+                "round_name": round['round_name'],
+                "start_round_datetime": round['start_round_datetime'],
+                "end_round_datetime": round['end_round_datetime']
+            }
+            round_obj = Round().load_round(round_dict)
+            # import pdb; pdb.set_trace()
+            tournament.add_round(round_obj)
+            self.load_matchs(round)
 
-    def load_matchs(self):
-        pass
+    def load_matchs(self, round: dict):
+        matchs : list[dict] = self.database.get_all_matchs_of_round(round['id'])
+        for match in matchs:
+            match_dict = {
+                "id": match["id"],
+                "player1": Player.get_player_by_id(match['player1']),
+                "score_player1": match['score_player1'],
+                "player2": Player.get_player_by_id(match['player2']),
+                "score_player2": match['score_player1']
+            }
+            match : object = Match().load_match(match_dict)
+            round_obj : object = Round.find_round_by_id(round['id'])
+            round_obj.add_match_to_round(match)
 
     # Display lists 
     def display_match_of_tournament(self):
-        """Select the tournament and Call the view to display match of a tournament."""
+        """Select the tournament and call the view to display match of a tournament."""
         # TODO : function select item... 
         selected_tournament = self.select_tournament()
         RoundView().display_round(selected_tournament, True)
@@ -249,7 +347,7 @@ class Controller:
         selected_tournament = self.select_tournament()
         RoundView().display_round(selected_tournament)
 
-    def select_tournament(self):
+    def select_tournament(self) -> object:
         """Allow the user to choose the turnament.
 
         Returns:
@@ -258,7 +356,7 @@ class Controller:
         # Selectionner un tournoi -> afficher les tournois
         self.tournament_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
         # choisir l'ordre d'affichage
-        number_item = self.menu_view.select_item()
+        number_item = self.menu_view.select_item('tournois')
         selected_tournament = Tournament().LISTE_TOURNOIS[int(number_item)]
         return selected_tournament
 
@@ -285,13 +383,13 @@ class Controller:
         # afficher les joueurs du tournoi
         players = selected_tournament.players_list
         # Ranger la liste par ordre alphabetique ou par classement
-        sorted_list = self.rooting_sort_by(players)
+        sorted_list = self.routing_sort_by(players)
         # afficher les joueurs par ordre souhaité
         self.player_view.display_players_list(sorted_list)
 
     def get_all_players_from_model(self):
         """Display all players."""
-        self.all_players = Player().get_all_players()
+        self.all_players = Player.get_all_players()
         self.player_view.display_players_list(self.all_players)
 
     def display_match_of_round(self, round):
@@ -304,14 +402,20 @@ class Controller:
             self.score.display_match(match)    
 
     # ADD & Updates 
-    def edit_tournament(self):
-        """Allow users to edit a tournament."""
-        #  TODO : fonction choose your item
-        self.tournament_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
-        item_index = self.menu_view.select_item()
-        tournoi = Tournament().LISTE_TOURNOIS[int(item_index)]
-        print(tournoi.tournament_name)
-        # TODO : EDIT a proprement parler... 
+    
+    def end_of_round(self, tournament):
+        try:
+            round = tournament.round_list[-1]
+            if round.end_round_datetime == 'Round en cours':
+                round.stop_round()
+                round_view = RoundView()
+                round_view.display_stop_time(round)
+                self.update_score_round(round)
+                self.generate_next_round(round, tournament)
+            else:
+                self.utilities_view.display_tournament_is_finished()
+        except AttributeError:
+            self.utilities_view.display_error()
 
     def update_score_round(self, round):
         """Update player's score at the end of a round.
@@ -352,22 +456,23 @@ class Controller:
                             'number_of_players': '8',
                             'description': 'Description du tournois', 
                             'id': str(uuid.uuid1())}
-        self.tournois_obj = Tournament()
-        self.tournois_obj.add_tournament(tournament_infos)
-        self.tournaments.append(self.tournois_obj)
-        self.add_multiple_players(self.tournois_obj.number_of_players)
+        tournament_obj = Tournament()
+        tournament_obj.add_tournament(tournament_infos)
+        # self.tournaments.append(tournois_obj)
+        self.add_multiple_players(int(tournament_obj.number_of_players), tournament_obj)
 
-        self.generate_first_round(self.tournois_obj)
+        self.generate_first_round(tournament_obj)
 
     # AUTO REMPLISSAGE POUR TESTER PLUS FACILEMENT
     # TODO : A SUPPRIMER ⬇️
-    def TEST_import_auto_players(self, players_number):
+    def TEST_import_auto_players(self, players_number:int, tournois_obj:object):
         """Cette méthode génère automatiquement des instance de Player
         avec attributs aléatoires
 
         Keyword arguments:
         players_number : int -- Nombre de joueurs à créer
         """
+        self.players = []
         for num_player in range(int(players_number)):
             player_infos = {
                 "last_name": f'Nom {str(num_player+1)}',
@@ -379,11 +484,17 @@ class Controller:
             player_obj = Player()
             player_obj.add_player(player_infos)
             self.players.append(player_obj)
-            self.bind_player_to_tournament(self.tournois_obj, self.players)
+            self.bind_player_to_tournament(tournois_obj, self.players)
             self.players = []
             
     #  ______________________________________________________________________
-    def add_multiple_players(self, players_number):
+
+    def create_player(self, player_info: dict):
+        player_obj = Player()
+        player_obj.add_player(player_info)
+        # self.players.append(player_obj)
+
+    def add_multiple_players(self, players_number:int, tournament_obj:object):
         """Add players to a tournament.
 
         Keyword arguments:
@@ -394,7 +505,7 @@ class Controller:
         # MENU À SUPPRIMER POUR LA PRODUCTION
         menu = self.menu_view.test_import_auto()
         if menu == '1':
-            self.TEST_import_auto_players(players_number)
+            self.TEST_import_auto_players(players_number, tournament_obj)
         elif menu == '2':
             for num_player in range(int(players_number)):
                 selected_menu = self.menu_view.display_menu_add_player()
@@ -404,20 +515,19 @@ class Controller:
                     # TODO : selectionner le joueur à ajouter
                 # Saisir un nouveau joueu
                 elif selected_menu == '2':
-                    player_info = self.player_view.get_player_info(num_player + 1)
+                    player_info : dict = self.player_view.get_player_info(num_player + 1)
                     id = str(uuid.uuid1())
                     player_info['id'] = str(id)
                     
-                    player_obj = Player()
-                    player_obj.add_player(player_info)
-                    self.players.append(player_obj)
+                    self.create_player(player_info)
+                    
                 else:
                     self.utilities_view.display_error()
         # A SUPPRIMER - fait parti du menu IMPORT AUTO
         else:
             self.utilities_view.display_error()
 
-    def bind_player_to_tournament(self, tournament_obj, players):
+    def bind_player_to_tournament(self, tournament_obj:object, players:object):
         """Add players lists to tournament.
 
         Keyword arguments:
@@ -483,20 +593,20 @@ class Controller:
         # Saisi des informations du tournoi
         tournament_infos = self.tournament_view.get_tournament_info()
         tournament_infos['id'] = str(uuid.uuid1())
-        self.tournois_obj = Tournament()
-        self.tournois_obj.add_tournament(tournament_infos)
+        tournois_obj = Tournament()
+        tournois_obj.add_tournament(tournament_infos)
 
         # TODO : a remplacer par la liste du modèle
-        self.tournaments.append(self.tournois_obj)
+        self.tournaments.append(tournois_obj)
 
         # number_of_player = self.get_players_number()
-        self.add_multiple_players(self.tournois_obj.number_of_players)
+        self.add_multiple_players(int(tournois_obj.number_of_players), tournois_obj)
 
-        self.bind_player_to_tournament(self.tournois_obj, self.players)
+        self.bind_player_to_tournament(tournois_obj, self.players)
         # remis à zéro pour le prochain tournoi
         self.players = []
 
-        self.generate_first_round(self.tournois_obj)
+        self.generate_first_round(tournois_obj)
 
     # main
     def main_menu(self):

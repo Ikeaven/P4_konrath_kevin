@@ -58,3 +58,18 @@ class TournamentView:
     def display_tournoi(self, tournoi):
         pass
 
+
+    def update_tournament_name(self, tournament):
+        print(f'Nom avant mise à jour : {tournament.tournament_name}')
+        new_tournament_name = self.fields.input_text_field('Nouveau nom du tournoi : ')
+        return new_tournament_name
+
+    def update_tournament_description(self, tournament):
+        print(f'Description avant mise à jour : {tournament.description}')
+        new_description = self.fields.input_text_field('Nouvelle description du tournoi :')
+        return new_description
+
+    def update_time_controller(self, tournament):
+        print(f'Controller avant mise à jour : {tournament.time_controller}')
+        new_time_controller = self.fields.input_time_controler('Nouveau controller de temps [1] bullet / [2] blitz / [3] coup rapide :')
+        return new_time_controller

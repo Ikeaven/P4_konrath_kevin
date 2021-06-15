@@ -23,3 +23,7 @@ class UtilitiesView:
     def display_error_null(self):
         """Display an error : This field can not be empty"""        
         print("Erreur. Ce champ ne peut pas être vide.")
+
+    def display_tournament_is_finished(self):
+        """tournament is finished message"""
+        print('Error : Le tournoi est déjà terminé')

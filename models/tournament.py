@@ -24,5 +24,14 @@ class Tournament:
         for player in players:
             self.players_list.append(player)
 
-    def add_round(self, round):
+    def add_round(self, round: object):
         self.round_list.append(round)
+
+    def update_name(self, new_tournament_name):
+        self.tournament_name = new_tournament_name
+
+    def update_description(self, new_description):
+        self.description = new_description
+
+    def update_time_controller(self, new_time_controller):
+        self.time_controller = new_time_controller

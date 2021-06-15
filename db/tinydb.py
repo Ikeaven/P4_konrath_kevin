@@ -1,7 +1,7 @@
 """ Import from TinyDB / Export to TinyDB """
 
 
-from tinydb import TinyDB
+from tinydb import TinyDB, where
 
 # TODO nom db dans config
 class Database: 
@@ -36,16 +36,24 @@ class Database:
         players = self.db.table('players')
         return players.all()
 
-    def get_all_tournament(self) -> list:
+    def get_all_tournaments(self) -> list:
         tournaments = self.db.table('tournaments')
         return tournaments.all()
 
-    def get_all_round(self) -> list:
-        rounds = self.db.table('rounds')
-        return rounds.all() 
+    def get_all_rounds_of_tournament(self, tournament_id: str) -> list:
+        tournament = self.tournaments_table.search(where('id') == tournament_id)
+        rounds = []
+        for round_id in tournament[0]['round_list']:
+            round_dict = self.rounds_table.search(where('id') == round_id)
+            rounds.append(round_dict[0])
+        return rounds
 
-    def get_all_matchs(self) -> list:
-        matchs = self.db.table('matchs')
-        return matchs.all()
+    def get_all_matchs_of_round(self, round_id: int) -> list:
+        round = self.rounds_table.search(where('id') == round_id)
+        matchs = []
+        for match_id in round[0]['matchs']:
+            match_dict = self.matchs_table.search(where('id') == match_id)
+            matchs.append(match_dict[0])
+        return matchs
 
    

@@ -11,6 +11,8 @@ class RoundSerializer:
         serialized_round = {
             'id': round.id,
             'round_name': round.round_name,
+            'start_round_datetime': str(round.start_round_datetime),
+            'end_round_datetime': str(round.end_round_datetime),
             'matchs': match_list_id 
         }
         return serialized_round
