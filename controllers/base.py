@@ -513,7 +513,7 @@ class Controller:
         elif menu == '2':
             for num_player in range(int(players_number)):
                 selected_menu = self.menu_view.display_menu_add_player()
-                if len(Player.get_all_players()) > 1:
+                if Player.get_all_players() != None:
                     if selected_menu == '1':
                         self.display_all_players_from_model()
                         player_id = int(self.menu_view.select_item('joueur'))
