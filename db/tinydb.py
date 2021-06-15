@@ -1,21 +1,51 @@
 """ Import from TinyDB / Export to TinyDB """
 
+
 from tinydb import TinyDB
 
 # TODO nom db dans config
-db = TinyDB('db.json')
-players_table = db.table('players')
-tournaments_table = db.table('tournaments')
+class Database: 
 
-def clear_db(table):
-    table.truncate()
+    def __init__(self):
+        self.db = TinyDB('db.json')
+        # self.clear_db()
+        self.players_table = self.db.table('players')
+        self.tournaments_table = self.db.table('tournaments')
+        self.rounds_table = self.db.table('rounds')
+        self.matchs_table = self.db.table('matchs')
 
-def insert_players_to_db(players):
-    players_table.insert_multiple(players)
+    def clear_db(self, ):
+        # self.db.truncate()
+        # TODO : supprimer la table et réinitialiser les ID de table
+        self.db.drop_tables()
+        
 
-def insert_tournaments_to_db(tournaments):
-    tournaments_table.insert_multiple(tournaments)
+    def insert_players_to_db(self, players):
+        self.players_table.insert_multiple(players)
 
+    def insert_rounds_to_db(self, rounds):
+        self.rounds_table.insert_multiple(rounds)
 
-clear_db(players_table)
-clear_db(tournaments_table)
+    def insert_matchs_to_db(self, matchs):
+        self.matchs_table.insert_multiple(matchs)
+
+    def insert_tournaments_to_db(self, tournaments):
+        self.tournaments_table.insert_multiple(tournaments)
+
+    def get_all_players(self) -> list:
+        players = self.db.table('players')
+        return players.all()
+
+    def get_all_tournament(self) -> list:
+        tournaments = self.db.table('tournaments')
+        return tournaments.all()
+
+    def get_all_round(self) -> list:
+        rounds = self.db.table('rounds')
+        return rounds.all() 
+
+    def get_all_matchs(self) -> list:
+        matchs = self.db.table('matchs')
+        return matchs.all()
+
+   

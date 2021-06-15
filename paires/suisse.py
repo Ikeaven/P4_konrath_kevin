@@ -74,6 +74,7 @@ class Suisse:
                     return False
         return True
 
+    # FIXME : réduire la taille des fonction
     def next_round_player_association(self, players_list_with_score, tournament):
         # TODO : faire de plus petites fonctions
         # prendre l'utilisateur un et l'associer au second

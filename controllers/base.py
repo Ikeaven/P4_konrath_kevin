@@ -6,7 +6,9 @@
 # TODO Enlever les appele de classes sauvages. ex : Tournament()... si ça change faudra le chercher dans tout le code...
 
 # import time
+import pdb
 import random
+import uuid
 # import sys
 
 from config import DEFAULT_TOUR_NUMBER, SCORE_FOR_WINNER, SCORE_FOR_NULL
@@ -23,9 +25,12 @@ from views.utilities import UtilitiesView
 from views.score import ScoreView
 from views.round import RoundView
 
+from db.tinydb import Database
+
 from serializers.player import PlayerSerializer
 from serializers.tournament import TournamentSerializer
-from db.tinydb import insert_players_to_db, insert_tournaments_to_db
+from serializers.round import RoundSerializer
+from serializers.match import MatchSerializer
 
 # from utilities.checker import checker_text_field, checker_menu, checker_digit_field
 # from utilities.checker import checker_digit_or_empy_default_field
@@ -36,6 +41,7 @@ from paires.suisse import Suisse
 class Controller:
     """Main Controller."""
 
+    # init
     def __init__(self, menu_view, player_view, tournament_view):
         """Init Controller.
 
@@ -55,23 +61,25 @@ class Controller:
         self.utilities_view = UtilitiesView()
         self.score = ScoreView()
 
+        self.database = Database()
+
         self.running = True
 
     # Rounting
     def routing_main_menu(self, selected_menu):
         """Cette fonction déclenche des méthodes en fonction du choix de l'utilisateur."""
-        # Créer un nouvau tournoi
+        # Create new tournament
         if selected_menu == '1':
 
             self.create_tournament()
 
-        # Éditer un tournoi
+        # Edit tournament
         elif selected_menu == '2':
             # TODO : choisir le tournois à éditer
             # TODO :remplir les champs
             self.edit_tournament()
 
-        # Editer joueur
+        # Edit player
         elif selected_menu == '3':
             # TODO Choisir le joueur et modifier
             self.player_view.display_players_list(self.players)
@@ -80,11 +88,14 @@ class Controller:
         elif selected_menu == '4':
             self.routing_menu_reports()
 
-        # Afficher les tournois
+        # Load data from database
         elif selected_menu == '5':
-            self.tournament_view.display_tournament_list(Tournament().LISTE_TOURNOIS)
-
-        # fin de round
+            self.load_tournaments()
+            self.load_players()
+            self.load_rounds()
+            self.load_matchs()
+            
+        # end of round
         elif selected_menu == '6':
             # TODO : créer une méthode pour ça
             try:
@@ -97,11 +108,11 @@ class Controller:
             except AttributeError:
                 self.utilities_view.display_error()
 
-        # Sauvegarder
+        # Save
         elif selected_menu == '7':
             self.save_to_tinydb(Player().LIST_PLAYERS, Tournament().LISTE_TOURNOIS)
 
-        # TEST générer tournois auto
+        # TEST generate tournament auto
         elif selected_menu == '8':
             self.TEST_import_auto_tournoi()
 
@@ -109,7 +120,7 @@ class Controller:
         elif selected_menu == '9':
             self.running = False
 
-        # Choix n'est pas dans les propositions du menu
+        # error : value not found
         else:
             self.utilities_view.display_error()
 
@@ -177,15 +188,53 @@ class Controller:
     # Save 
     def save_to_tinydb(self, players, tournaments):
         """Save players and tournaments into json file."""
+        self.database.clear_db()
         serialized_player = []
         for player in players:
             serialized_player.append(PlayerSerializer().serialize_player(player))
-        insert_players_to_db(serialized_player)
+        self.database.insert_players_to_db(serialized_player)
 
-        serialized_tournament = []
+        serialized_tournaments = []
         for tournament in tournaments:
-            serialized_tournament.append(TournamentSerializer().serialize_tournament(tournament))
-        insert_tournaments_to_db(serialized_tournament)
+            serialized_tournaments.append(TournamentSerializer().serialize_tournament(tournament))
+            serialized_rounds = []
+            for round in tournament.round_list:
+                serialized_rounds.append(RoundSerializer().serialize_round(round))
+                serialized_matchs = []
+                for match in round.matchs:
+                    serialized_matchs.append(MatchSerializer().serialize_matchs(match))
+                
+                self.database.insert_matchs_to_db(serialized_matchs)
+            self.database.insert_rounds_to_db(serialized_rounds)
+        self.database.insert_tournaments_to_db(serialized_tournaments)
+
+    # Loads
+    def load_tournaments(self):
+        tournaments = self.database.get_all_tournament()
+        for tournament in tournaments:
+            # We only create a new instance if we don't already have it
+            if tournament['id'] not in (tournament.id for tournament in Tournament.LISTE_TOURNOIS):
+                tournament_obj = Tournament()
+                tournament_dict = {
+                            'id': tournament['id'],
+                            'tournament_name': tournament['tournament_name'],
+                            'location': tournament['location'],
+                            'tour_number': tournament['tour_number'],
+                            'time_controller': tournament['time_controller'],
+                            'number_of_players': tournament['number_of_players'],
+                            'description': tournament['description']}
+                tournament_obj.add_tournament(tournament_dict)
+            else:
+                pass
+            
+    def load_players(self):
+        pass
+
+    def load_rounds(self):
+        pass
+
+    def load_matchs(self):
+        pass
 
     # Display lists 
     def display_match_of_tournament(self):
@@ -254,7 +303,7 @@ class Controller:
         for match in round.matchs:
             self.score.display_match(match)    
 
-    # Updates 
+    # ADD & Updates 
     def edit_tournament(self):
         """Allow users to edit a tournament."""
         #  TODO : fonction choose your item
@@ -301,7 +350,8 @@ class Controller:
                             'tour_number': '4',
                             'time_controller': f'{random.randint(1,3)}',
                             'number_of_players': '8',
-                            'description': 'Description du tournois'}
+                            'description': 'Description du tournois', 
+                            'id': str(uuid.uuid1())}
         self.tournois_obj = Tournament()
         self.tournois_obj.add_tournament(tournament_infos)
         self.tournaments.append(self.tournois_obj)
@@ -324,12 +374,14 @@ class Controller:
                 "first_name": f'Prénom {str(num_player+1)}',
                 "date_of_birth": f'{random.randint(10, 28)}/{random.randint(10, 12)}/{random.randint(1950, 2021)}',
                 "sex": 'M' if random.randint(0, 1) else 'F',
-                "ranking": random.randint(300, 2000)}
+                "ranking": random.randint(300, 2000),
+                "id": str(uuid.uuid1())}
             player_obj = Player()
             player_obj.add_player(player_infos)
             self.players.append(player_obj)
             self.bind_player_to_tournament(self.tournois_obj, self.players)
             self.players = []
+            
     #  ______________________________________________________________________
     def add_multiple_players(self, players_number):
         """Add players to a tournament.
@@ -353,6 +405,9 @@ class Controller:
                 # Saisir un nouveau joueu
                 elif selected_menu == '2':
                     player_info = self.player_view.get_player_info(num_player + 1)
+                    id = str(uuid.uuid1())
+                    player_info['id'] = str(id)
+                    
                     player_obj = Player()
                     player_obj.add_player(player_info)
                     self.players.append(player_obj)
@@ -418,6 +473,7 @@ class Controller:
             self.score.display_final_score(sorted_list)
             print("Fin du tournois")
 
+    # Create Tournament
     def create_tournament(self):
         """Create Tournament.
 
@@ -426,7 +482,7 @@ class Controller:
 
         # Saisi des informations du tournoi
         tournament_infos = self.tournament_view.get_tournament_info()
-
+        tournament_infos['id'] = str(uuid.uuid1())
         self.tournois_obj = Tournament()
         self.tournois_obj.add_tournament(tournament_infos)
 
@@ -451,4 +507,5 @@ class Controller:
     def run(self):
         """App loop."""
         while self.running:
+
             self.main_menu()

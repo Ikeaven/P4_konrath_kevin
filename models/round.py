@@ -1,5 +1,5 @@
 """ Round model """
-
+from uuid import uuid1
 from datetime import datetime
 
 
@@ -9,6 +9,7 @@ class Round:
         self.end_round_datetime = 'Round en cours'
 
     def create_round(self, round_name):
+        self.id = str(uuid1())
         self.round_name = round_name
         self.matchs = []
         return self
