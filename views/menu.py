@@ -57,7 +57,8 @@ class MenuView:
         print('[2] Changer le nom')
         print('[3] Changer la description')
         print('[4] Changer le controller de temps')
-        print('[5] Retour au menu principal')
+        print('[5] Changer la localisation')
+        print('[6] Retour au menu principal')
         menu_value = input('entrer le numéro du menu :')
         return menu_value
 

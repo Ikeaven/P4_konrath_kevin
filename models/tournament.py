@@ -20,7 +20,7 @@ class Tournament:
     def append_tournois(cls, tournament):
         cls.LISTE_TOURNOIS.append(tournament)
 
-    def bind_players(self, players):
+    def bind_players(self, players: list):
         for player in players:
             self.players_list.append(player)
 
@@ -35,3 +35,6 @@ class Tournament:
 
     def update_time_controller(self, new_time_controller):
         self.time_controller = new_time_controller
+
+    def update_location(self, new_location):
+        self.location = new_location

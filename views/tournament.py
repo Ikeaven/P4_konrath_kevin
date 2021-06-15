@@ -53,11 +53,14 @@ class TournamentView:
             print(f'Index du tournoi : [{index}]')
             print(f'{tournament.tournament_name}')
             print(f'{tournament.location}')
+            if tournament.time_controller == 1:
+                print('Bullet')
+            elif tournament.time_controller == 2:
+                print('Blitz')
+            elif tournament.time_controller == 3:
+                print('Coup rapide')            
+            print(f'{tournament.description}')
             self.utilities.line_separator()
-
-    def display_tournoi(self, tournoi):
-        pass
-
 
     def update_tournament_name(self, tournament):
         print(f'Nom avant mise à jour : {tournament.tournament_name}')
@@ -66,10 +69,15 @@ class TournamentView:
 
     def update_tournament_description(self, tournament):
         print(f'Description avant mise à jour : {tournament.description}')
-        new_description = self.fields.input_text_field('Nouvelle description du tournoi :')
+        new_description = self.fields.input_text_field('Nouvelle description du tournoi : ')
         return new_description
 
     def update_time_controller(self, tournament):
         print(f'Controller avant mise à jour : {tournament.time_controller}')
-        new_time_controller = self.fields.input_time_controler('Nouveau controller de temps [1] bullet / [2] blitz / [3] coup rapide :')
+        new_time_controller = self.fields.input_time_controler('Nouveau controller de temps [1] bullet / [2] blitz / [3] coup rapide : ')
         return new_time_controller
+
+    def update_tournament_location(self, tournament):
+        print(f'Lieu du tournoi avant mise à jour : {tournament.location}')
+        new_location = self.fields.input_text_field('Nouveau lieu du tournoi : ')
+        return new_location

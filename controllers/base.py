@@ -144,8 +144,12 @@ class Controller:
         elif selected_menu == '4':
             new_time_controller = self.tournament_view.update_time_controller(tournament)
             tournament.update_time_controller(new_time_controller)
-        # return to main menu
+        # change tournament's location
         elif selected_menu == '5':
+            new_location = self.tournament_view.update_tournament_location(tournament)
+            tournament.update_location(new_location)    
+        # return to main menu
+        elif selected_menu == '6':
             self.main_menu()
         # error : value not found
         else:
@@ -387,7 +391,7 @@ class Controller:
         # afficher les joueurs par ordre souhaité
         self.player_view.display_players_list(sorted_list)
 
-    def get_all_players_from_model(self):
+    def display_all_players_from_model(self):
         """Display all players."""
         self.all_players = Player.get_all_players()
         self.player_view.display_players_list(self.all_players)
@@ -452,7 +456,7 @@ class Controller:
         tournament_infos = {'tournament_name': f"tournament_name {random.randint(0, 1000)}",
                             'location': "Strasbourg",
                             'tour_number': '4',
-                            'time_controller': f'{random.randint(1,3)}',
+                            'time_controller': random.randint(1,3),
                             'number_of_players': '8',
                             'description': 'Description du tournois', 
                             'id': str(uuid.uuid1())}
@@ -500,7 +504,7 @@ class Controller:
         Keyword arguments:
         players_number : int -- number of players to add 
         """
-
+        # TODO ; A SIMPLIFIER !!! 
         # TODO : REMPLISSAGE AUTO A SUPPRIMER => POUR TEST
         # MENU À SUPPRIMER POUR LA PRODUCTION
         menu = self.menu_view.test_import_auto()
@@ -509,20 +513,26 @@ class Controller:
         elif menu == '2':
             for num_player in range(int(players_number)):
                 selected_menu = self.menu_view.display_menu_add_player()
-                #  Ajouter un joueur déjà enregistré
-                if selected_menu == '1':
-                    self.get_all_players_from_model()
-                    # TODO : selectionner le joueur à ajouter
-                # Saisir un nouveau joueu
-                elif selected_menu == '2':
+                if len(Player.get_all_players()) > 1:
+                    if selected_menu == '1':
+                        self.display_all_players_from_model()
+                        player_id = int(self.menu_view.select_item('joueur'))
+                        player = Player.get_all_players()[player_id]
+                        self.bind_player_to_tournament(tournament_obj, [player])
+                    # Saisir un nouveau joueu
+                    elif selected_menu == '2':
+                        player_info : dict = self.player_view.get_player_info(num_player + 1)
+                        id = str(uuid.uuid1())
+                        player_info['id'] = str(id)
+                        
+                        self.create_player(player_info)
+                    else:
+                        self.utilities_view.display_error()
+                else:
                     player_info : dict = self.player_view.get_player_info(num_player + 1)
                     id = str(uuid.uuid1())
                     player_info['id'] = str(id)
-                    
-                    self.create_player(player_info)
-                    
-                else:
-                    self.utilities_view.display_error()
+
         # A SUPPRIMER - fait parti du menu IMPORT AUTO
         else:
             self.utilities_view.display_error()
