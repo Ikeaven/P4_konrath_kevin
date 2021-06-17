@@ -308,8 +308,7 @@ class Controller:
                 
             else:
                 pass
-        
-
+ 
     def load_rounds(self, tournament):
         rounds: list[dict] = self.database.get_all_rounds_of_tournament(tournament.id)
         for round in rounds: 
@@ -406,7 +405,6 @@ class Controller:
             self.score.display_match(match)    
 
     # ADD & Updates 
-    
     def end_of_round(self, tournament):
         try:
             round = tournament.round_list[-1]
@@ -508,20 +506,28 @@ class Controller:
         # TODO : REMPLISSAGE AUTO A SUPPRIMER => POUR TEST
         # MENU À SUPPRIMER POUR LA PRODUCTION
         menu = self.menu_view.test_import_auto()
+        # Import auto 
         if menu == '1':
             self.TEST_import_auto_players(players_number, tournament_obj)
+        # Import manuel
         elif menu == '2':
             for num_player in range(int(players_number)):
                 selected_menu = self.menu_view.display_menu_add_player()
+                # On vérifie qu'il y ai des joueurs enregistrés
                 if Player.get_all_players() != None:
+                    # Joueur déjà enregistré
                     if selected_menu == '1':
                         self.display_all_players_from_model()
                         player_id = int(self.menu_view.select_item('joueur'))
                         player = Player.get_all_players()[player_id]
-                        self.bind_player_to_tournament(tournament_obj, [player])
-                    # Saisir un nouveau joueu
+                        if player in self.players_list:
+                            # TODO : a basculer dans view
+                            print('player déjà enregistré !!')
+                        else: 
+                            self.bind_player_to_tournament(tournament_obj, [player])
+                    # Saisir un nouveau joueur
                     elif selected_menu == '2':
-                        player_info : dict = self.player_view.get_player_info(num_player + 1)
+                        player_info: dict = self.player_view.get_player_info(num_player + 1)
                         id = str(uuid.uuid1())
                         player_info['id'] = str(id)
                         
@@ -529,7 +535,7 @@ class Controller:
                     else:
                         self.utilities_view.display_error()
                 else:
-                    player_info : dict = self.player_view.get_player_info(num_player + 1)
+                    player_info: dict = self.player_view.get_player_info(num_player + 1)
                     id = str(uuid.uuid1())
                     player_info['id'] = str(id)
 
@@ -537,7 +543,7 @@ class Controller:
         else:
             self.utilities_view.display_error()
 
-    def bind_player_to_tournament(self, tournament_obj:object, players:object):
+    def bind_player_to_tournament(self, tournament_obj:object, players:List[Player]):
         """Add players lists to tournament.
 
         Keyword arguments:

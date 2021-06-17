@@ -1,4 +1,4 @@
-import config as config
+from config import TIME_CONTROLLER, DEFAULT_TOUR_NUMBER, DEFAULT_PLAYERS_NUMBER
 import utilities.checker as check
 
 
@@ -21,15 +21,15 @@ class Fields:
         return input(message)
 
     # TODO : mettre les valeurs dans les variables de config
-    @check.checker_menu(1, 3)
+    @check.checker_menu(1, len(TIME_CONTROLLER))
     def input_time_controler(self, message):
         return input(message)
 
-    @check.checker_digit_or_empy_default_field(config.DEFAULT_TOUR_NUMBER)
+    @check.checker_digit_or_empy_default_field(DEFAULT_TOUR_NUMBER)
     def input_tour_number(self, message):
         return input(message)
 
-    @check.checker_digit_or_empy_default_field(config.DEFAULT_PLAYERS_NUMBER)
+    @check.checker_digit_or_empy_default_field(DEFAULT_PLAYERS_NUMBER)
     def input_number_of_players(self, message):
         return input(message)
 

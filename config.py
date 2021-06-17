@@ -1,6 +1,7 @@
 """ Variables de configuration """
 
-# TODO : ajouter les controllers de temps
+TIME_CONTROLLER = ['[1] Bullet', '[2] Blitz', '[3] Coup rapide']
+
 
 DEFAULT_TOUR_NUMBER = 4
 DEFAULT_PLAYERS_NUMBER = 8

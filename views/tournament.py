@@ -1,6 +1,6 @@
 """ Get tournament infos view"""
 
-from config import DEFAULT_TOUR_NUMBER, DEFAULT_PLAYERS_NUMBER
+from config import DEFAULT_TOUR_NUMBER, DEFAULT_PLAYERS_NUMBER, TIME_CONTROLLER
 
 from .utilities import UtilitiesView
 from .fields import Fields
@@ -17,7 +17,9 @@ class TournamentView:
         # TODO : date de fin si plusieurs jours
         tournament_name = self.fields.input_text_field("Nom du tournoi : ")
         location = self.fields.input_text_field("Lieu du tournoi : ")
-        time_controller = self.fields.input_time_controler("[1] bullet / [2] blitz / [3] coup rapide : ")
+
+        time_controller = self.fields.input_time_controler(f'Controller de temps : {", ".join([time for time in TIME_CONTROLLER])} : ')
+
         description = self.fields.input_text_field("Description du tournois : ")
         message_nombre_tour = f"Nombre de tour (si champ vide, {DEFAULT_TOUR_NUMBER} par défaut) : "
         tour_number = self.fields.input_tour_number(message_nombre_tour)
@@ -48,18 +50,16 @@ class TournamentView:
 
     def display_tournament_list(self, tournaments_list):
         self.utilities.line_separator()
-
+        print()
+        print('LISTE DES TOURNOIS')
+        print()
+        self.utilities.line_separator()
         for index, tournament in enumerate(tournaments_list):
             print(f'Index du tournoi : [{index}]')
-            print(f'{tournament.tournament_name}')
-            print(f'{tournament.location}')
-            if tournament.time_controller == 1:
-                print('Bullet')
-            elif tournament.time_controller == 2:
-                print('Blitz')
-            elif tournament.time_controller == 3:
-                print('Coup rapide')            
-            print(f'{tournament.description}')
+            print(f'Nom : {tournament.tournament_name}')
+            print(f'Lieu : {tournament.location}')
+            print(f'Controller de temps : {TIME_CONTROLLER[tournament.time_controller -1]}')           
+            print(f'Description : {tournament.description}')
             self.utilities.line_separator()
 
     def update_tournament_name(self, tournament):
@@ -74,7 +74,7 @@ class TournamentView:
 
     def update_time_controller(self, tournament):
         print(f'Controller avant mise à jour : {tournament.time_controller}')
-        new_time_controller = self.fields.input_time_controler('Nouveau controller de temps [1] bullet / [2] blitz / [3] coup rapide : ')
+        new_time_controller = self.fields.input_time_controler(f'Nouveau controller de temps : {", ".join([time for time in TIME_CONTROLLER])} : ')
         return new_time_controller
 
     def update_tournament_location(self, tournament):
