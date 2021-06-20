@@ -10,7 +10,7 @@ class Player:
             setattr(self, attr_name, attr_value)
         self.append_player(self)
 
-    def update_ranking(self, new_ranking:int):
+    def update_ranking(self, new_ranking: int):
         self.ranking = new_ranking
 
     def update_name(self, new_first_name, new_last_name):

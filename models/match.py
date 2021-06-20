@@ -22,4 +22,3 @@ class Match:
         self.player2 = match_info['player2']
         self.score_player2 = match_info['score_player2']
         return self
-

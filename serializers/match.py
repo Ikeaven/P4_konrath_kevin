@@ -3,7 +3,7 @@
 
 class MatchSerializer:
 
-    def serialize_matchs(self, match: object) -> dict :
+    def serialize_matchs(self, match: object) -> dict:
         serialized_matchs = {
             'id': match.id,
             'player1': match.player1.id,

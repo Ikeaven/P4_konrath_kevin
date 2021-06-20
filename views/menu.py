@@ -3,7 +3,8 @@
 
 from .utilities import UtilitiesView
 # TODO UTILISER LES FIELDS avec vérif !!
-# TODO decorateur 'entrez le numéro du menu... 
+# TODO decorateur 'entrez le numéro du menu...
+
 
 class MenuView:
 
@@ -19,7 +20,7 @@ class MenuView:
         print("[3] Editer un joueur")
         print('[4] Rapports')
         print('[5] Chargement de la base de donnée')
-       
+
         # print('[6] Fin de round')
         print('[7] Sauvegarder')
         print('[8] Générer tournois automatiquement')
@@ -40,7 +41,6 @@ class MenuView:
         menu_value = input('entrer le numéro du menu :')
         return menu_value
 
-
     def display_menu_add_player(self):
         print('[1] Ajouter joueur a partir des joueurs déjà enregistrés')
         print('[2] Ajouter un nouveau joueur')
@@ -51,7 +51,7 @@ class MenuView:
         print()
         print("----- MENU EDITION DU TOURNOI -----")
         print()
-        
+
         if tournament.round_list[-1].end_round_datetime == 'Round en cours':
             print('[1] Fin du round : mise à jour des scores')
         print('[2] Changer le nom')
@@ -69,7 +69,7 @@ class MenuView:
         return menu_value
 
     def select_item(self, item):
-        if item in ['joueur', 'tournois'] :
+        if item in ['joueur', 'tournois']:
             determinant = 'le'
         else:
             determinant = 'la'
@@ -95,5 +95,3 @@ class MenuView:
         print("[2] Ordre de classement")
         menu_value = input("selectionner un ordre de tri : ")
         return menu_value
-
-

@@ -18,7 +18,9 @@ class TournamentView:
         tournament_name = self.fields.input_text_field("Nom du tournoi : ")
         location = self.fields.input_text_field("Lieu du tournoi : ")
 
-        time_controller = self.fields.input_time_controler(f'Controller de temps : {", ".join([time for time in TIME_CONTROLLER])} : ')
+        time_controller = self.fields.input_time_controler(
+            'Controller de temps : '
+            f'{", ".join([time for time in TIME_CONTROLLER])} : ')
 
         description = self.fields.input_text_field("Description du tournois : ")
         message_nombre_tour = f"Nombre de tour (si champ vide, {DEFAULT_TOUR_NUMBER} par défaut) : "
@@ -58,7 +60,7 @@ class TournamentView:
             print(f'Index du tournoi : [{index}]')
             print(f'Nom : {tournament.tournament_name}')
             print(f'Lieu : {tournament.location}')
-            print(f'Controller de temps : {TIME_CONTROLLER[tournament.time_controller -1]}')           
+            print(f'Controller de temps : {TIME_CONTROLLER[tournament.time_controller -1]}')
             print(f'Description : {tournament.description}')
             self.utilities.line_separator()
 
@@ -74,7 +76,9 @@ class TournamentView:
 
     def update_time_controller(self, tournament):
         print(f'Controller avant mise à jour : {tournament.time_controller}')
-        new_time_controller = self.fields.input_time_controler(f'Nouveau controller de temps : {", ".join([time for time in TIME_CONTROLLER])} : ')
+        new_time_controller = self.fields.input_time_controler(
+            'Nouveau controller de temps : '
+            f'{", ".join([time for time in TIME_CONTROLLER])} : ')
         return new_time_controller
 
     def update_tournament_location(self, tournament):

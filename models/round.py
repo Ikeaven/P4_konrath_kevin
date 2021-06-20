@@ -20,7 +20,7 @@ class Round:
     def load_round(self, round_info: dict):
         self.id = round_info['id']
         self.round_name = round_info['round_name']
-        self.start_round_datetime = round_info['start_round_datetime'] 
+        self.start_round_datetime = round_info['start_round_datetime']
         self.end_round_datetime = round_info['end_round_datetime']
         self.matchs = []
         self.add_round_to_globale_list()
@@ -45,5 +45,4 @@ class Round:
             if round.id == round_id:
                 return round
 
-
-    # update date -> début et fin si besoin
+# update date -> début et fin si besoin

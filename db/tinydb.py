@@ -4,7 +4,9 @@
 from tinydb import TinyDB, where
 
 # TODO nom db dans config
-class Database: 
+
+
+class Database:
 
     def __init__(self):
         self.db = TinyDB('db.json')
@@ -18,7 +20,6 @@ class Database:
         # self.db.truncate()
         # TODO : supprimer la table et réinitialiser les ID de table
         self.db.drop_tables()
-        
 
     def insert_players_to_db(self, players):
         self.players_table.insert_multiple(players)
@@ -55,5 +56,3 @@ class Database:
             match_dict = self.matchs_table.search(where('id') == match_id)
             matchs.append(match_dict[0])
         return matchs
-
-   

@@ -5,6 +5,7 @@
 from .utilities import UtilitiesView
 from .score import ScoreView
 
+
 class RoundView:
     def display_start_time(self):
         pass
@@ -32,5 +33,3 @@ class RoundView:
             if show_match:
                 for match in round.matchs:
                     ScoreView().display_match(match)
-
-

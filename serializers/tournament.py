@@ -11,7 +11,7 @@ class TournamentSerializer:
         list_rounds_id = []
         for round in tournament.round_list:
             list_rounds_id.append(round.id)
-        
+
         serialized_tournament = {
             'id': tournament.id,
             'tournament_name': tournament.tournament_name,

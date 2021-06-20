@@ -6,7 +6,7 @@
 import functools
 import datetime
 
-# TODO ajouter les checkers a filds directement... 
+# TODO ajouter les checkers a filds directement...
 
 from views.utilities import UtilitiesView
 
@@ -88,7 +88,7 @@ def sex_validation(function):
     def wrapper(*args, **kwargs):
         while True:
             result = function(*args, **kwargs)
-            if result == 'M' or result == 'F':
+            if result.upper() == 'M' or result.upper() == 'F':
                 break
             else:
                 UtilitiesView().display_error()
