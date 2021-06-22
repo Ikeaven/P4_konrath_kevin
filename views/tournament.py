@@ -62,6 +62,12 @@ class TournamentView:
             print(f'Lieu : {tournament.location}')
             print(f'Controller de temps : {TIME_CONTROLLER[tournament.time_controller -1]}')
             print(f'Description : {tournament.description}')
+            print(f'Nombre de tour : {len(tournament.round_list)}/{tournament.tour_number}')
+            if ((len(tournament.round_list) == tournament.tour_number) and
+                    (tournament.round_list[-1].end_round_datetime == 'Round en cours')):
+                print('Ce tournoi est terminé !')
+            else:
+                print('Ce tournoi est toujours en cours')
             self.utilities.line_separator()
 
     def update_tournament_name(self, tournament):

@@ -4,19 +4,17 @@
 """Entry point to chess app."""
 
 from views.menu import MenuView
-from views.player import PlayerView
-from views.tournament import TournamentView
 
 from controllers.base import Controller
+from controllers.routing import Router
 
 
 def main():
     """Run the chess application, loop entry point."""
     menu_view = MenuView()
-    player_view = PlayerView()
-    tournament_view = TournamentView()
+    router = Router()
 
-    controller = Controller(menu_view, player_view, tournament_view)
+    controller = Controller(router, menu_view)
     controller.run()
 
 

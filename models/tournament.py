@@ -20,9 +20,12 @@ class Tournament:
     def append_tournois(cls, tournament):
         cls.LISTE_TOURNOIS.append(tournament)
 
-    def bind_players(self, players: list):
+    def bind_multiple_players(self, players: list):
         for player in players:
             self.players_list.append(player)
+
+    def bind_player(self, player):
+        self.players_list.append(player)
 
     def add_round(self, round: object):
         self.round_list.append(round)

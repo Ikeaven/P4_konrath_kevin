@@ -1,6 +1,7 @@
 """Menu View"""
 
 
+from utilities import checker
 from .utilities import UtilitiesView
 # TODO UTILISER LES FIELDS avec vérif !!
 # TODO decorateur 'entrez le numéro du menu...
@@ -62,7 +63,7 @@ class MenuView:
         menu_value = input('entrer le numéro du menu :')
         return menu_value
 
-    def test_import_auto(self):
+    def import_auto_or_manuel_menu(self):
         print('[1] INSERT PLAYERS AUTO')
         print('[2] INSERT PLAYERS MANUEL')
         menu_value = input('entrer le numéro du menu :')
@@ -91,7 +92,7 @@ class MenuView:
         return menu_value
 
     def select_sorting(self):
-        print("[1] Ordre alphabétique")
-        print("[2] Ordre de classement")
+        print("[1] Ordre de classement")
+        print("[2] Ordre alphabétique")
         menu_value = input("selectionner un ordre de tri : ")
         return menu_value
