@@ -6,8 +6,6 @@
 import functools
 import datetime
 
-# TODO ajouter les checkers a filds directement...
-
 from views.utilities import UtilitiesView
 
 
@@ -82,6 +80,23 @@ def date_validation(function):
                 UtilitiesView().display_error()
         return result
     return wrapper
+
+
+def date_validation_or_empty(function):
+    def wrapper(*args, **kwargs):
+        while True:
+            result = function(*args, **kwargs)
+            if result == '':
+                break
+            else:
+                try:
+                    datetime.datetime.strptime(result, "%d/%m/%Y")
+                    break
+                except ValueError:
+                    UtilitiesView().display_error()
+        return result
+    return wrapper
+
 
 
 def sex_validation(function):

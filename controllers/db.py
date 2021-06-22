@@ -55,13 +55,15 @@ class DBController:
         tournaments: list[dict] = self.database.get_all_tournaments()
         for tournament in tournaments:
             # We only create a new instance if we don't already have it
-            if tournament['id'] not in (tournament.id for tournament in Tournament.LISTE_TOURNOIS):
+            if tournament['id'] not in (tournament.id for tournament in Tournament.TOURNAMENT_LIST):
                 # create tournament object with attributs
                 tournament_obj = Tournament()
                 tournament_dict = {
                             'id': tournament['id'],
                             'tournament_name': tournament['tournament_name'],
                             'location': tournament['location'],
+                            'start_date': tournament['start_date'],
+                            'end_date': tournament['end_date'],
                             'tour_number': tournament['tour_number'],
                             'time_controller': tournament['time_controller'],
                             'number_of_players': tournament['number_of_players'],

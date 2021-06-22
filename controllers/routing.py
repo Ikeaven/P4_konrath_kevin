@@ -1,3 +1,6 @@
+""" MENUS """
+
+from models import tournament
 from .view import ViewsController
 from .models import ModelsController
 from .db import DBController
@@ -31,11 +34,14 @@ class Router:
 
         # Edit tournament
         elif selected_menu == '2':
-            selected_tournament = self.view_controller.select_tournament()
-            if selected_tournament:
-                self.edit_tournament_menu(selected_tournament)
+            if len(Tournament.TOURNAMENT_LIST) >= 1:
+                selected_tournament = self.view_controller.select_tournament()
+                if selected_tournament:
+                    self.edit_tournament_menu(selected_tournament)
+                else:
+                    pass
             else:
-                return True
+                self.utilities_view.display_error_with_message('Pas de tournois enregistré pour le moment !')
 
         # Edit player
         elif selected_menu == '3':
@@ -59,7 +65,7 @@ class Router:
 
         # Save
         elif selected_menu == '7':
-            self.db_controller.save_to_tinydb(Player().LIST_PLAYERS, Tournament().LISTE_TOURNOIS)
+            self.db_controller.save_to_tinydb(Player().LIST_PLAYERS, Tournament().TOURNAMENT_LIST)
 
         # TEST generate tournament auto
         elif selected_menu == '8':
@@ -94,9 +100,17 @@ class Router:
         elif selected_menu == '5':
             new_location = self.tournament_view.update_tournament_location(tournament)
             tournament.update_location(new_location)
-        # return to main menu
+        # change start_date
         elif selected_menu == '6':
-            self.main_menu()
+            new_start_date = self.tournament_view.update_tournament_start_date(tournament)
+            tournament.update_start_date(new_start_date)
+        # change end_date
+        elif selected_menu == '7':
+            new_end_date = self.tournament_view.update_tournament_end_date(tournament)
+            tournament.update_end_date(new_end_date)
+        # return to main menu
+        elif selected_menu == '8':
+            pass
         # error : value not found
         else:
             self.utilities_view.display_error()
@@ -132,25 +146,38 @@ class Router:
 
         # Afficher tous les joueurs
         if selected_menu == '1':
-            # TODO demande dans quel tri -> Alpha / Classement
-            players = Player.LIST_PLAYERS
-            self.player_view.display_players_list(players)
+            if len(Player.LIST_PLAYERS) >= 1:
+                self.view_controller.display_all_players_sorted()
+            else:
+                self.utilities_view.display_error_with_message('Pas de joueur enregistré pour le moment !')
 
         # Afficher les joueurs d'un tournois
         elif selected_menu == '2':
-            self.view_controller.display_players_of_tournament()
+            if len(Tournament.TOURNAMENT_LIST) >= 1:
+                self.view_controller.display_players_of_tournament()
+            else:
+                self.utilities_view.display_error_with_message('Pas de tournois enregistré pour le moment !')
 
         # Afficher les tournois
         elif selected_menu == '3':
-            self.tournament_view.display_tournament_list(Tournament.LISTE_TOURNOIS)
+            if len(Tournament.TOURNAMENT_LIST) >= 1:
+                self.tournament_view.display_tournament_list(Tournament.TOURNAMENT_LIST)
+            else:
+                self.utilities_view.display_error_with_message('Pas de tournois enregistré pour le moment !')
 
         # Afficher les rounds d'un tournoi
         elif selected_menu == '4':
-            self.view_controller.display_round_of_tournament()
+            if len(Tournament.TOURNAMENT_LIST) >= 1:
+                self.view_controller.display_round_of_tournament()
+            else:
+                self.utilities_view.display_error_with_message('Pas de tournois enregistré pour le moment !')
 
         # Liste des matchs d'un tournoi
         elif selected_menu == '5':
-            self.view_controller.display_match_of_tournament()
+            if len(Tournament.TOURNAMENT_LIST) >= 1:
+                self.view_controller.display_match_of_tournament()
+            else:
+                self.utilities_view.display_error_with_message('Pas de tournois enregistré pour le moment !')
 
         # retour au menu principal
         elif selected_menu == '6':

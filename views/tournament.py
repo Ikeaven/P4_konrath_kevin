@@ -13,11 +13,12 @@ class TournamentView:
         self.fields = Fields()
 
     def get_tournament_info(self):
-        # TODO : date de début
-        # TODO : date de fin si plusieurs jours
         tournament_name = self.fields.input_text_field("Nom du tournoi : ")
         location = self.fields.input_text_field("Lieu du tournoi : ")
-
+        start_date = self.fields.input_date_field('Entrez la date de début du tournoi (jj/mm/aaaa): ')
+        end_date = self.fields.input_date_field_or_empty('Entrez une date de fin (si vide le tournoi durera 1jour): ')
+        if end_date == '':
+            end_date = start_date
         time_controller = self.fields.input_time_controler(
             'Controller de temps : '
             f'{", ".join([time for time in TIME_CONTROLLER])} : ')
@@ -29,45 +30,33 @@ class TournamentView:
         number_of_players = self.fields.input_number_of_players(message_nombre_joueur)
         tournament_infos = {'tournament_name': tournament_name,
                             'location': location,
+                            'start_date': start_date,
+                            'end_date': end_date,
                             'tour_number': tour_number,
                             'time_controller': time_controller,
                             'number_of_players': number_of_players,
                             'description': description}
         return tournament_infos
 
-    # def get_name_tournament(self):
-    #     return input("Nom du tournoi : ")
-
-    # def get_location_tournament(self):
-    #     return input("Lieu du tournois : ")
-
-    # def get_tour_number(self, default):
-    #     return input(f"Nombre de tour (si champ vide, {DEFAULT_TOUR_NUMBER} par défaut) : ")
-
-    # def get_time_controller(self):
-    #     return input("[1] bullet / [2] blitz / [3] coup rapide : ")
-
-    # def get_description(self):
-    #     return input("Description du tournois : ")
-
     def display_tournament_list(self, tournaments_list):
         self.utilities.line_separator()
         print()
-        print('LISTE DES TOURNOIS')
+        print('----- LISTE DES TOURNOIS -----')
         print()
         self.utilities.line_separator()
         for index, tournament in enumerate(tournaments_list):
             print(f'Index du tournoi : [{index}]')
             print(f'Nom : {tournament.tournament_name}')
             print(f'Lieu : {tournament.location}')
+            print(f'Date de début du tournoi : {tournament.start_date}')
+            print(f'Date de fin du tournoi : {tournament.end_date}')
             print(f'Controller de temps : {TIME_CONTROLLER[tournament.time_controller -1]}')
             print(f'Description : {tournament.description}')
             print(f'Nombre de tour : {len(tournament.round_list)}/{tournament.tour_number}')
-            if ((len(tournament.round_list) == tournament.tour_number) and
-                    (tournament.round_list[-1].end_round_datetime == 'Round en cours')):
-                print('Ce tournoi est terminé !')
-            else:
+            if (tournament.round_list[-1].end_round_datetime == 'Round en cours'):
                 print('Ce tournoi est toujours en cours')
+            else:
+                print('Ce tournoi est terminé !')
             self.utilities.line_separator()
 
     def update_tournament_name(self, tournament):
@@ -91,3 +80,13 @@ class TournamentView:
         print(f'Lieu du tournoi avant mise à jour : {tournament.location}')
         new_location = self.fields.input_text_field('Nouveau lieu du tournoi : ')
         return new_location
+
+    def update_tournament_start_date(self, tournament):
+        print(f'Date de début avant mise à jour : {tournament.start_date}')
+        new_start_date = self.fields.input_date_field('Nouvelle date de début de tournoi :')
+        return new_start_date
+
+    def update_tournament_end_date(self, tournament):
+        print(f'Date de fin de tournoi avant mise à jour : {tournament.end_date}')
+        new_end_date = self.fields.input_date_field('Nouvelle date de fin de tournoi :')
+        return new_end_date

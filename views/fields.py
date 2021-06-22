@@ -12,6 +12,10 @@ class Fields:
     def input_date_field(self, message):
         return input(message)
 
+    @check.date_validation_or_empty
+    def input_date_field_or_empty(self, message):
+        return input(message)
+
     @check.sex_validation
     def input_sex_field(self, message):
         return input(message)
@@ -20,7 +24,6 @@ class Fields:
     def input_digit_field(self, message):
         return input(message)
 
-    # TODO : mettre les valeurs dans les variables de config
     @check.checker_menu(1, len(TIME_CONTROLLER))
     def input_time_controler(self, message):
         return input(message)

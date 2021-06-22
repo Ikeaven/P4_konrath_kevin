@@ -18,6 +18,7 @@ from views.round import RoundView
 from views.menu import MenuView
 from views.player import PlayerView
 from views.score import ScoreView
+from views.utilities import UtilitiesView
 
 from config import SCORE_FOR_NULL, SCORE_FOR_WINNER, DEFAULT_TOUR_NUMBER
 
@@ -30,6 +31,7 @@ class ModelsController:
         self.player_view = PlayerView()
         self.round_view = RoundView()
         self.score = ScoreView()
+        self.utilities_view = UtilitiesView()
 
         self.players: List = []
 
@@ -81,10 +83,12 @@ class ModelsController:
         tournament_infos = {'tournament_name': f"tournament_name {random.randint(0, 1000)}",
                             'location': "Strasbourg",
                             'tour_number': '4',
+                            'start_date' : f'{random.randint(10, 20)}/{random.randint(10, 12)}/{random.randint(1990, 2000)}',
                             'time_controller': random.randint(1, 3),
                             'number_of_players': '8',
                             'description': 'Description du tournois',
                             'id': str(uuid1())}
+        tournament_infos['end_date'] = tournament_infos['start_date']
         tournament_obj = Tournament()
         tournament_obj.add_tournament(tournament_infos)
         self.add_multiple_players(int(tournament_obj.number_of_players), tournament_obj)
@@ -132,9 +136,8 @@ class ModelsController:
                     self.display_all_players_from_model()
                     player_id = int(self.menu_view.select_item('joueur'))
                     player = Player.get_all_players()[player_id]
-                    if player in self.players_list:
-                        # TODO : a basculer dans view
-                        print('player déjà enregistré !!')
+                    if player in tournament_obj.players_list:
+                        self.utilities_view.display_error_with_message('Joueur déjà enregistré dans ce tournoi !!')
                     else:
                         self.bind_player_to_tournament(tournament_obj, player)
                 # Saisir un nouveau joueur

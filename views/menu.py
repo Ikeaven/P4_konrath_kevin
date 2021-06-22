@@ -59,7 +59,9 @@ class MenuView:
         print('[3] Changer la description')
         print('[4] Changer le controller de temps')
         print('[5] Changer la localisation')
-        print('[6] Retour au menu principal')
+        print('[6] Changer la date de début du tournoi')
+        print('[7] Changer la date de fin du tournoi')
+        print('[8] Retour au menu principal')
         menu_value = input('entrer le numéro du menu :')
         return menu_value
 
@@ -92,7 +94,10 @@ class MenuView:
         return menu_value
 
     def select_sorting(self):
+        self.utilities.line_separator()
+        print()
         print("[1] Ordre de classement")
         print("[2] Ordre alphabétique")
+        print()
         menu_value = input("selectionner un ordre de tri : ")
         return menu_value
