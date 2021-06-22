@@ -483,7 +483,7 @@ class Controller:
             player_obj = Player()
             player_obj.add_player(player_infos)
             self.players.append(player_obj)
-            self.bind_player_to_tournament(tournois_obj, self.players)
+            self.bind_players_to_tournament(tournois_obj, self.players)
             self.players = []
 
     #  ______________________________________________________________________
@@ -510,25 +510,32 @@ class Controller:
         elif menu == '2':
             for num_player in range(int(players_number)):
                 selected_menu = self.menu_view.display_menu_add_player()
+
                 # On vérifie qu'il y ai des joueurs enregistrés
                 if Player.get_all_players() is not None:
+
                     # Joueur déjà enregistré
                     if selected_menu == '1':
-                        self.display_all_players_from_model()
-                        player_id = int(self.menu_view.select_item('joueur'))
-                        player = Player.get_all_players()[player_id]
-                        if player in self.players_list:
-                            # TODO : a basculer dans view
-                            print('player déjà enregistré !!')
-                        else:
-                            self.bind_player_to_tournament(tournament_obj, [player])
+                        while True:
+                            self.display_all_players_from_model()
+                            player_id = int(self.menu_view.select_item('joueur'))
+                            player = Player.get_all_players()[player_id]
+
+                            if player in tournament_obj.players_list:
+                                # TODO : a basculer dans view
+                                print('player déjà enregistré, recommencer!!')
+                            else:
+                                self.bind_players_to_tournament(tournament_obj, [player])
+                                break
+
                     # Saisir un nouveau joueur
                     elif selected_menu == '2':
+                        # TODO en faire une fonction
                         player_info: dict = self.player_view.get_player_info(num_player + 1)
                         id = str(uuid.uuid1())
                         player_info['id'] = str(id)
-
                         self.create_player(player_info)
+
                     else:
                         self.utilities_view.display_error()
                 else:
@@ -540,7 +547,7 @@ class Controller:
         else:
             self.utilities_view.display_error()
 
-    def bind_player_to_tournament(self, tournament_obj: object, players: List[Player]):
+    def bind_players_to_tournament(self, tournament_obj: object, players: List[Player]):
         """Add players lists to tournament.
 
         Keyword arguments:
@@ -616,7 +623,7 @@ class Controller:
         # number_of_player = self.get_players_number()
         self.add_multiple_players(int(tournois_obj.number_of_players), tournois_obj)
 
-        self.bind_player_to_tournament(tournois_obj, self.players)
+        self.bind_players_to_tournament(tournois_obj, self.players)
         # remis à zéro pour le prochain tournoi
         self.players = []
 

@@ -32,7 +32,7 @@ def checker_digit_field(function):
                 break
             else:
                 UtilitiesView().display_error_NaN()
-        return result
+        return int(result)
     return wrapper
 
 

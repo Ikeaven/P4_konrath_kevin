@@ -2,14 +2,13 @@
 
 
 from tinydb import TinyDB, where
-
-# TODO nom db dans config
+from config import DB_NAME
 
 
 class Database:
 
     def __init__(self):
-        self.db = TinyDB('db.json')
+        self.db = TinyDB(DB_NAME)
         # self.clear_db()
         self.players_table = self.db.table('players')
         self.tournaments_table = self.db.table('tournaments')
