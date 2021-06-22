@@ -1,6 +1,6 @@
-""" MENUS """
+""" ROUTING """
 
-from models import tournament
+
 from .view import ViewsController
 from .models import ModelsController
 from .db import DBController
