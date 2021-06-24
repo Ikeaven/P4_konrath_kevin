@@ -1,25 +1,37 @@
-""" Système Suisse
-    1. trie tous les joueurs en fonction du classement
-    2. Divise les joueurs en 2 moitiers (supérieurs / inférieur)
-    3. Le meilleur de la moitier supérieur est jumelé avec le meilleur de la moitier inférieur
-    4. Trier maitenant les joueurs en fonction de leur nombre de points
-    5. Associer joueur 1 avec joueur 2, joueur 3 avec 4...
-       Si le joueur 1 à déjà joué contre 2 alors l'associer avec 3...
-    6. répéter les étapes 4 et 5
-"""
+""" Swiss System
 
-# from operator import itemgetter, attrgetter
+    This system generates pairs of players
+
+"""
 
 
 class Suisse:
+    """Generates matchs of round with Suisse syteme
+    """
+    # #######################
+    # ----- FIRST ROUND -----
+    # #######################
+    def sort_list_by_ranking(self, players_list):
+        """Sort a list of players by ranking.
 
-    def sort_list(self, players_list):
+        Args:
+            players_list [Player_instance]: List of players instance
+
+        Returns:
+            sorted_list - [Player_instance]: sorted list of player instances, sorted by ranking
+        """
         sorted_list = sorted(players_list, key=lambda x: x.ranking, reverse=True)
-        # for el in sorted_list:
-        #     print(el.first_name)
         return sorted_list
 
     def split_list(self, sorted_list):
+        """Split a list in two list
+
+        Args:
+            sorted_list (List): list of player instance
+
+        Returns:
+            upper_list, lower_list : two list => each half of sorted_list
+        """
         length = len(sorted_list)//2
         upper_list = []
         lower_list = []
@@ -31,6 +43,15 @@ class Suisse:
         return upper_list, lower_list
 
     def first_round_player_association(self, upper_list, lower_list):
+        """Associates best player of first list to best player to second list.
+
+        Args:
+            upper_list (List): List of player
+            lower_list (List): List of player
+
+        Returns:
+            match_list: list of matchs for the first round
+        """
         match_list = []
         if len(upper_list) == len(lower_list):
             for i in range(len(upper_list)):
@@ -45,12 +66,31 @@ class Suisse:
         return match_list
 
     def generate_first_round(self, players_list):
-        sorted_list = self.sort_list(players_list)
-        upper_list, lower_list = self.split_list(sorted_list)
-        round_list = self.first_round_player_association(upper_list, lower_list)
-        return round_list
+        """Generate first rounds
 
+        Args:
+            players_list (List): list of players instance
+
+        Returns:
+            match list: matchs list for the first round
+        """
+        sorted_list = self.sort_list_by_ranking(players_list)
+        upper_list, lower_list = self.split_list(sorted_list)
+        matchs_list = self.first_round_player_association(upper_list, lower_list)
+        return matchs_list
+
+    # ########################
+    # ----- NEXT ROUNDS -----
+    # ########################
     def get_players_list_with_score(self, previous_round):
+        """Get players and result for the previous round
+
+        Args:
+            previous_round (obj): last round that just finished
+
+        Returns:
+            players_with_score: [[player, score_player], [player, score_player], [player, score_player], ...]
+        """
         players_with_score = []
         for match in previous_round.matchs:
             player1 = [match.player1, match.score_player1]
@@ -61,11 +101,33 @@ class Suisse:
         return players_with_score
 
     def sort_list_by_score(self, players_list_with_score):
+        """Sort players by score and by ranking.
+
+        Args:
+            players_list_with_score (List): list of players with score:
+                [[player, score], [player, score], ...]
+
+        Returns:
+            List: sorted_list_by_score, if multiple players have the same score,
+                    they are sorted by ranking
+        """
         sorted_list_by_ranking = sorted(players_list_with_score, key=lambda x: x[0].ranking, reverse=True)
         sorted_list_by_score = sorted(sorted_list_by_ranking, key=lambda x: x[1], reverse=True)
         return sorted_list_by_score
 
     def check_association(self, player1, player2, tournament):
+        """Check if player1 already played against player2.
+
+        Args:
+            player1 (Player instance): a player instance
+            player2 (Player instance): a player instance
+            tournament (Tournament instance): check inside this tournament
+
+        Returns:
+            Boolean :
+                if player1 already played against player2 retrun False.
+                else retrun True.
+        """
         for round in tournament.round_list:
             for match in round.matchs:
                 if (player1 == match.player1 or player1 == match.player2) and (
@@ -74,35 +136,39 @@ class Suisse:
                     return False
         return True
 
-    # FIXME : réduire la taille des fonction
     def next_round_player_association(self, players_list_with_score, tournament):
-        # TODO : faire de plus petites fonctions
-        # prendre l'utilisateur un et l'associer au second
-        # Si l'association a déjà été faite, essayer avec le suivant
+        """Associates players by score for the next round
+
+        Args:
+            players_list_with_score (List):
+                list of player, with score, sorted by score and ranking
+                [[player1, score1], [player2, score2], ...]
+
+            tournament (tournament instance): tournament instance
+
+        Yields:
+            tuple: ([player1, score_player1], [player2, score_player2])
+        """
         associated_players = []
-        # On parcours tous les joueurs
         for i, player in enumerate(players_list_with_score):
-            # S'il est déjà associé, on passe au suivant sans rien faire
+            # if we already associate this player just jump to next player
             if player[0] in associated_players:
                 continue
-            # Sinon on check si l'association n'a pas déjà eu lieu
+            # else we can associate it to the other one
             else:
-                # TODO si i = len(nombre_de_player... on est au bout)
                 next_player = i+1
                 while True:
                     try:
-                        # on vérifie si le joueur 2 n'est pas déjà asocié, s'il est associé on passe au suivant
+                        # If second player already associated, just jump to next player
                         while players_list_with_score[next_player][0] in associated_players:
                             next_player += 1
-                        # On vérifie les matchs précédent,
-                        # Si les deux joueurs n'ont pas encore été associé,
-                        # on créer le match et on met de coté ces utilisateurs
-                        if self.check_association(player[0], players_list_with_score[next_player][0], tournament):
+                        # If this association has not yet taken place in this tournament, we have our match !!
+                        if self._check_association(player[0], players_list_with_score[next_player][0], tournament):
                             associated_players.append(player[0])
                             associated_players.append(players_list_with_score[next_player][0])
                             yield (player, players_list_with_score[next_player])
                             break
-                        # Sinon on cherche avec l'utilisateur suivant
+                        # Else, try with next player
                         else:
                             next_player += 1
                     except IndexError:
@@ -110,11 +176,19 @@ class Suisse:
                         break
 
     def generate_next_round(self, previous_round, tournament):
-        # récupère la liste des joueurs avec le score du tournois
+        """Create match_list for the next round.
+
+        Args:
+            previous_round (Round instance): last round, that just finished
+            tournament (Tournament instance): tournament.
+
+        Returns:
+            List:
+                list of matchs, for the next round
+                [([player1, score_player1], [player2, score_player2]), ([player1, score_player1],...)]
+        """
         players_list_with_score = self.get_players_list_with_score(previous_round)
-        # trie la liste en fonction du ranking, puis du score
         sorted_list = self.sort_list_by_score(players_list_with_score)
-        # association des joueurs
         match_list = []
         for match in self.next_round_player_association(sorted_list, tournament):
             match_list.append(match)

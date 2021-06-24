@@ -14,6 +14,12 @@ class UtilitiesView:
         print("Erreur. Ce champ n'accepte que les nombres!")
         self.line_separator()
 
+    def display_error_with_message(self, message):
+        """Display a generic error like : value not found."""
+        self.line_separator()
+        print(f'Erreur : {message}')
+        self.line_separator()
+
     def display_error(self):
         """Display a generic error like : value not found."""
         self.line_separator()

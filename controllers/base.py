@@ -3,59 +3,25 @@
 
 """Base Controller."""
 
-# TODO Enlever les appele de classes sauvages.
-# ex : Tournament()... si ça change faudra le chercher dans tout le code...
-
-import random
-import uuid
-
-from config import DEFAULT_TOUR_NUMBER, SCORE_FOR_WINNER, SCORE_FOR_NULL
-
-from typing import List
-
-
-from models.player import Player
-from models.tournament import Tournament
-from models.match import Match
-from models.round import Round
-
-from views.utilities import UtilitiesView
-
-from views.score import ScoreView
-from views.round import RoundView
-
-from db.tinydb import Database
-
-from serializers.player import PlayerSerializer
-from serializers.tournament import TournamentSerializer
-from serializers.round import RoundSerializer
-from serializers.match import MatchSerializer
-
-# from utilities.checker import checker_text_field, checker_menu, checker_digit_field
-# from utilities.checker import checker_digit_or_empy_default_field
-
-from paires.suisse import Suisse
-
 
 class Controller:
-    """Main Controller."""
+    """Main Controller, it start the main loop app !
+    """
 
     # init
-    def __init__(self, menu_view, player_view, tournament_view):
+    def __init__(self, router, menu_view):
         """Init Controller.
 
         Args:
-            menu_view (View): Display menus
-            player_view (View): Display players view
-            tournament_view (View): Display tournament view
+            router,
+            menu_view
         """
-        # models
-        # TODO : normanelent je n'ai pas besoin de ces listes la...
-        self.players: List[Player] = []
-        self.tournaments: List[Tournament] = []
+        # Routes
+        self.router = router
 
         # views
         self.menu_view = menu_view
+<<<<<<< HEAD
         self.player_view = player_view
         self.tournament_view = tournament_view
         self.utilities_view = UtilitiesView()
@@ -634,9 +600,13 @@ class Controller:
         """Diplay main menu."""
         selected_menu = self.menu_view.display_menu()
         self.routing_main_menu(selected_menu)
+=======
+>>>>>>> dev
 
     def run(self):
         """App loop."""
-        while self.running:
-
-            self.main_menu()
+        while True:
+            selected_menu = self.menu_view.display_menu()
+            main_menu_return = self.router.main_menu(selected_menu)
+            if main_menu_return is False:
+                break

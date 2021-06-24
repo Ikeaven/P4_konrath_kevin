@@ -2,8 +2,8 @@
 
 
 # from .fields import Fields
+from views.match import MatchView
 from .utilities import UtilitiesView
-from .score import ScoreView
 
 
 class RoundView:
@@ -11,7 +11,8 @@ class RoundView:
         pass
 
     def display_stop_time(self, round):
-        print(f'Arrêt à : {round.end_round_datetime}')
+        print()
+        print(f'Round arrété à : {round.end_round_datetime}')
 
     def start_new_round(self, round):
         UtilitiesView().line_separator()
@@ -28,8 +29,7 @@ class RoundView:
             print("##################")
             print()
             print(f"Début : {round.start_round_datetime}")
-            # TODO end_round
             print(f"Fin : {round.end_round_datetime}")
             if show_match:
                 for match in round.matchs:
-                    ScoreView().display_match(match)
+                    MatchView().display_match(match)

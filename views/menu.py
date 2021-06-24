@@ -2,8 +2,6 @@
 
 
 from .utilities import UtilitiesView
-# TODO UTILISER LES FIELDS avec vérif !!
-# TODO decorateur 'entrez le numéro du menu...
 
 
 class MenuView:
@@ -16,14 +14,15 @@ class MenuView:
         print("----- MENU PRINCIPAL -----")
         print()
         print("[1] Créer un nouveau tournoi")
-        print("[2] Editer un tournoi")
-        print("[3] Editer un joueur")
-        print('[4] Rapports')
-        print('[5] Chargement de la base de donnée')
+        print("[2] Ajouter un nouveau joueur")
+        print("[3] Editer un tournoi")
+        print("[4] Editer un joueur")
+        print('[5] Rapports')
+        print('[6] Chargement de la base de donnée')
 
         # print('[6] Fin de round')
         print('[7] Sauvegarder')
-        print('[8] Générer tournois automatiquement')
+        print('[8] DEMO : Générer tournois automatiquement')
         print("[9] Quitter")
         print()
         menu_value = input('entrer le numéro du menu :')
@@ -58,11 +57,13 @@ class MenuView:
         print('[3] Changer la description')
         print('[4] Changer le controller de temps')
         print('[5] Changer la localisation')
-        print('[6] Retour au menu principal')
+        print('[6] Changer la date de début du tournoi')
+        print('[7] Changer la date de fin du tournoi')
+        print('[8] Retour au menu principal')
         menu_value = input('entrer le numéro du menu :')
         return menu_value
 
-    def test_import_auto(self):
+    def import_auto_or_manuel_menu(self):
         print('[1] INSERT PLAYERS AUTO')
         print('[2] INSERT PLAYERS MANUEL')
         menu_value = input('entrer le numéro du menu :')
@@ -91,7 +92,10 @@ class MenuView:
         return menu_value
 
     def select_sorting(self):
-        print("[1] Ordre alphabétique")
-        print("[2] Ordre de classement")
+        self.utilities.line_separator()
+        print()
+        print("[1] Ordre de classement")
+        print("[2] Ordre alphabétique")
+        print()
         menu_value = input("selectionner un ordre de tri : ")
         return menu_value

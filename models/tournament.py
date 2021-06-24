@@ -4,7 +4,7 @@
 
 class Tournament:
 
-    LISTE_TOURNOIS = []
+    TOURNAMENT_LIST = []
 
     def __init__(self):
         pass
@@ -18,11 +18,14 @@ class Tournament:
 
     @classmethod
     def append_tournois(cls, tournament):
-        cls.LISTE_TOURNOIS.append(tournament)
+        cls.TOURNAMENT_LIST.append(tournament)
 
-    def bind_players(self, players: list):
+    def bind_multiple_players(self, players: list):
         for player in players:
             self.players_list.append(player)
+
+    def bind_player(self, player):
+        self.players_list.append(player)
 
     def add_round(self, round: object):
         self.round_list.append(round)
@@ -38,3 +41,9 @@ class Tournament:
 
     def update_location(self, new_location):
         self.location = new_location
+
+    def update_start_date(self, new_strat_date):
+        self.start_date = new_strat_date
+
+    def update_end_date(self, new_end_date):
+        self.end_date = new_end_date

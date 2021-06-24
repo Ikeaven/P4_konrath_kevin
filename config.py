@@ -10,4 +10,8 @@ DEFAULT_PLAYERS_NUMBER = 8
 SCORE_FOR_WINNER = 1
 SCORE_FOR_NULL = 0.5
 
+<<<<<<< HEAD
 DB_NAME = 'db.json'
+=======
+NAME_DATABASE = 'db.json'
+>>>>>>> dev
