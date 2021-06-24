@@ -92,7 +92,7 @@ class DBController:
                     "sex": player['sex'],
                     "ranking": player['ranking']
                 }
-                self.models_controller.create_player(player_dict)
+                self.models_controller.create_multiple_player(player_dict)
 
             else:
                 pass

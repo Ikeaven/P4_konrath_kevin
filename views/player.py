@@ -1,5 +1,6 @@
 """Get player info view"""
 
+from models.player import Player
 from .utilities import UtilitiesView
 from .fields import Fields
 
@@ -10,14 +11,14 @@ class PlayerView:
         self.utilities = UtilitiesView()
         self.fields = Fields()
 
-    def get_player_info(self, num_player):
+    def get_player_info(self, num_player=len(Player.LIST_PLAYERS)):
         self.utilities.line_separator()
         print("Player", num_player)
         last_name = self.fields.input_text_field('Nom du joueur :')
         first_name = self.fields.input_text_field('Prénom du joueur :')
         date_of_birth = self.fields.input_date_field("date d'anniversaire (jj/mm/aaaa): ")
         sex = self.fields.input_sex_field("sexe du joueur [M] / [F] : ")
-        ranking = self.fields.input_digit_field("Classement du joueur : ")
+        ranking = int(self.fields.input_digit_field("Classement du joueur : "))
         self.utilities.line_separator()
         return {"last_name": last_name,
                 "first_name": first_name,

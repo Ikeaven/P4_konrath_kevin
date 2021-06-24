@@ -2,8 +2,8 @@
 
 
 # from .fields import Fields
+from views.match import MatchView
 from .utilities import UtilitiesView
-from .score import ScoreView
 
 
 class RoundView:
@@ -32,4 +32,4 @@ class RoundView:
             print(f"Fin : {round.end_round_datetime}")
             if show_match:
                 for match in round.matchs:
-                    ScoreView().display_match(match)
+                    MatchView().display_match(match)

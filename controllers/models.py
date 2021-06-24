@@ -18,6 +18,7 @@ from views.round import RoundView
 from views.menu import MenuView
 from views.player import PlayerView
 from views.score import ScoreView
+from views.tournament import TournamentView
 from views.utilities import UtilitiesView
 
 from config import SCORE_FOR_NULL, SCORE_FOR_WINNER, DEFAULT_TOUR_NUMBER
@@ -32,6 +33,7 @@ class ModelsController:
         self.round_view = RoundView()
         self.score = ScoreView()
         self.utilities_view = UtilitiesView()
+        self.tournois_view = TournamentView()
 
         self.players: List = []
 
@@ -121,39 +123,63 @@ class ModelsController:
 
     #  ______________________________________________________________________
 
-    def create_player(self, player_info: dict):
+    def create_multiple_player(self, player_info: dict):
         player_obj = Player()
         player_obj.add_player(player_info)
         self.players.append(player_obj)
 
+    def create_new_player(self, player_info):
+        player_obj = Player()
+        player_obj.add_player(player_info)
+        return player_obj
+
+    def ask_player_info(self, num_player: int) -> dict:
+        player_info: dict = self.player_view.get_player_info(num_player + 1)
+        id = str(uuid1())
+        player_info['id'] = str(id)
+        return player_info
+
+    def check_players_list(self, tournament_obj):
+        check_list = list(Player.LIST_PLAYERS)
+        for player in tournament_obj.players_list:
+            if player in check_list:
+                check_list.remove(player)
+        return check_list
+
     def import_players_manuel(self, players_number, tournament_obj):
         for num_player in range(int(players_number)):
-            selected_menu = self.menu_view.display_menu_add_player()
-            # On vérifie qu'il y ai des joueurs enregistrés
-            if Player.get_all_players() is not None:
-                # Joueur déjà enregistré
-                if selected_menu == '1':
-                    self.display_all_players_from_model()
-                    player_id = int(self.menu_view.select_item('joueur'))
-                    player = Player.get_all_players()[player_id]
-                    if player in tournament_obj.players_list:
-                        self.utilities_view.display_error_with_message('Joueur déjà enregistré dans ce tournoi !!')
-                    else:
+            # check_list is a list of all players without players already binded with tournament
+            check_list = self.check_players_list(tournament_obj)
+            # Display menu if
+            if len(check_list) != 0:
+                while True:
+                    selected_menu = self.menu_view.display_menu_add_player()
+                    # Player already saved
+                    if selected_menu == '1':
+                        self.player_view.display_players_list(check_list)
+                        player_id = int(self.menu_view.select_item('joueur'))
+                        try:
+                            player = check_list[player_id]
+                        except IndexError:
+                            self.utilities_view.display_error_with_message('Index non trouvé !!')
+                        if player in tournament_obj.players_list:
+                            self.utilities_view.display_error_with_message('Joueur déjà enregistré dans ce tournoi !!')
+                        else:
+                            self.bind_player_to_tournament(tournament_obj, player)
+                            break
+                    # input new player
+                    elif selected_menu == '2':
+                        player_info = self.ask_player_info(num_player)
+                        player = self.create_new_player(player_info)
                         self.bind_player_to_tournament(tournament_obj, player)
-                # Saisir un nouveau joueur
-                elif selected_menu == '2':
-                    player_info: dict = self.player_view.get_player_info(num_player + 1)
-                    id = str(uuid1())
-                    player_info['id'] = str(id)
-
-                    self.create_player(player_info)
-                    self.bind_player_to_tournament(tournament_obj, player)
-                else:
-                    self.utilities_view.display_error()
+                        break
+                    else:
+                        self.utilities_view.display_error()
+            # input new player
             else:
-                player_info: dict = self.player_view.get_player_info(num_player + 1)
-                id = str(uuid1())
-                player_info['id'] = str(id)
+                player_info = self.ask_player_info(num_player)
+                player = self.create_new_player(player_info)
+                self.bind_player_to_tournament(tournament_obj, player)
 
     def add_multiple_players(self, players_number: int, tournament_obj: object):
         """Add players to a tournament.
@@ -161,8 +187,8 @@ class ModelsController:
         Keyword arguments:
         players_number : int -- number of players to add
         """
-        menu = self.menu_view.import_auto_or_manuel_menu()
-        self.player_import_type(menu, players_number, tournament_obj)
+        selected_menu = self.menu_view.import_auto_or_manuel_menu()
+        self.player_import_type(selected_menu, players_number, tournament_obj)
 
     def player_import_type(self, selected_menu, players_number, tournois_obj):
         # import auto
@@ -198,7 +224,7 @@ class ModelsController:
         first_round_list = Suisse().generate_first_round(tournois_obj.players_list)
         self.round = Round().create_round('Round 1')
         for players in first_round_list:
-            # création de l'instance de match - initialisation du score
+            # Create match instance - init score
             match = Match().create_match(players[0], 0, players[1], 0)
             self.round.add_match_to_round(match)
         #  Création du match suivant, et affichage des prochains matchs
@@ -242,7 +268,7 @@ class ModelsController:
         """
 
         # Saisi des informations du tournoi
-        tournament_infos = self.view_controller.get_tournament_info()
+        tournament_infos = self.tournois_view.get_tournament_info()
         tournament_infos['id'] = str(uuid1())
         tournois_obj = Tournament()
         tournois_obj.add_tournament(tournament_infos)
@@ -250,8 +276,8 @@ class ModelsController:
         # number_of_player = self.get_players_number()
         self.add_multiple_players(int(tournois_obj.number_of_players), tournois_obj)
 
-        self.bind_multiple_players_to_tournament(tournois_obj, self.players)
+        # self.bind_multiple_players_to_tournament(tournois_obj, self.players)
         # remis à zéro pour le prochain tournoi
-        self.players = []
+        # self.players = []
 
         self.generate_first_round(tournois_obj)

@@ -32,8 +32,10 @@ class Router:
         if selected_menu == '1':
             self.model_controller.create_tournament()
 
+        if selected_menu == '2':
+            self.model_controller.create_new_player()
         # Edit tournament
-        elif selected_menu == '2':
+        elif selected_menu == '3':
             if len(Tournament.TOURNAMENT_LIST) >= 1:
                 selected_tournament = self.view_controller.select_tournament()
                 if selected_tournament:
@@ -44,7 +46,7 @@ class Router:
                 self.utilities_view.display_error_with_message('Pas de tournois enregistré pour le moment !')
 
         # Edit player
-        elif selected_menu == '3':
+        elif selected_menu == '4':
             if Player.get_all_players() is not None:
                 self.player_view.display_players_list(Player.get_all_players())
                 player_id: int = int(self.menu_view.select_item('joueur'))
@@ -55,11 +57,11 @@ class Router:
                     self.edit_player_menu(selected_player)
 
         # Rapports
-        elif selected_menu == '4':
+        elif selected_menu == '5':
             self.reports_menu()
 
         # Load data from database
-        elif selected_menu == '5':
+        elif selected_menu == '6':
             self.db_controller.load_players()
             self.db_controller.load_tournaments()
 
@@ -74,10 +76,6 @@ class Router:
         # stop
         elif selected_menu == '9':
             return False
-
-        # error : value not found
-        else:
-            self.utilities_view.display_error()
 
     def edit_tournament_menu(self, tournament: object):
         selected_menu = self.menu_view.display_menu_edit_tournament(tournament)
