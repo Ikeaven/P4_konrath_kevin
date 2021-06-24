@@ -33,7 +33,8 @@ class Router:
             self.model_controller.create_tournament()
 
         if selected_menu == '2':
-            self.model_controller.create_new_player()
+            player_info = self.model_controller.ask_player_info(len(Player.LIST_PLAYERS))
+            self.model_controller.create_new_player(player_info)
         # Edit tournament
         elif selected_menu == '3':
             if len(Tournament.TOURNAMENT_LIST) >= 1:

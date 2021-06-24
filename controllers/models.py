@@ -215,7 +215,6 @@ class ModelsController:
         """
         tournament_obj.bind_multiple_players(players)
 
-    # Create rounds
     def generate_first_round(self, tournois_obj):
         """Create first round.
 
@@ -269,8 +268,6 @@ class ModelsController:
 
         We will ask the user to fill in the tournament information.
         """
-
-        # Saisi des informations du tournoi
         tournament_infos = self.tournois_view.get_tournament_info()
         tournament_infos['id'] = str(uuid1())
         tournois_obj = Tournament()

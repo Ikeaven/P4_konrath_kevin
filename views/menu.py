@@ -2,8 +2,6 @@
 
 
 from .utilities import UtilitiesView
-# TODO UTILISER LES FIELDS avec vérif !!
-# TODO decorateur 'entrez le numéro du menu...
 
 
 class MenuView:
@@ -24,7 +22,7 @@ class MenuView:
 
         # print('[6] Fin de round')
         print('[7] Sauvegarder')
-        print('[8] Générer tournois automatiquement')
+        print('[8] DEMO : Générer tournois automatiquement')
         print("[9] Quitter")
         print()
         menu_value = input('entrer le numéro du menu :')
