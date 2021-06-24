@@ -24,12 +24,26 @@ class DBController:
         self.models_controller = ModelsController()
 
     def save_players(self, players):
+        """Save the players in the database.
+            - serialize players
+            - insert to database.
+
+        Args:
+            players (List): List of player instance
+        """
         serialized_player = []
         for player in players:
             serialized_player.append(PlayerSerializer().serialize_player(player))
         self.database.insert_players_to_db(serialized_player)
 
     def save_tournaments(self, tournaments):
+        """Save the tournaments in the database:
+            - serialize tournament
+            - insert to database
+
+        Args:
+            tournaments (Tournament instance): tournament instance to save
+        """
         serialized_tournaments = []
         for tournament in tournaments:
             serialized_tournaments.append(TournamentSerializer().serialize_tournament(tournament))
@@ -45,13 +59,17 @@ class DBController:
         self.database.insert_tournaments_to_db(serialized_tournaments)
 
     def save_to_tinydb(self, players, tournaments):
-        """Save players and tournaments into json file."""
+        """Save players and tournaments in database."""
         self.database.clear_db()
         self.save_players(players)
         self.save_tournaments(tournaments)
 
     # Loads
     def load_tournaments(self):
+        """Load tournament from database
+            - Get tournaments info from database
+            - Create tournaments instances.
+        """
         tournaments: list[dict] = self.database.get_all_tournaments()
         for tournament in tournaments:
             # We only create a new instance if we don't already have it
@@ -80,6 +98,10 @@ class DBController:
                 pass
 
     def load_players(self):
+        """Load players from database
+            - Get players info from database
+            - Create players instances.
+        """
         players: list = self.database.get_all_players()
         for player in players:
             # We only create new instance if we don't already have it
@@ -93,11 +115,15 @@ class DBController:
                     "ranking": player['ranking']
                 }
                 self.models_controller.create_multiple_player(player_dict)
-
             else:
                 pass
 
     def load_rounds(self, tournament):
+        """Load rounds for a tournament from database
+
+        Args:
+            tournament (tournament instance): specify a tournament to get his rounds
+        """
         rounds: list[dict] = self.database.get_all_rounds_of_tournament(tournament.id)
         for round in rounds:
             round_dict = {
@@ -112,6 +138,11 @@ class DBController:
             self.load_matchs(round)
 
     def load_matchs(self, round: dict):
+        """Load matchs for a round from database
+
+        Args:
+            round (dict): round infos
+        """
         matchs: list[dict] = self.database.get_all_matchs_of_round(round['id'])
         for match in matchs:
             match_dict = {

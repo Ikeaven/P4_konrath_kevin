@@ -27,14 +27,32 @@ class Router:
         self.utilities_view = UtilitiesView()
 
     def main_menu(self, selected_menu):
-        """Cette fonction déclenche des méthodes en fonction du choix de l'utilisateur."""
+        """Main Menu:
+            - 1 : Create tournament
+            - 2 : Create new player
+            - 3 : Edit tournament
+            - 4 : Edit player
+            - 5 : Rapports
+            - 6 : Load data from database
+            - 7 : Save to database
+            - 8 : DEMO generate auto tournament
+            - 9 : Stop
+
+        Args:
+            selected_menu (str): input user
+
+        Returns:
+            False : to Stop the loop with [9]
+        """
         # Create new tournament
         if selected_menu == '1':
             self.model_controller.create_tournament()
 
+        # Create new player
         if selected_menu == '2':
             player_info = self.model_controller.ask_player_info(len(Player.LIST_PLAYERS))
             self.model_controller.create_new_player(player_info)
+
         # Edit tournament
         elif selected_menu == '3':
             if len(Tournament.TOURNAMENT_LIST) >= 1:
@@ -70,15 +88,27 @@ class Router:
         elif selected_menu == '7':
             self.db_controller.save_to_tinydb(Player().LIST_PLAYERS, Tournament().TOURNAMENT_LIST)
 
-        # TEST generate tournament auto
+        # DEMO generate tournament auto
         elif selected_menu == '8':
-            self.model_controller.TEST_import_auto_tournoi()
+            self.model_controller.DEMO_import_auto_tournament()
 
         # stop
         elif selected_menu == '9':
             return False
 
     def edit_tournament_menu(self, tournament: object):
+        """Tournament edition menu
+            1 : End of a round
+            2 : Change Name
+            3 : Change Description
+            4 : Change time controller
+            5 : Change Location
+            6 : Change Sart date
+            7 : Change End Date
+            8 : Return to main menu
+        Args:
+            tournament (object): Instance of tournament, we want to edit.
+        """
         selected_menu = self.menu_view.display_menu_edit_tournament(tournament)
         # end of the round -> update score
         if selected_menu == '1':
@@ -115,6 +145,11 @@ class Router:
             self.utilities_view.display_error()
 
     def edit_player_menu(self, player: object):
+        """Menu player edition
+
+        Args:
+            player (object): Player instance we want to edit
+        """
         selected_menu = self.menu_view.display_menu_edit_player()
         # Editer the ranking
         if selected_menu == '1':

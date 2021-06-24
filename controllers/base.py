@@ -5,7 +5,8 @@
 
 
 class Controller:
-    """Main Controller."""
+    """Main Controller, it start the main loop app !
+    """
 
     # init
     def __init__(self, router, menu_view):

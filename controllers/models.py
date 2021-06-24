@@ -38,6 +38,14 @@ class ModelsController:
         self.players: List = []
 
     def end_of_round(self, tournament):
+        """End a round :
+            - set an end time to round
+            - update score
+            - generate new round
+
+        Args:
+            tournament (tournament instance): tournament instance
+        """
         try:
             round = tournament.round_list[-1]
             if round.end_round_datetime == 'Round en cours':
@@ -73,14 +81,8 @@ class ModelsController:
                 # player 2 gagne
                 match.score_player2 += SCORE_FOR_WINNER
 
-    # AUTO REMPLISSAGE POUR TESTER PLUS FACILEMENT
-    #  ______________________________________________________________________
-    # TODO : A SUPPRIMER pour la mise en production ⬇️
-    def TEST_import_auto_tournoi(self):
-        """ Cette méthode génère une instance de tournoi
-        avec des attributs aléatoires.
-
-        A SUPPRIMER POUR LA PRODUCTION
+    def DEMO_import_auto_tournament(self):
+        """Create random info for a tournament
         """
         tournament_infos = {'tournament_name': f"tournament_name {random.randint(0, 1000)}",
                             'location': "Strasbourg",
@@ -100,14 +102,13 @@ class ModelsController:
 
         self.generate_first_round(tournament_obj)
 
-    # AUTO REMPLISSAGE POUR TESTER PLUS FACILEMENT
-    # TODO : A SUPPRIMER ⬇️
-    def TEST_import_auto_players(self, players_number: int, tournois_obj: object):
-        """Cette méthode génère automatiquement des instance de Player
-        avec attributs aléatoires
+    def DEMO_import_auto_players(self, players_number: int, tournois_obj: object):
+        """DEMO : import players auto for a tournament
 
-        Keyword arguments:
-        players_number : int -- Nombre de joueurs à créer
+
+        Args:
+            players_number (int): players number in the tournament
+            tournois_obj (tournament instance): tournament instance
         """
         self.players = []
         for num_player in range(int(players_number)):
@@ -127,22 +128,54 @@ class ModelsController:
     #  ______________________________________________________________________
 
     def create_multiple_player(self, player_info: dict):
+        """Create player instance, add to players list
+
+        Args:
+            player_info (dict): player informations from user
+
+        """
         player_obj = Player()
         player_obj.add_player(player_info)
         self.players.append(player_obj)
 
     def create_new_player(self, player_info):
+        """Create a player instance
+
+        Args:
+            player_info (dict): player informations from user
+
+        Returns:
+            player instance
+        """
         player_obj = Player()
         player_obj.add_player(player_info)
         return player_obj
 
     def ask_player_info(self, num_player: int) -> dict:
+        """Input player informations, ask to user
+
+        Args:
+            num_player (int): player number to show
+                - it can be number in the turnament
+                - or count of all players
+
+        Returns:
+            dict: player info
+        """
         player_info: dict = self.player_view.get_player_info(num_player + 1)
         id = str(uuid1())
         player_info['id'] = str(id)
         return player_info
 
     def check_players_list(self, tournament_obj):
+        """Get a list of players without player already in the tournament
+
+        Args:
+            tournament_obj (tournament instance): tournament instance
+
+        Returns:
+            List : List of all players, without players already in the tournament
+        """
         check_list = list(Player.LIST_PLAYERS)
         for player in tournament_obj.players_list:
             if player in check_list:
@@ -150,6 +183,14 @@ class ModelsController:
         return check_list
 
     def import_players_manuel(self, players_number, tournament_obj):
+        """Import player to a tournament
+            - already saved player
+            - Input new player
+
+        Args:
+            players_number (int): player number for this tournament
+            tournament_obj (tournament instance): tournament instance where we wants to imports players
+        """
         for num_player in range(int(players_number)):
             # check_list is a list of all players without players already binded with tournament
             check_list = self.check_players_list(tournament_obj)
@@ -194,9 +235,18 @@ class ModelsController:
         self.player_import_type(selected_menu, players_number, tournament_obj)
 
     def player_import_type(self, selected_menu, players_number, tournois_obj):
+        """Select a way to import players :
+                - auto
+                - manuel
+
+        Args:
+            selected_menu (int): selection by user
+            players_number (int): number for a player
+            tournois_obj (tournament instance): instance du tournoi.
+        """
         # import auto
         if selected_menu == '1':
-            self.TEST_import_auto_players(players_number, tournois_obj)
+            self.DEMO_import_auto_players(players_number, tournois_obj)
         # import manuel
         elif selected_menu == '2':
             self.import_players_manuel(players_number, tournois_obj)
@@ -204,6 +254,13 @@ class ModelsController:
             self.view_controller.display_error()
 
     def bind_player_to_tournament(self, tournament_obj, player_obj):
+        """Bind player to a tournament :
+            Add player instance to a list in the tournament instance.
+
+        Args:
+            tournament_obj (Tournament instance): tournament where we want to link players
+            player_obj (Player instance): player we want to link
+        """
         tournament_obj.bind_player(player_obj)
 
     def bind_multiple_players_to_tournament(self, tournament_obj: object, players: List[Player]):
@@ -264,20 +321,12 @@ class ModelsController:
 
     # Create Tournament
     def create_tournament(self):
-        """Create Tournament.
-
-        We will ask the user to fill in the tournament information.
-        """
+        """Create tournament instance with user informations."""
         tournament_infos = self.tournois_view.get_tournament_info()
         tournament_infos['id'] = str(uuid1())
         tournois_obj = Tournament()
         tournois_obj.add_tournament(tournament_infos)
 
-        # number_of_player = self.get_players_number()
         self.add_multiple_players(int(tournois_obj.number_of_players), tournois_obj)
-
-        # self.bind_multiple_players_to_tournament(tournois_obj, self.players)
-        # remis à zéro pour le prochain tournoi
-        # self.players = []
 
         self.generate_first_round(tournois_obj)
