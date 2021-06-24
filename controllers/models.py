@@ -85,7 +85,10 @@ class ModelsController:
         tournament_infos = {'tournament_name': f"tournament_name {random.randint(0, 1000)}",
                             'location': "Strasbourg",
                             'tour_number': '4',
-                            'start_date' : f'{random.randint(10, 20)}/{random.randint(10, 12)}/{random.randint(1990, 2000)}',
+                            'start_date': (
+                                f'''{random.randint(10, 20)}/{random.randint(10, 12)}/'''
+                                f'''{random.randint(1990, 2000)}'''
+                                ),
                             'time_controller': random.randint(1, 3),
                             'number_of_players': '8',
                             'description': 'Description du tournois',

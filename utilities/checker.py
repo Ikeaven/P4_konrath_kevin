@@ -98,7 +98,6 @@ def date_validation_or_empty(function):
     return wrapper
 
 
-
 def sex_validation(function):
     def wrapper(*args, **kwargs):
         while True:

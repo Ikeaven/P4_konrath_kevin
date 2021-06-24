@@ -27,7 +27,6 @@ class ViewsController:
         self.player_view = PlayerView()
         self.match_view = MatchView()
 
-    # Display lists
     def display_match_of_tournament(self):
         """Select the tournament and call the view to display match of a tournament."""
         selected_tournament = self.select_tournament()
@@ -87,10 +86,6 @@ class ViewsController:
         """
         for match in round.matchs:
             self.match_view.display_match(match)
-
-    # TODO a supprimer
-    # def get_tournament_info(self) -> dict:
-    #     return self.tournament_view.get_tournament_info()
 
     # TODO a supprimer
     def display_error(self):

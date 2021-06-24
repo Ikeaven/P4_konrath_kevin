@@ -1,7 +1,6 @@
 """Menu View"""
 
 
-from utilities import checker
 from .utilities import UtilitiesView
 # TODO UTILISER LES FIELDS avec vérif !!
 # TODO decorateur 'entrez le numéro du menu...

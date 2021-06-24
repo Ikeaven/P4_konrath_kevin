@@ -1,6 +1,7 @@
 import pandas as pd
 from .utilities import UtilitiesView
 
+
 class MatchView:
 
     def display_match(self, match):
