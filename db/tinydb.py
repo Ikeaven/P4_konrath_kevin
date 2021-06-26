@@ -1,22 +1,15 @@
 """ Import from TinyDB / Export to TinyDB """
 
 
-from config import NAME_DATABASE
 from tinydb import TinyDB, where
-<<<<<<< HEAD
 from config import DB_NAME
-=======
->>>>>>> dev
 
 
 class Database:
 
     def __init__(self):
-<<<<<<< HEAD
         self.db = TinyDB(DB_NAME)
-=======
-        self.db = TinyDB(NAME_DATABASE)
->>>>>>> dev
+
         # self.clear_db()
         self.players_table = self.db.table('players')
         self.tournaments_table = self.db.table('tournaments')
