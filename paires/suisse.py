@@ -163,7 +163,7 @@ class Suisse:
                         while players_list_with_score[next_player][0] in associated_players:
                             next_player += 1
                         # If this association has not yet taken place in this tournament, we have our match !!
-                        if self._check_association(player[0], players_list_with_score[next_player][0], tournament):
+                        if self.check_association(player[0], players_list_with_score[next_player][0], tournament):
                             associated_players.append(player[0])
                             associated_players.append(players_list_with_score[next_player][0])
                             yield (player, players_list_with_score[next_player])
