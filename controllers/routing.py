@@ -1,6 +1,8 @@
 """ ROUTING """
 
 
+
+from paires.suisse import Suisse
 from .view import ViewsController
 from .models import ModelsController
 from .db import DBController
@@ -12,6 +14,7 @@ from views.utilities import UtilitiesView
 from views.player import PlayerView
 from views.menu import MenuView
 from views.tournament import TournamentView
+from views.score import ScoreView
 
 
 class Router:
@@ -25,6 +28,7 @@ class Router:
         self.menu_view = MenuView()
         self.tournament_view = TournamentView()
         self.utilities_view = UtilitiesView()
+        self.score_view = ScoreView()
 
     def main_menu(self, selected_menu):
         """Main Menu:
@@ -213,8 +217,16 @@ class Router:
             else:
                 self.utilities_view.display_error_with_message('Pas de tournois enregistré pour le moment !')
 
-        # retour au menu principal
         elif selected_menu == '6':
+            ended_tournaments = self.model_controller.get_ended_tournament()
+            self.tournament_view.display_tournament_list(ended_tournaments)
+            selected_tournoi = ended_tournaments[int(self.menu_view.select_item('tournoi'))]
+            player_with_score = Suisse().get_players_list_with_score(selected_tournoi.round_list[-1])
+            sorted_player_list = Suisse().sort_list_by_score(player_with_score)
+            self.score_view.display_final_score(sorted_player_list)
+
+        # retour au menu principal
+        elif selected_menu == '7':
             pass
 
         # Le choix n'est pas dans les propositions du menu

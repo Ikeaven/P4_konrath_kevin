@@ -122,7 +122,8 @@ class MenuView:
         print("[3] Liste des tournois")
         print("[4] Liste des tours d'un tournoi")
         print("[5] Liste des matchs d'un tournoi")
-        print("[6] Retour au menu principal")
+        print("[6] Score final d'un tournoi terminé")
+        print("[7] Retour au menu principal")
         print()
         menu_value = input("entrer le numéro du menu : ")
         return menu_value

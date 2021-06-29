@@ -11,7 +11,15 @@ class PlayerView:
         self.utilities = UtilitiesView()
         self.fields = Fields()
 
-    def get_player_info(self, num_player=len(Player.LIST_PLAYERS)):
+    def get_player_info(self, num_player=len(Player.LIST_PLAYERS)) -> dict:
+        """Ask to user the player's informations
+
+        Args:
+            num_player (int, optional): player number in a tournament or in all players. Defaults to len(Player.LIST_PLAYERS).
+
+        Returns:
+            dict: player information
+        """
         self.utilities.line_separator()
         print("Player", num_player)
         last_name = self.fields.input_text_field('Nom du joueur :')

@@ -21,7 +21,7 @@ class ScoreView:
         return selected_menu
 
     def display_final_score(self, sorted_list):
-        print("###################")
+        print("\n###################")
         print("### SCORE FINAL ###")
         print("###################")
         for i, player in enumerate(sorted_list):

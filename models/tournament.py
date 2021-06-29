@@ -47,3 +47,6 @@ class Tournament:
 
     def update_end_date(self, new_end_date):
         self.end_date = new_end_date
+
+    def set_final_score(self, sorted_list):
+        self.final_score = sorted_list

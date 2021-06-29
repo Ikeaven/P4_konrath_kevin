@@ -317,9 +317,9 @@ class ModelsController:
             players = Suisse().get_players_list_with_score(tournois_obj.round_list[-1])
             sorted_list = Suisse().sort_list_by_score(players)
             self.score.display_final_score(sorted_list)
+            tournois_obj.set_final_score(sorted_list)
             print("Fin du tournois")
 
-    # Create Tournament
     def create_tournament(self):
         """Create tournament instance with user informations."""
         tournament_infos = self.tournois_view.get_tournament_info()
@@ -330,3 +330,11 @@ class ModelsController:
         self.add_multiple_players(int(tournois_obj.number_of_players), tournois_obj)
 
         self.generate_first_round(tournois_obj)
+
+    def get_ended_tournament(seld):
+        ended_tournament = []
+        for tournament in Tournament.TOURNAMENT_LIST:
+            if ((tournament.round_list[-1].end_round_datetime != 'Round en cours') and
+                    (len(tournament.round_list) == int(tournament.tour_number))):
+                ended_tournament.append(tournament)
+        return ended_tournament
