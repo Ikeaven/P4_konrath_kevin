@@ -2,21 +2,15 @@
 
 
 from tinydb import TinyDB, where
-<<<<<<< HEAD
-=======
+
 from config import DB_NAME
->>>>>>> b6952206fa7889bdcb311fe0b6a24b6efd86ec11
+
 
 
 class Database:
 
     def __init__(self):
-<<<<<<< HEAD
-        self.db = TinyDB(NAME_DATABASE)
-=======
         self.db = TinyDB(DB_NAME)
-
->>>>>>> b6952206fa7889bdcb311fe0b6a24b6efd86ec11
         # self.clear_db()
         self.players_table = self.db.table('players')
         self.tournaments_table = self.db.table('tournaments')
