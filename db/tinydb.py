@@ -6,7 +6,6 @@ from tinydb import TinyDB, where
 from config import DB_NAME
 
 
-
 class Database:
 
     def __init__(self):
