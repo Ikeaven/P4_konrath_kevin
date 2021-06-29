@@ -27,6 +27,6 @@ class ScoreView:
         for i, player in enumerate(sorted_list):
             UtilitiesView().line_separator()
             print(f"{i+1}: {player[0].first_name} {player[0].last_name} ")
-            print(f"ranking : {player[0].ranking}")
-            print(f"score : {player[1]}")
+            print(f"Clanssement : {player[0].ranking}")
+            print(f"Score : {player[1]}")
             UtilitiesView().line_separator()

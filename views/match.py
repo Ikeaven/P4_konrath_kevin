@@ -1,3 +1,5 @@
+""" Match View Module """
+
 import pandas as pd
 from .utilities import UtilitiesView
 
@@ -5,6 +7,11 @@ from .utilities import UtilitiesView
 class MatchView:
 
     def display_match(self, match):
+        """Print all match informations in a pandas DataFrame
+
+        Args:
+            match (obj): Match instance
+        """
         UtilitiesView().line_separator()
         print()
         data = {

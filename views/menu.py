@@ -10,6 +10,11 @@ class MenuView:
         self.utilities = UtilitiesView()
 
     def display_menu(self):
+        """Main menu.
+
+        Returns:
+            menu_value (str): user choice
+        """
         print()
         print("----- MENU PRINCIPAL -----")
         print()
@@ -29,6 +34,11 @@ class MenuView:
         return menu_value
 
     def display_menu_edit_player(self):
+        """Player edition menu
+
+        Returns:
+            menu_value (str): user choice
+        """
         print()
         print("----- MENU EDITION D'UN JOUEUR -----")
         print()
@@ -41,12 +51,25 @@ class MenuView:
         return menu_value
 
     def display_menu_add_player(self):
+        """Meun to add player
+
+        Returns:
+            menu_value (str): user choice
+        """
         print('[1] Ajouter joueur a partir des joueurs déjà enregistrés')
         print('[2] Ajouter un nouveau joueur')
         menu_value = input('entrer le numéro du menu :')
         return menu_value
 
     def display_menu_edit_tournament(self, tournament):
+        """Tournament edition menu.
+
+        Args:
+            tournament (obj): Tournament instance
+
+        Returns:
+            menu_value (str): user choice
+        """
         print()
         print("----- MENU EDITION DU TOURNOI -----")
         print()
@@ -70,6 +93,14 @@ class MenuView:
         return menu_value
 
     def select_item(self, item):
+        """Select an element in a list.
+
+        Args:
+            item (str): item name
+
+        Returns:
+            menu_value (str): user choice
+        """
         if item in ['joueur', 'tournois']:
             determinant = 'le'
         else:
@@ -78,6 +109,11 @@ class MenuView:
         return menu_value
 
     def display_report_menu(self):
+        """Display report menu
+
+        Returns:
+            menu_value: user choice
+        """
         print()
         print("----- MENU RAPPORTS -----")
         print()
@@ -92,6 +128,11 @@ class MenuView:
         return menu_value
 
     def select_sorting(self):
+        """Display sorting choices
+
+        Returns:
+            menu_valeu (str) : user choice
+        """
         self.utilities.line_separator()
         print()
         print("[1] Ordre de classement")

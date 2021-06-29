@@ -16,9 +16,7 @@ class Database:
         self.rounds_table = self.db.table('rounds')
         self.matchs_table = self.db.table('matchs')
 
-    def clear_db(self, ):
-        # self.db.truncate()
-        # TODO : supprimer la table et réinitialiser les ID de table
+    def clear_db(self):
         self.db.drop_tables()
 
     def insert_players_to_db(self, players):

@@ -34,11 +34,11 @@ class PlayerView:
         self.utilities.line_separator()
 
         for index, player in enumerate(players):
-            print(f'index : [{index}]')
+            print(f'\n index : [{index}]')
             print(f'{player.first_name} {player.last_name}')
-            print(f"date of birth: {player.date_of_birth}")
-            print(f"sex: {player.sex}")
-            print(f"ranking : {player.ranking}")
+            print(f"Date de naissance : {player.date_of_birth}")
+            print(f"Sexe : {player.sex}")
+            print(f"Classement : {player.ranking}")
             self.utilities.line_separator()
 
     def update_ranking(self, player: object):

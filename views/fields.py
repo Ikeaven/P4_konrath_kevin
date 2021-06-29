@@ -1,3 +1,8 @@
+""" Fields Modul
+
+    Every fields has a checker with a decorators
+"""
+
 from config import TIME_CONTROLLER, DEFAULT_TOUR_NUMBER, DEFAULT_PLAYERS_NUMBER
 import utilities.checker as check
 
