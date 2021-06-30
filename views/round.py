@@ -2,11 +2,13 @@
 
 
 # from .fields import Fields
+import pdb
 from views.match import MatchView
 from .utilities import UtilitiesView
 
 
 class RoundView:
+
     def display_stop_time(self, round):
         """Display stop time for a round
 
@@ -41,8 +43,11 @@ class RoundView:
             print(f"---- {round.round_name} ----")
             print("##################")
             print()
-            print(f"Début : {round.start_round_datetime}")
-            print(f"Fin : {round.end_round_datetime}")
+            print(f"Début : {round.start_round_datetime.strftime('%A %w %B %Y à %Hh %Mmin')}")
+            if round.end_round_datetime == 'Round en cours':
+                print(f"{round.end_round_datetime}")
+            else:
+                print(f"Fin : {round.end_round_datetime.strftime('%A %w %B %Y à %Hh %Mmin')}")
             if show_match:
                 for match in round.matchs:
                     MatchView().display_match(match)

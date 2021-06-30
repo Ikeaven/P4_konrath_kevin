@@ -3,8 +3,8 @@
 
 class UtilitiesView:
     def line_separator(self):
-        """Display a line of 115 underscores."""
-        for _ in range(115):
+        """Display a line of 118 underscores."""
+        for _ in range(118):
             print('_', end='')
         print()
 

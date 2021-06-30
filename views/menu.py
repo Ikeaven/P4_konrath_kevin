@@ -87,9 +87,16 @@ class MenuView:
         return menu_value
 
     def import_auto_or_manuel_menu(self):
-        print('[1] INSERT PLAYERS AUTO')
-        print('[2] INSERT PLAYERS MANUEL')
-        menu_value = input('entrer le numéro du menu :')
+        """import user choice : auto / manuel
+
+        Returns:
+            str: user choices
+        """
+        self.utilities.line_separator()
+        print("\n##### Choix d'import des joueurs #####")
+        print('\n[1] DEMO : insérer des joueurs automatiquement')
+        print('[2] insérer des joueurs manuelement')
+        menu_value = input('\nentrer le numéro du menu :')
         return menu_value
 
     def select_item(self, item):

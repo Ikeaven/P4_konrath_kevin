@@ -22,8 +22,8 @@ class ScoreView:
         """
         self.match_view.display_match(match)
         print('[0] Match null')
-        print('[1] Player 1 est gagnant')
-        print('[2] Player 2 est gagnant')
+        print('[1] Joueur 1 est gagnant')
+        print('[2] Joueur 2 est gagnant')
         selected_menu = int(Fields().input_winner('Qui est le gagnant ?'))
         UtilitiesView().line_separator()
         return selected_menu

@@ -6,12 +6,12 @@ ____
 ## Lancer le logiciel Mac / Linux :
 
 
-### 1. Récupérr le projet : 
+### 1. Récupérr le projet :
 
 `$ git clone https://github.com/Ikeaven/P4_konrath_kevin.git`
 
 
-Dans un terminal, aller dans le dossier de l'application. 
+Dans un terminal, aller dans le dossier de l'application.
 
 `$ cd P4_konrath_kevin`
 ### 2. Créer et activer un environnement virtuel :
@@ -20,36 +20,40 @@ Dans un terminal, aller dans le dossier de l'application.
 
 `$ source env/bin/activate`
 
-### 3. Installer les dépendances : 
+### 3. Installer les dépendances :
 
 `pip install -r requirements.txt`
 
-### 4. Lancer l'application 
+### 4. Lancer l'application
 
 `python main.py`
 
 
 ____
-# initialisation du projet Windows:
+## initialisation du projet Windows:
 
 Dans Windows PowerShell : Naviguez vers le repertoire souhaité, à l'aide de cd / ls
 
 ### 1. Récupérer le projet
 
-$ git clone https://github.com/Ikeaven/P4_konrath_kevin.git
+`$ git clone https://github.com/Ikeaven/P4_konrath_kevin.git`
 
 ### 2. activer un environnement vituel
 
-$ cd P4_konrath_kevin 
+`$ cd P4_konrath_kevin`
 
-$ py -m venv env 
+`$ py -m venv env`
 
-$ .\env\Scripts\activate
+`$ .\env\Scripts\activate`
 
 ### 3. installer les dépencances projets
 
-$ pip install -r requirements.txt
+`$ pip install -r requirements.txt`
 
 ### 4. executer le programme :
 
-$ py main.py
+`$ py main.py`
+
+## Générer rapport html Flake8-html
+
+`$ flake8 --format=html --htmldir=flake8_report`

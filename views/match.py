@@ -15,13 +15,13 @@ class MatchView:
         UtilitiesView().line_separator()
         print()
         data = {
-                'Player1': f'{match.player1.first_name} {match.player1.last_name} ',
-                'Classement player 1': f'{match.player1.ranking}',
-                'Score player1': match.score_player1,
+                'Joueur 1': f'{match.player1.first_name} {match.player1.last_name} ',
+                'Classement joueur 1': f'{match.player1.ranking}',
+                'Score joueur 1': match.score_player1,
                 'VS': '|',
-                'Player2': f'{match.player2.first_name} {match.player2.last_name} ',
-                'Classement player 2': f'{match.player2.ranking} ',
-                'Score player2':  match.score_player2
+                'Joueur 2': f'{match.player2.first_name} {match.player2.last_name} ',
+                'Classement joueur 2': f'{match.player2.ranking} ',
+                'Score joueur 2':  match.score_player2
                 }
         with pd.option_context('display.colheader_justify', 'center'):
             df = pd.DataFrame(data=data, index=['Match =>'])

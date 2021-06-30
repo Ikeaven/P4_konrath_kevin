@@ -66,6 +66,7 @@ class Round:
     def stop_round(self):
         """Set a end datetime for the round
         """
+        del self.end_round_datetime
         self.end_round_datetime = datetime.now()
 
     @classmethod
@@ -81,5 +82,3 @@ class Round:
         for round in cls.ROUND_LIST:
             if round.id == round_id:
                 return round
-
-# update date -> début et fin si besoin

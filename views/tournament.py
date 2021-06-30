@@ -78,7 +78,7 @@ class TournamentView:
         Returns:
             str: new_tournament_name
         """
-        print(f'Nom avant mise à jour : {tournament.tournament_name}')
+        print(f'\nNom avant mise à jour : {tournament.tournament_name}')
         new_tournament_name = self.fields.input_text_field('Nouveau nom du tournoi : ')
         return new_tournament_name
 
@@ -91,7 +91,7 @@ class TournamentView:
         Returns:
             str: new_description
         """
-        print(f'Description avant mise à jour : {tournament.description}')
+        print(f'\nDescription avant mise à jour : {tournament.description}')
         new_description = self.fields.input_text_field('Nouvelle description du tournoi : ')
         return new_description
 
@@ -104,7 +104,7 @@ class TournamentView:
         Returns:
             str: new_time_controller
         """
-        print(f'Controller avant mise à jour : {tournament.time_controller}')
+        print(f'\nController avant mise à jour : {tournament.time_controller}')
         new_time_controller = self.fields.input_time_controler(
             'Nouveau controller de temps : '
             f'{", ".join([time for time in TIME_CONTROLLER])} : ')
@@ -119,7 +119,7 @@ class TournamentView:
         Returns:
             str: new_location
         """
-        print(f'Lieu du tournoi avant mise à jour : {tournament.location}')
+        print(f'\nLieu du tournoi avant mise à jour : {tournament.location}')
         new_location = self.fields.input_text_field('Nouveau lieu du tournoi : ')
         return new_location
 
@@ -132,7 +132,7 @@ class TournamentView:
         Returns:
             str: new_start_date
         """
-        print(f'Date de début avant mise à jour : {tournament.start_date}')
+        print(f'\nDate de début avant mise à jour : {tournament.start_date}')
         new_start_date = self.fields.input_date_field('Nouvelle date de début de tournoi :')
         return new_start_date
 
@@ -145,6 +145,6 @@ class TournamentView:
         Returns:
             str: new_end_date
         """
-        print(f'Date de fin de tournoi avant mise à jour : {tournament.end_date}')
+        print(f'\nDate de fin de tournoi avant mise à jour : {tournament.end_date}')
         new_end_date = self.fields.input_date_field('Nouvelle date de fin de tournoi :')
         return new_end_date

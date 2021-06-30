@@ -15,7 +15,8 @@ class PlayerView:
         """Ask to user the player's informations
 
         Args:
-            num_player (int, optional): player number in a tournament or in all players. Defaults to len(Player.LIST_PLAYERS).
+            num_player (int, optional): player number in a tournament or in all players.
+                Defaults to len(Player.LIST_PLAYERS).
 
         Returns:
             dict: player information

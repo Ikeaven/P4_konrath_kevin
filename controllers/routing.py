@@ -1,7 +1,6 @@
 """ ROUTING """
 
 
-
 from paires.suisse import Suisse
 from .view import ViewsController
 from .models import ModelsController
