@@ -39,6 +39,11 @@ class PlayerView:
     #     return player_number
 
     def display_players_list(self, players: list):
+        """Display informations about players in a list
+
+        Args:
+            players (list): list of player whose information we want to display
+        """
         self.utilities.line_separator()
 
         for index, player in enumerate(players):
@@ -50,22 +55,54 @@ class PlayerView:
             self.utilities.line_separator()
 
     def update_ranking(self, player: object):
+        """Ask to user to type a new ranking for a player
+
+        Args:
+            player (object): Player instance to update
+
+        Returns:
+            [str]: it's a digit in a string, new ranking
+        """
         print(f'classement avant mise à jour : {player.ranking}')
         new_ranking = self.fields.input_digit_field('Nouveau classement :')
         return new_ranking
 
     def update_name(self, player: object):
+        """Ask to user to type a new First_Name & Last name for a player
+
+        Args:
+            player (object): PLayer instance to update
+
+        Returns:
+            tuple: new_first_name, new_last_name
+        """
         print(f'Prénom Nom avant mise à jour : {player.first_name} {player.last_name}')
         new_first_name = self.fields.input_text_field('Nouveau prénom :')
         new_last_name = self.fields.input_text_field('Nouveau nom :')
         return new_first_name, new_last_name
 
     def update_birthday(self, player: object):
+        """Ask to user to type a new date of birth for a player
+
+        Args:
+            player (object): Player instance to update
+
+        Returns:
+            str: new date of birth
+        """
         print(f'Anniversaire avant mise à jour : {player.date_of_birth}')
         new_date_of_birth = self.fields.input_date_field('Nouvelle date de naissance :')
         return new_date_of_birth
 
     def update_sex(self, player: object):
+        """Ask to user to type a new sex for a player
+
+        Args:
+            player (object): Player instcance to update
+
+        Returns:
+            str: new sex ('M' or 'F')
+        """
         print(f'Sexe du joueur avant mise à  jour : {player.sex}')
         new_sex = self.fields.input_sex_field('Nouveau sexe [M] / [F] : ')
         return new_sex
