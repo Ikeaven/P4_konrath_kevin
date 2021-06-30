@@ -1,4 +1,4 @@
-""" Get tournament infos view"""
+""" Tournament view """
 
 from config import DEFAULT_TOUR_NUMBER, DEFAULT_PLAYERS_NUMBER, TIME_CONTROLLER
 
@@ -13,6 +13,11 @@ class TournamentView:
         self.fields = Fields()
 
     def get_tournament_info(self):
+        """Ask to user to type the tournament informations
+
+        Returns:
+            dict: tournament informations
+        """
         tournament_name = self.fields.input_text_field("Nom du tournoi : ")
         location = self.fields.input_text_field("Lieu du tournoi : ")
         start_date = self.fields.input_date_field('Entrez la date de début du tournoi (jj/mm/aaaa): ')
@@ -39,6 +44,11 @@ class TournamentView:
         return tournament_infos
 
     def display_tournament_list(self, tournaments_list):
+        """Display all tournament informations from a list
+
+        Args:
+            tournaments_list (Liste(tournament_instance)): list of Tournaments instances
+        """
         self.utilities.line_separator()
         print()
         print('----- LISTE DES TOURNOIS -----')
@@ -60,16 +70,40 @@ class TournamentView:
             self.utilities.line_separator()
 
     def update_tournament_name(self, tournament):
+        """Ask to user to update the tournament name
+
+        Args:
+            tournament (obj): Tournament instance to update
+
+        Returns:
+            str: new_tournament_name
+        """
         print(f'Nom avant mise à jour : {tournament.tournament_name}')
         new_tournament_name = self.fields.input_text_field('Nouveau nom du tournoi : ')
         return new_tournament_name
 
     def update_tournament_description(self, tournament):
+        """Ask to user to update the tournament description
+
+        Args:
+            tournament (obj): Tournament tnstance to update
+
+        Returns:
+            str: new_description
+        """
         print(f'Description avant mise à jour : {tournament.description}')
         new_description = self.fields.input_text_field('Nouvelle description du tournoi : ')
         return new_description
 
     def update_time_controller(self, tournament):
+        """Ask to user to update the time controller of a tournament
+
+        Args:
+            tournament (obj): Tournament instance to update
+
+        Returns:
+            str: new_time_controller
+        """
         print(f'Controller avant mise à jour : {tournament.time_controller}')
         new_time_controller = self.fields.input_time_controler(
             'Nouveau controller de temps : '
@@ -77,16 +111,40 @@ class TournamentView:
         return new_time_controller
 
     def update_tournament_location(self, tournament):
+        """Ask to update location of a tournament
+
+        Args:
+            tournament (obj): Tournament instance to update
+
+        Returns:
+            str: new_location
+        """
         print(f'Lieu du tournoi avant mise à jour : {tournament.location}')
         new_location = self.fields.input_text_field('Nouveau lieu du tournoi : ')
         return new_location
 
     def update_tournament_start_date(self, tournament):
+        """Ask to user to update start date
+
+        Args:
+            tournament (obj): Tournament instance to update
+
+        Returns:
+            str: new_start_date
+        """
         print(f'Date de début avant mise à jour : {tournament.start_date}')
         new_start_date = self.fields.input_date_field('Nouvelle date de début de tournoi :')
         return new_start_date
 
     def update_tournament_end_date(self, tournament):
+        """Ask to user to update end date
+
+        Args:
+            tournament (obj): Tournament instance to update
+
+        Returns:
+            str: new_end_date
+        """
         print(f'Date de fin de tournoi avant mise à jour : {tournament.end_date}')
         new_end_date = self.fields.input_date_field('Nouvelle date de fin de tournoi :')
         return new_end_date

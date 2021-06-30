@@ -12,6 +12,14 @@ class ScoreView:
         self.match_view = MatchView()
 
     def update_score(self, match):
+        """Ask player who is the winner
+
+        Args:
+            match (obj): Match instance
+
+        Returns:
+            str: selected_menu, user choice
+        """
         self.match_view.display_match(match)
         print('[0] Match null')
         print('[1] Player 1 est gagnant')
@@ -21,6 +29,11 @@ class ScoreView:
         return selected_menu
 
     def display_final_score(self, sorted_list):
+        """Display score from a list of player with score
+
+        Args:
+            sorted_list (list[[player, score], [player, score]]): list of player with score
+        """
         print("\n###################")
         print("### SCORE FINAL ###")
         print("###################")
