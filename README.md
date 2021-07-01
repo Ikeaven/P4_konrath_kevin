@@ -62,6 +62,9 @@ Dans le terminal ou PowerShell, à la racine du projet :
 <br/>
 # Utilisation
 
+Avant de lancer l'application. <br/>
+Ouvrir le fichier config.py, vous permet de modifier des varables globales. Une fois configuré, lancer l'application en suivant la procédure ci-dessus en fonction de votre système d'exploitation.
+
 Naviguer d'un menu à l'autre avec les numéros de menu.
 ## Menu principal:
 1. Créer un nouveau tournoi
