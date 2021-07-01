@@ -3,10 +3,10 @@
 
 from controllers.models import ModelsController
 
-from serializers.player import PlayerSerializer
-from serializers.tournament import TournamentSerializer
-from serializers.round import RoundSerializer
-from serializers.match import MatchSerializer
+from utilities.serializers.player import PlayerSerializer
+from utilities.serializers.tournament import TournamentSerializer
+from utilities.serializers.round import RoundSerializer
+from utilities.serializers.match import MatchSerializer
 
 from models.tournament import Tournament
 from models.player import Player

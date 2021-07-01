@@ -4,7 +4,7 @@
 """
 
 from config import TIME_CONTROLLER, DEFAULT_TOUR_NUMBER, DEFAULT_PLAYERS_NUMBER
-import utilities.checker as check
+import utilities.fieldschecker.checker as check
 
 
 class Fields:

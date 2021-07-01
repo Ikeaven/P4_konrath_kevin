@@ -6,7 +6,7 @@ from typing import List
 
 from .view import ViewsController
 
-from paires.suisse import Suisse
+from utilities.paires.suisse import Suisse
 
 from models.tournament import Tournament
 from models.player import Player
