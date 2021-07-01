@@ -56,4 +56,6 @@ Dans Windows PowerShell : Naviguez vers le repertoire souhaité, à l'aide de cd
 
 ## Générer rapport html Flake8-html
 
+Dans le terminal ou PowerShell, à la racine du projet :
+
 `$ flake8 --format=html --htmldir=flake8_report`
