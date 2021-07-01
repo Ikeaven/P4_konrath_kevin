@@ -99,12 +99,12 @@ Vous pouvez maintenant modifier le tournoi selectionné grace au menu d'édition
 8. Retour au menu principal
 
 ### [4] Menu edition d'un joueur:
-La liste des joueurs va vous être présenté si vous avez déjà rensigné des joueurs ou importé des joueurs de la base de données.
+La liste des joueurs va vous être présenté si vous avez déjà renseigné des joueurs ou importé des joueurs de la base de données.
 Selectionner le joueur grace à l'index associé.
 
 Vous pouvez maintenant modifier les informations du joueur grace au menu d'édition:
-1. Editier le classement
-2. Editier Nom et prénom
+1. Editer le classement
+2. Editer Nom et prénom
 3. Editer la date d'anniversaire
 4. Editer le sexe
 5. Retour au menu principal

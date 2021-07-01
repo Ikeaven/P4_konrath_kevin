@@ -16,7 +16,12 @@ class RoundView:
             round (object): Round instance
         """
         print()
-        print(f'Round arrété à : {round.end_round_datetime}')
+        # print(f'Round arrété à : {round.end_round_datetime}')
+        if isinstance(round.end_round_datetime, str):
+            end_date_time_obj = datetime.strptime(round.end_round_datetime, '%Y-%m-%d %H:%M:%S.%f')
+            print(f"Fin : {end_date_time_obj.strftime('%A %d %B %Y à %Hh%Mmin')}")
+        else:
+            print(f"Fin : {round.end_round_datetime.strftime('%A %d %B %Y à %Hh%Mmin')}")
 
     def start_new_round(self, round):
         """Display round name for a new round
@@ -45,17 +50,17 @@ class RoundView:
             print()
             if isinstance(round.start_round_datetime, str):
                 start_date_time_obj = datetime.strptime(round.start_round_datetime, '%Y-%m-%d %H:%M:%S.%f')
-                print(f"Début : {start_date_time_obj.strftime('%A %w %B %Y à %Hh%Mmin')}")
+                print(f"Début : {start_date_time_obj.strftime('%A %d %B %Y à %Hh%Mmin')}")
             else:
-                print(f"Début : {round.start_round_datetime.strftime('%A %w %B %Y à %Hh%Mmin')}")
+                print(f"Début : {round.start_round_datetime.strftime('%A %d %B %Y à %Hh%Mmin')}")
 
             if round.end_round_datetime == 'Round en cours':
                 print(f"{round.end_round_datetime}")
             elif isinstance(round.end_round_datetime, str):
                 end_date_time_obj = datetime.strptime(round.end_round_datetime, '%Y-%m-%d %H:%M:%S.%f')
-                print(f"Fin : {end_date_time_obj.strftime('%A %w %B %Y à %Hh%Mmin')}")
+                print(f"Fin : {end_date_time_obj.strftime('%A %d %B %Y à %Hh%Mmin')}")
             else:
-                print(f"Fin : {round.end_round_datetime.strftime('%A %w %B %Y à %Hh%Mmin')}")
+                print(f"Fin : {round.end_round_datetime.strftime('%A %d %B %Y à %Hh%Mmin')}")
             if show_match:
                 for match in round.matchs:
                     MatchView().display_match(match)
