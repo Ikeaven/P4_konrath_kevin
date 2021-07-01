@@ -49,8 +49,16 @@ class Round:
         """
         self.ROUND_LIST.append(self)
 
+    def load_match_to_round(self, match):
+        """Just bind matchs to a round on load data of database
+
+        Args:
+            match (obj): match to bind
+        """
+        self.matchs.append(match)
+
     def add_match_to_round(self, match):
-        """Bind match to a round
+        """Bind match to a round that's start the round
 
         Args:
             match (obj): Match instance to add in matchs list

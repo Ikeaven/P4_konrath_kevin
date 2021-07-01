@@ -30,12 +30,18 @@ class ViewsController:
     def display_match_of_tournament(self):
         """Select the tournament and call the view to display match of a tournament."""
         selected_tournament = self.select_tournament()
-        RoundView().display_round(selected_tournament, True)
+        if selected_tournament is not None:
+            RoundView().display_round(selected_tournament, True)
+        else:
+            pass
 
     def display_round_of_tournament(self):
         """Call the view to display round of tournament."""
         selected_tournament = self.select_tournament()
-        RoundView().display_round(selected_tournament)
+        if selected_tournament is not None:
+            RoundView().display_round(selected_tournament)
+        else:
+            pass
 
     def select_tournament(self) -> object:
         """Allow the user to choose the turnament.
@@ -48,22 +54,30 @@ class ViewsController:
         # choisir l'ordre d'affichage
         number_item = self.menu_view.select_item('tournois')
         if number_item.isdigit():
-            selected_tournament = Tournament().TOURNAMENT_LIST[int(number_item)]
-            return selected_tournament
+            try:
+                selected_tournament = Tournament().TOURNAMENT_LIST[int(number_item)]
+                return selected_tournament
+            except IndexError:
+                self.utilities_view.display_error_with_message('Pas de tournoi à cet index !')
+
         else:
+            self.utilities_view.display_error_with_message("L'index que vous avez saisi n'est pas un")
             return None
 
     def display_players_of_tournament(self):
         """Display players of a tournament."""
         # affiche les tournois - et choix
         selected_tournament = self.select_tournament()
-        # les joueurs du tournoi
-        players = selected_tournament.players_list
-        # Ranger la liste par ordre alphabetique ou par classement
-        sort_by = self.menu_view.select_sorting()
-        sorted_list = sort_list_by(players, sort_by)
-        # afficher les joueurs par ordre souhaité
-        self.player_view.display_players_list(sorted_list)
+        if selected_tournament is not None:
+            # les joueurs du tournoi
+            players = selected_tournament.players_list
+            # Ranger la liste par ordre alphabetique ou par classement
+            sort_by = self.menu_view.select_sorting()
+            sorted_list = sort_list_by(players, sort_by)
+            # afficher les joueurs par ordre souhaité
+            self.player_view.display_players_list(sorted_list)
+        else:
+            pass
 
     def display_all_players_from_model(self):
         """Display all players."""

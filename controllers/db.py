@@ -154,4 +154,4 @@ class DBController:
             }
             match: object = Match().load_match(match_dict)
             round_obj: object = Round.find_round_by_id(round['id'])
-            round_obj.add_match_to_round(match)
+            round_obj.load_match_to_round(match)

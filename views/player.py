@@ -46,14 +46,16 @@ class PlayerView:
             players (list): list of player whose information we want to display
         """
         self.utilities.line_separator()
-
-        for index, player in enumerate(players):
-            print(f'\n index : [{index}]')
-            print(f'{player.first_name} {player.last_name}')
-            print(f"Date de naissance : {player.date_of_birth}")
-            print(f"Sexe : {player.sex}")
-            print(f"Classement : {player.ranking}")
-            self.utilities.line_separator()
+        if players is not None:
+            for index, player in enumerate(players):
+                print(f'\nindex : [{index}]')
+                print(f'{player.first_name} {player.last_name}')
+                print(f"Date de naissance : {player.date_of_birth}")
+                print(f"Sexe : {player.sex}")
+                print(f"Classement : {player.ranking}")
+                self.utilities.line_separator()
+        else:
+            pass
 
     def update_ranking(self, player: object):
         """Ask to user to type a new ranking for a player
@@ -64,7 +66,7 @@ class PlayerView:
         Returns:
             [str]: it's a digit in a string, new ranking
         """
-        print(f'classement avant mise à jour : {player.ranking}')
+        print(f'\nlassement avant mise à jour : {player.ranking}')
         new_ranking = self.fields.input_digit_field('Nouveau classement :')
         return new_ranking
 
@@ -77,7 +79,7 @@ class PlayerView:
         Returns:
             tuple: new_first_name, new_last_name
         """
-        print(f'Prénom Nom avant mise à jour : {player.first_name} {player.last_name}')
+        print(f'\nPrénom Nom avant mise à jour : {player.first_name} {player.last_name}')
         new_first_name = self.fields.input_text_field('Nouveau prénom :')
         new_last_name = self.fields.input_text_field('Nouveau nom :')
         return new_first_name, new_last_name
@@ -91,7 +93,7 @@ class PlayerView:
         Returns:
             str: new date of birth
         """
-        print(f'Anniversaire avant mise à jour : {player.date_of_birth}')
+        print(f'\nAnniversaire avant mise à jour : {player.date_of_birth}')
         new_date_of_birth = self.fields.input_date_field('Nouvelle date de naissance :')
         return new_date_of_birth
 
@@ -104,6 +106,6 @@ class PlayerView:
         Returns:
             str: new sex ('M' or 'F')
         """
-        print(f'Sexe du joueur avant mise à  jour : {player.sex}')
+        print(f'\nSexe du joueur avant mise à  jour : {player.sex}')
         new_sex = self.fields.input_sex_field('Nouveau sexe [M] / [F] : ')
         return new_sex

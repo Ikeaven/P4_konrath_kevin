@@ -61,7 +61,10 @@ class Router:
             if len(Tournament.TOURNAMENT_LIST) >= 1:
                 selected_tournament = self.view_controller.select_tournament()
                 if selected_tournament:
-                    self.edit_tournament_menu(selected_tournament)
+                    try:
+                        self.edit_tournament_menu(selected_tournament)
+                    except IndexError:
+                        self.utilities_view.display_error_with_message('Pas de tournois à cet index !')
                 else:
                     pass
             else:
@@ -72,11 +75,11 @@ class Router:
             if Player.get_all_players() is not None:
                 self.player_view.display_players_list(Player.get_all_players())
                 player_id: int = int(self.menu_view.select_item('joueur'))
-                if player_id == 'X':
-                    pass
-                else:
+                try:
                     selected_player: object = Player.get_all_players()[player_id]
                     self.edit_player_menu(selected_player)
+                except IndexError:
+                    self.utilities_view.display_error_with_message('Pas de joueur à cet index !')
 
         # Rapports
         elif selected_menu == '5':
@@ -98,6 +101,9 @@ class Router:
         # stop
         elif selected_menu == '9':
             return False
+
+        else:
+            self.utilities_view.display_error_with_message('Valeur non trouvé')
 
     def edit_tournament_menu(self, tournament: object):
         """Tournament edition menu
@@ -181,50 +187,57 @@ class Router:
         """Choice - Menu reports."""
         selected_menu = self.menu_view.display_report_menu()
 
-        # Afficher tous les joueurs
+        # display all players
         if selected_menu == '1':
             if len(Player.LIST_PLAYERS) >= 1:
                 self.view_controller.display_all_players_sorted()
             else:
                 self.utilities_view.display_error_with_message('Pas de joueur enregistré pour le moment !')
 
-        # Afficher les joueurs d'un tournois
+        # Players of a tournament
         elif selected_menu == '2':
             if len(Tournament.TOURNAMENT_LIST) >= 1:
                 self.view_controller.display_players_of_tournament()
             else:
                 self.utilities_view.display_error_with_message('Pas de tournois enregistré pour le moment !')
 
-        # Afficher les tournois
+        # Display a tournament
         elif selected_menu == '3':
             if len(Tournament.TOURNAMENT_LIST) >= 1:
                 self.tournament_view.display_tournament_list(Tournament.TOURNAMENT_LIST)
             else:
                 self.utilities_view.display_error_with_message('Pas de tournois enregistré pour le moment !')
 
-        # Afficher les rounds d'un tournoi
+        # Rounds of a tournament
         elif selected_menu == '4':
             if len(Tournament.TOURNAMENT_LIST) >= 1:
                 self.view_controller.display_round_of_tournament()
             else:
                 self.utilities_view.display_error_with_message('Pas de tournois enregistré pour le moment !')
 
-        # Liste des matchs d'un tournoi
+        # Matchs list of a tournament
         elif selected_menu == '5':
             if len(Tournament.TOURNAMENT_LIST) >= 1:
                 self.view_controller.display_match_of_tournament()
             else:
                 self.utilities_view.display_error_with_message('Pas de tournois enregistré pour le moment !')
 
+        # Final score
         elif selected_menu == '6':
             ended_tournaments = self.model_controller.get_ended_tournament()
-            self.tournament_view.display_tournament_list(ended_tournaments)
-            selected_tournoi = ended_tournaments[int(self.menu_view.select_item('tournoi'))]
-            player_with_score = Suisse().get_players_list_with_score(selected_tournoi.round_list[-1])
-            sorted_player_list = Suisse().sort_list_by_score(player_with_score)
-            self.score_view.display_final_score(sorted_player_list)
+            if ended_tournaments != []:
+                self.tournament_view.display_tournament_list(ended_tournaments)
+                selected_tournoi = ended_tournaments[int(self.menu_view.select_item('tournoi'))]
+                try:
+                    player_with_score = Suisse().get_players_list_with_score(selected_tournoi.round_list[-1])
+                    sorted_player_list = Suisse().sort_list_by_score(player_with_score)
+                    self.score_view.display_final_score(sorted_player_list)
+                except IndexError:
+                    self.utilities_view.display_error_with_message('Erreur: Pas de tournoi à cet index')
+            else:
+                self.utilities_view.display_error_with_message("Pas de tournoi terminé pour l'instant")
 
-        # retour au menu principal
+        # retrun to main menu
         elif selected_menu == '7':
             pass
 
