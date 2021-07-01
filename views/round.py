@@ -45,7 +45,7 @@ class RoundView:
             print()
             if isinstance(round.start_round_datetime, str):
                 start_date_time_obj = datetime.strptime(round.start_round_datetime, '%Y-%m-%d %H:%M:%S.%f')
-                print(f"Fin : {start_date_time_obj.strftime('%A %w %B %Y à %Hh%Mmin')}")
+                print(f"Début : {start_date_time_obj.strftime('%A %w %B %Y à %Hh%Mmin')}")
             else:
                 print(f"Début : {round.start_round_datetime.strftime('%A %w %B %Y à %Hh%Mmin')}")
 

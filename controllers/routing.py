@@ -74,12 +74,14 @@ class Router:
         elif selected_menu == '4':
             if Player.get_all_players() is not None:
                 self.player_view.display_players_list(Player.get_all_players())
-                player_id: int = int(self.menu_view.select_item('joueur'))
+                player_id = self.menu_view.select_item('joueur')
                 try:
-                    selected_player: object = Player.get_all_players()[player_id]
+                    selected_player: object = Player.get_all_players()[int(player_id)]
                     self.edit_player_menu(selected_player)
                 except IndexError:
                     self.utilities_view.display_error_with_message('Pas de joueur à cet index !')
+                except ValueError:
+                    self.utilities_view.display_error_with_message("Ce n'est un numéro d'index !")
 
         # Rapports
         elif selected_menu == '5':
@@ -227,13 +229,16 @@ class Router:
             ended_tournaments = self.model_controller.get_ended_tournament()
             if ended_tournaments != []:
                 self.tournament_view.display_tournament_list(ended_tournaments)
-                selected_tournoi = ended_tournaments[int(self.menu_view.select_item('tournoi'))]
                 try:
+                    selected_tournoi = ended_tournaments[int(self.menu_view.select_item('tournoi'))]
                     player_with_score = Suisse().get_players_list_with_score(selected_tournoi.round_list[-1])
                     sorted_player_list = Suisse().sort_list_by_score(player_with_score)
                     self.score_view.display_final_score(sorted_player_list)
                 except IndexError:
-                    self.utilities_view.display_error_with_message('Erreur: Pas de tournoi à cet index')
+                    self.utilities_view.display_error_with_message('Pas de tournoi à cet index')
+                except ValueError:
+                    self.utilities_view.display_error_with_message("Ce n'est pas un numéro d'index")
+
             else:
                 self.utilities_view.display_error_with_message("Pas de tournoi terminé pour l'instant")
 
