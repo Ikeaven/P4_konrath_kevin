@@ -10,4 +10,4 @@ objectdb
 db.json
 
 .vscode/
-
+.DS_Store
