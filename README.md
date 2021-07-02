@@ -6,7 +6,7 @@ ____
 ## Lancer le logiciel Mac / Linux :
 
 
-### 1. Récupérr le projet :
+### 1. Récupérer le projet :
 
 `$ git clone https://github.com/Ikeaven/P4_konrath_kevin.git`
 
